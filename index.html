@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go Green Scrap Pros | Your Eco-Friendly Junk Removal & Recycling Experts</title>
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #1e5a4a 0%, #0f3d32 100%);
+      color: #f5f5f5;
+      padding: 4rem 0;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    header p {
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: #a4d2c2;
+    }
+
+    .cta-button {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 1.2rem 3rem;
+      background-color: #f1b24a;
+      color: #1e5a4a;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(241,178,74,0.4);
+      animation: pulse 2s infinite;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(241,178,74,0.6);
+      background-color: #f3c274;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Sections */
+    main section {
+      padding: 6rem 0;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #1e5a4a;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: #f1b24a;
+      border-radius: 2px;
+    }
+
+    .intro-text {
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 1.5rem auto 3rem;
+      color: #555;
+    }
+
+    /* How It Works Section */
+    .how-it-works .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+
+    .step-card {
+      background: #fff;
+      padding: 2.5rem 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    }
+
+    .step-card .icon {
+      font-size: 3rem;
+      color: #f1b24a;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-card h3 {
+      font-size: 1.5rem;
+      color: #1e5a4a;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-card p {
+      color: #666;
+    }
+
+    /* Areas We Serve Section */
+    .areas-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .area-chip {
+      background: linear-gradient(135deg, #1e5a4a, #0f3d32);
+      color: #f5f5f5;
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .area-chip:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #f1b24a, #d1923e);
+      color: #1e5a4a;
+      box-shadow: 0 5px 15px rgba(241,178,74,0.4);
+    }
+
+    /* Services Section */
+    .services {
+      background: #e9f5f1;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .service-card-new {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      border-left: 6px solid #1e5a4a;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .service-card-new:hover {
+      transform: translateX(5px);
+      box-shadow: 0 6px 25px rgba(30,90,74,0.15);
+      border-left-color: #f1b24a;
+    }
+
+    .service-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e5a4a;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-price {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #f1b24a;
+      margin: 0.5rem 0;
+    }
+
+    .service-note {
+      font-size: 0.95rem;
+      font-style: italic;
+      color: #888;
+    }
+
+    /* Testimonials Section */
+    .testimonials {
+      background: #f8f8f8;
+      padding: 6rem 0;
+    }
+
+    .testimonial-card {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+
+    .testimonial-card blockquote {
+      font-style: italic;
+      color: #555;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .testimonial-card .author {
+      font-weight: bold;
+      color: #1e5a4a;
+      font-size: 1rem;
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #0f3d32 0%, #08211b 100%);
+      color: #a4d2c2;
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    footer .footer-nav {
+      margin-bottom: 1.5rem;
+    }
+
+    footer .footer-nav a {
+      color: #a4d2c2;
+      text-decoration: none;
+      margin: 0 1rem;
+      transition: color 0.3s ease;
+    }
+
+    footer .footer-nav a:hover {
+      color: #fff;
+    }
+
+    footer .social-icons {
+      margin-top: 1rem;
+    }
+
+    footer .social-icons a {
+      color: #a4d2c2;
+      font-size: 1.5rem;
+      margin: 0 0.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    footer .social-icons a:hover {
+      transform: scale(1.2);
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="hero-content">
+      <h1>🌱 Go Green Scrap Pros</h1>
+      <p>We Take Your Junk and Your Guilt. Eco-Friendly Junk Removal for the Denver Metro Area.</p>
+      <a href="tel:720-491-0562" class="cta-button">📞 Get a Free Quote</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="how-it-works">
+      <div class="container">
+        <h2>How It Works</h2>
+        <p class="intro-text">
+          Our process is simple, transparent, and designed to make your junk removal experience as easy as possible.
+        </p>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="icon">📞</div>
+            <h3>1. Contact Us</h3>
+            <p>Give us a call or text to tell us about your junk and get a fast quote.</p>
+          </div>
+          <div class="step-card">
+            <div class="icon">💰</div>
+            <h3>2. Get a Quote</h3>
+            <p>We'll provide a transparent, upfront price based on your items and location.</p>
+          </div>
+          <div class="step-card">
+            <div class="icon">🚚</div>
+            <h3>3. We Haul It Away</h3>
+            <p>Our team arrives on time, hauls away your items, and sweeps up afterwards.</p>
+          </div>
+          <div class="step-card">
+            <div class="icon">♻️</div>
+            <h3>4. We Go Green</h3>
+            <p>We sort your items, recycling and donating everything we can before the landfill.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="areas-we-serve">
+      <div class="container">
+        <h2>Areas We Serve</h2>
+        <p class="intro-text">
+          Proudly serving the entire Denver Metro Area and surrounding communities.
+        </p>
+        <div class="areas-grid">
+          <span class="area-chip">Northglenn</span>
+          <span class="area-chip">Brighton</span>
+          <span class="area-chip">Todd Creek</span>
+          <span class="area-chip">Broomfield</span>
+          <span class="area-chip">Lakewood</span>
+          <span class="area-chip">Thornton</span>
+          <span class="area-chip">Arvada</span>
+          <span class="area-chip">Westminster</span>
+          <span class="area-chip">Erie</span>
+          <span class="area-chip">Golden</span>
+          <span class="area-chip">Superior</span>
+          <span class="area-chip">Louisville</span>
+          <span class="area-chip">Lafayette</span>
+          <span class="area-chip">Wheat Ridge</span>
+          <span class="area-chip">Sherrelwood</span>
+          <span class="area-chip">Federal Heights</span>
+          <span class="area-chip">Welby</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="services">
+      <div class="container">
+        <h2>Our Services</h2>
+        <p class="intro-text">
+          We handle a wide range of items with an emphasis on recycling and responsible disposal.
+        </p>
+        <div class="services-grid">
+          <div class="service-card-new">
+            <div class="service-title">🔌 Appliance Haul Away</div>
+            <div class="service-price">FREE Curbside</div>
+            <div class="service-note">($100 from house)</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">❄️ Fridge Removal</div>
+            <div class="service-price">FREE Curbside</div>
+            <div class="service-note">($100 from house)</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">👕 Washer & Dryer Removal</div>
+            <div class="service-price">FREE Curbside</div>
+            <div class="service-note">($100 from house)</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">🛋️ Couch Removal</div>
+            <div class="service-price">Starting at $100</div>
+            <div class="service-note">Pricing per item</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">🛏️ Mattress Recycling</div>
+            <div class="service-price">Starting at $100</div>
+            <div class="service-note">Partnered with local recyclers</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">🔥 Furnace Removal</div>
+            <div class="service-price">Starting at $100</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">❄️ Air Conditioner Removal</div>
+            <div class="service-price">$50</div>
+            <div class="service-note">Includes Freon certification</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">🔧 Copper Pipe Recycling</div>
+            <div class="service-price">FREE</div>
+            <div class="service-note">If in a pile in the garage or street</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">📺 TV Recycling</div>
+            <div class="service-price">$50</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">💻 Computer Recycling</div>
+            <div class="service-price">FREE Curbside</div>
+            <div class="service-note">($100 from house)</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">🏠 Garage Clean Out</div>
+            <div class="service-price">Custom Quote</div>
+            <div class="service-note">Typically $1000 for a 2-car bay</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">🏗️ Construction Debris</div>
+            <div class="service-price">Custom Quote</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">🏢 Commercial Clean Out</div>
+            <div class="service-price">Custom Quote</div>
+          </div>
+          <div class="service-card-new">
+            <div class="service-title">🏚️ Hoarder House Clean Out</div>
+            <div class="service-price">Custom Quote</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <div class="container">
+        <h2>What Our Customers Say</h2>
+        <div class="testimonial-card">
+          <blockquote>
+            "Go Green Scrap Pros were amazing! They were prompt, professional, and took care of everything quickly. I'm so happy my old fridge didn't end up in a landfill. Highly recommend!"
+          </blockquote>
+          <div class="author">- Jane D., Northglenn</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-info">
+      <div class="container">
+        <h2>Ready to Go Green?</h2>
+        <p class="intro-text">
+          Call or text us today to get started with a free estimate!
+        </p>
+        <a href="tel:720-491-0562" class="cta-button">📞 720-491-0562</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-nav">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#services">Services</a>
+        <a href="tel:720-491-0562">Get a Quote</a>
+        <a href="#testimonials">Testimonials</a>
+      </div>
+      <p>🌍 We recycle first. Landfill last.</p>
+      <p>Serving the Denver Metro Area with Pride</p>
+      <div class="social-icons">
+        </div>
+      <p style="margin-top: 1.5rem; font-size: 0.9rem;">© 2025 Go Green Scrap Pros. All Rights Reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
