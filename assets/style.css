@@ -224,19 +224,33 @@ h2::after {
 }
 
 /* Testimonials Section */
+/* Testimonials Section */
 .testimonials {
   background: #f8f8f8;
   padding: 6rem 0;
 }
 
+.testimonial-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
 .testimonial-card {
-  max-width: 700px;
-  margin: 0 auto;
+  flex: 1 1 300px;
+  max-width: 350px;
   background: #fff;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.1);
   text-align: left;
+  transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
 }
 
 .testimonial-card blockquote {
@@ -251,6 +265,7 @@ h2::after {
   color: #1e5a4a;
   font-size: 1rem;
 }
+
 
 /* Footer */
 footer {
