@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cardinal Pilates | Strengthen. Balance. Renew.</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --primary: #b12b24;
+      --primary-light: #d63c35;
+      --accent: #e67e22;
+      --accent-light: #f39c12;
+      --dark: #1a1a1a;
+      --light: #f8f8f8;
+      --text: #2c2c2c;
+      --text-light: #6b6b6b;
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.2);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--light);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Navigation */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after { width: 100%; }
+
+    .cta-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white !important;
+      padding: 0.6rem 1.4rem;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(177, 43, 36, 0.3);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(177, 43, 36, 0.4);
+    }
+
+    /* Hero Section */
+    .hero {
+      margin-top: 60px;
+      position: relative;
+      background: linear-gradient(135deg, #f8f8f8 0%, #fff 100%);
+      overflow: hidden;
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(230, 126, 34, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -5%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(177, 43, 36, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(30px); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: auto;
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero h2 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      margin-bottom: 2.5rem;
+      font-weight: 500;
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(177, 43, 36, 0.3);
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 35px rgba(177, 43, 36, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(177, 43, 36, 0.1);
+      color: var(--primary);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(177, 43, 36, 0.2);
+    }
+
+    /* Sections */
+section {
+  padding: 5rem 2rem;
+  width: 100%;
+}
+
+section > *:not(.hero) {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+    h2.section-title {
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* About Section */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+
+  .about-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  .about-image img {
+    width: 100%;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .about-image:hover img {
+    transform: scale(1.05);
+  }
+
+  .about-image iframe {
+    display: block;
+    /* border-radius: 20px; */
+  }
+
+    .about-content p {
+      font-size: 1.05rem;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      padding: 2.5rem;
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .feature-card:hover::before {
+      left: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(177, 43, 36, 0.15);
+      border-color: var(--primary);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+    }
+
+    .feature-card p {
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* Classes Section */
+    .classes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .class-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .class-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(177, 43, 36, 0.2);
+    }
+
+    .class-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .class-card:hover img {
+      transform: scale(1.08);
+    }
+
+    .class-card .content {
+      padding: 2rem;
+    }
+
+    .class-card h3 {
+      font-size: 1.4rem;
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+    }
+
+    .class-card p {
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .class-card .btn {
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Testimonials */
+    #testimonials {
+      background: linear-gradient(135deg, #f8f8f8 0%, #fff 100%);
+    }
+
+    .testimonial {
+      background: white;
+      padding: 3rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      max-width: 700px;
+      margin: 2rem auto;
+      border-left: 5px solid var(--primary);
+      position: relative;
+    }
+
+    .testimonial p {
+      font-size: 1.1rem;
+      color: var(--text);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .testimonial span {
+      display: block;
+      color: var(--primary);
+      font-weight: 700;
+      font-style: normal;
+      font-size: 1rem;
+    }
+
+    .quote-mark {
+      font-size: 3rem;
+      color: rgba(177, 43, 36, 0.2);
+      position: absolute;
+      top: -10px;
+      left: 20px;
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .pricing-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .pricing-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(177, 43, 36, 0.2);
+    }
+
+    .pricing-card.featured {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .pricing-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 1rem 0;
+      color: var(--primary);
+    }
+
+    .pricing-card.featured .price {
+      color: white;
+    }
+
+    .price-desc {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pricing-card.featured .price-desc {
+      color: rgba(255,255,255,0.9);
+    }
+
+    .pricing-list {
+      list-style: none;
+      margin: 1.5rem 0;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    .pricing-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .pricing-card.featured .pricing-list li {
+      border-bottom-color: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* Contact */
+    #contact {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+    }
+
+    #contact h2 {
+      color: white;
+      background: none;
+      -webkit-text-fill-color: white;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .contact-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.2);
+      text-align: center;
+    }
+
+    .contact-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-card p {
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-card a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 2px solid white;
+      transition: all 0.3s ease;
+    }
+
+    .contact-card a:hover {
+      opacity: 0.8;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(0,0,0,0.2);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        width: 100%;
+      }
+
+      .hero {
+        padding: 4rem 1.5rem;
+        margin-top: 200px;
+      }
+
+      section {
+        padding: 3rem 1.5rem;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .cta-btn::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Cardinal Pilates</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#classes">Classes</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact" class="cta-btn">Book Now</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Strengthen. Balance. Renew.</h2>
+      <p>Mindful Pilates instruction with certified instructors in a welcoming Denver studio</p>
+      <a href="#contact" class="btn">Book Your First Class</a>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="section-title">About Cardinal Pilates</h2>
+    <div class="about-grid">
+      <div class="about-image">
+          <iframe src="https://player.vimeo.com/video/1072957624?h=8a0a57599a&autoplay=1&loop=1&autopause=0&muted=1&title=0&byline=0&portrait=0&controls=0" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="" style="border-radius: 20px;"></iframe>
+      </div>
+      <div class="about-content">
+        <p>At Cardinal Pilates, we believe every body is capable of transformation. Led by Katherine, a Polestar Pilates-trained instructor and former attorney, our studio creates a sanctuary where movement meets joy.</p>
+        <p>We focus on functional, mindful movement designed to improve your posture, flexibility, and overall strength. Whether you're a beginner discovering Pilates for the first time or an advanced practitioner, our personalized approach ensures you feel supported every step of the way.</p>
+        <p>With 5 Balanced Body studio reformers, multiple fitness props, and an intimate setting, you'll leave feeling stronger, more aligned, and ready to take on your week.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <h2 class="section-title">Why Choose Us</h2>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🎓</div>
+        <h3>Polestar Certified Instructor</h3>
+        <p>Learn from Katherine, trained to teach each individual body with expertise and care.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h3>Intimate Classes</h3>
+        <p>Small group sizes ensure personalized attention and a comfortable, welcoming environment.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <h3>Soul-Nurturing Vibe</h3>
+        <p>A relaxing home studio designed for your comfort, equipped with premium reformers and props.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💪</div>
+        <h3>Holistic Wellness</h3>
+        <p>Combine Pilates with optional nutrition consultations for total mind-body transformation.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="classes">
+    <h2 class="section-title">Our Classes</h2>
+    <div class="classes">
+      <div class="class-card">
+        <img src="https://img1.wsimg.com/isteam/ip/414ff32e-fa1e-4f49-a8ed-7420b974582f/IMG_7856.jpg/:/cr=t:0%25,l:0.12%25,w:99.75%25,h:100%25/rs=w:365,h:274,cg:true" alt="Reformer Pilates" />
+        <div class="content">
+          <h3>Reformer Pilates</h3>
+          <p>Strengthen and lengthen your body using traditional reformer equipment. Perfect for building lean muscle and improving alignment.</p>
+          <a href="#pricing" class="btn">Learn More</a>
+        </div>
+      </div>
+      <div class="class-card">
+        <img src="https://img1.wsimg.com/isteam/ip/414ff32e-fa1e-4f49-a8ed-7420b974582f/IMG_7787.jpg/:/rs=w:365,h:274,cg:true,m/cr=w:365,h:274" alt="Mat Pilates" />
+        <div class="content">
+          <h3>Mat Pilates</h3>
+          <p>Improve control, balance, and flexibility through core-focused routines. No equipment needed—just you and your strength.</p>
+          <a href="#pricing" class="btn">Learn More</a>
+        </div>
+      </div>
+      <div class="class-card">
+        <img src="https://img1.wsimg.com/isteam/ip/414ff32e-fa1e-4f49-a8ed-7420b974582f/blob-11753b4.png/:/cr=t:25.44%25,l:0%25,w:100%25,h:60.27%25/rs=w:365,h:274,cg:true" alt="Private Sessions" />
+        <div class="content">
+          <h3>Private Sessions</h3>
+          <p>One-on-one training tailored to your unique body and goals. Get undivided attention and customized programming.</p>
+          <a href="#pricing" class="btn">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <h2 class="section-title">Pricing & Packages</h2>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <h3>Group Classes</h3>
+        <ul class="pricing-list">
+          <li><strong>Single Class:</strong> $30</li>
+          <li><strong>10-Pack:</strong> $250</li>
+          <li><strong>20-Pack:</strong> $425</li>
+        </ul>
+        <a href="#contact" class="btn btn-secondary">Get Started</a>
+      </div>
+      <div class="pricing-card featured">
+        <h3>Private Sessions</h3>
+        <ul class="pricing-list">
+          <li><strong>Single Session:</strong> $75</li>
+          <li><strong>3-Pack:</strong> $210</li>
+        </ul>
+        <p style="margin-top: 1rem; font-style: italic;">Most popular choice for personalized results</p>
+        <a href="#contact" class="btn" style="background: white; color: var(--primary); margin-top: 1rem;">Book Private</a>
+      </div>
+      <div class="pricing-card">
+        <h3>Nutrition Coaching</h3>
+        <ul class="pricing-list">
+          <li><strong>Consultation:</strong> $30</li>
+          <li><strong>Package Options:</strong> Available</li>
+        </ul>
+        <a href="#contact" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials">
+    <h2 class="section-title">What Clients Say</h2>
+    <div class="testimonial">
+      <span class="quote-mark">"</span>
+      <p>I love Cardinal Pilates—the classes are uplifting, challenging, and the instructors genuinely care. I feel stronger and more aligned every week! Katherine has a gift for making you feel welcome whether you're just starting out or you're an experienced practitioner.</p>
+      <span>— Sarah M.</span>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2 class="section-title">Ready to Transform?</h2>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon">📍</div>
+        <p><strong>Location</strong></p>
+        <p>Denver, CO (Home Studio)</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">📞</div>
+        <p><strong>Phone</strong></p>
+        <p><a href="tel:+13035550199">(303) 555-0199</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">✉️</div>
+        <p><strong>Email</strong></p>
+        <p><a href="mailto:info@cardinalpilates.com">info@cardinalpilates.com</a></p>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 3rem;">
+      <a href="mailto:info@cardinalpilates.com?subject=Book%20a%20Class" class="btn" style="background: white; color: var(--primary);">Book a Class Today</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Cardinal Pilates | <a href="#">Privacy Policy</a></p>
+  </footer>
+
+</body>
+</html>
