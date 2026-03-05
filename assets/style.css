@@ -306,6 +306,47 @@ footer .social-icons a:hover {
 }
 
 /* Site Nav Bar */
+.site-nav .nav-links {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.site-nav .nav-links a {
+  color: #a4d2c2;
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: color 0.2s;
+}
+
+.site-nav .nav-links a:hover {
+  color: #f1b24a;
+}
+
+.site-nav .nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.site-nav .nav-sms {
+  color: #a4d2c2;
+  text-decoration: none;
+  font-size: 0.82rem;
+  border-left: 1px solid #1e5a4a;
+  padding-left: 0.6rem;
+  transition: color 0.2s;
+}
+
+.site-nav .nav-sms:hover {
+  color: #f1b24a;
+}
+
+@media (max-width: 700px) {
+  .site-nav .nav-links { display: none; }
+  .site-nav .nav-sms { display: none; }
+}
+
 .site-nav {
   background: #0a2a21;
   padding: 0.6rem 0;
