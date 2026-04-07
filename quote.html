@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Slick &amp; Vanilla Quoting Engine — Go Green Scrap Pros</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"></noscript>
+  <style>
+    :root {
+      --green:       #1e5a4a;
+      --green-dark:  #0f3d32;
+      --green-nav:   #0a2a21;
+      --gold:        #f1b24a;
+      --gold-hover:  #f3c274;
+      --mint:        #a4d2c2;
+      --bg:          #f0f2f5;
+      --surface:     #ffffff;
+      --surface-alt: #e9f5f1;
+      --text:        #1a1a1a;
+      --muted:       #666;
+      --border:      #d0e8df;
+      --radius:      12px;
+      --shadow:      0 4px 16px rgba(0,0,0,0.08);
+      --shadow-lg:   0 8px 30px rgba(0,0,0,0.14);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    .app-header {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      padding: 1.1rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+    .app-header .brand {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: 0.2rem;
+    }
+    .app-header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Layout ─────────────────────────────────────────────────────────── */
+    .app-layout {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 1rem;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+    @media (min-width: 680px) {
+      .app-layout {
+        grid-template-columns: 1fr 1fr;
+        padding: 1.5rem;
+        gap: 1.5rem;
+      }
+    }
+
+    /* ── Panel card ─────────────────────────────────────────────────────── */
+    .panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .panel-header {
+      background: var(--green);
+      color: #fff;
+      padding: 0.65rem 1.25rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .panel-body {
+      padding: 1rem 1.25rem 1.25rem;
+    }
+
+    /* ── Form fields ────────────────────────────────────────────────────── */
+    .field { margin-bottom: 0.9rem; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.77rem;
+      font-weight: 600;
+      color: var(--green);
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.02em;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      transition: border-color 0.18s, box-shadow 0.18s;
+      -webkit-appearance: none;
+      appearance: none;
+      min-height: 48px;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(30,90,74,0.13);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath fill='%231e5a4a' d='M5 7L0 0h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    /* ── Field group (2-col row) ────────────────────────────────────────── */
+    .field-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .field-group .field { margin-bottom: 0; }
+
+    /* ── Divider + section label ────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1rem 0 0.85rem;
+    }
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    /* ── Toggle switch ──────────────────────────────────────────────────── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 48px;
+      background: var(--surface-alt);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 0 1rem;
+    }
+    .toggle-row label.toggle-label {
+      margin-bottom: 0;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .toggle {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: #c8d8d4;
+      border-radius: 28px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-track::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      top: 4px;
+      left: 4px;
+      transition: transform 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .toggle input:checked + .toggle-track { background: var(--green); }
+    .toggle input:checked + .toggle-track::before { transform: translateX(24px); }
+    .toggle input:focus-visible + .toggle-track {
+      box-shadow: 0 0 0 3px rgba(30,90,74,0.25);
+    }
+
+    /* ── Stair stepper ──────────────────────────────────────────────────── */
+    .stepper {
+      display: flex;
+      align-items: stretch;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      min-height: 48px;
+      transition: border-color 0.18s;
+    }
+    .stepper:focus-within { border-color: var(--green); }
+    .stepper button {
+      width: 52px;
+      border: none;
+      background: var(--surface-alt);
+      color: var(--green);
+      font-size: 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .stepper button:active { background: var(--mint); }
+    .stepper button:disabled { opacity: 0.35; cursor: default; }
+    .stepper-val {
+      flex: 1;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+    }
+
+    /* ── Results column ─────────────────────────────────────────────────── */
+    .results-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* ── Breakdown table ────────────────────────────────────────────────── */
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .breakdown-table tr { border-bottom: 1px solid var(--border); }
+    .breakdown-table tr:last-child { border-bottom: none; }
+    .breakdown-table td {
+      padding: 0.5rem 0.2rem;
+      color: var(--text);
+      vertical-align: middle;
+    }
+    .breakdown-table td:first-child { color: var(--muted); }
+    .breakdown-table td:last-child {
+      text-align: right;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    /* Muted row (disposal when Scrap Only, zero-fee surcharges) */
+    .breakdown-table .row-muted td {
+      opacity: 0.35;
+      font-style: italic;
+    }
+    /* Subtotal row */
+    .row-subtotal td {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--green) !important;
+      padding-top: 0.7rem;
+    }
+    .row-subtotal td:first-child::before {
+      content: '';
+      display: block;
+      height: 1.5px;
+      background: var(--border);
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── Quote box ──────────────────────────────────────────────────────── */
+    .quote-box {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.5rem 1.4rem;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      transition: background 0.3s;
+    }
+    .quote-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: 0.2rem;
+      transition: color 0.3s;
+    }
+    .quote-amount {
+      font-size: 3.75rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      transition: color 0.3s;
+    }
+    .min-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffd699;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 0.15rem 0.65rem;
+      margin-top: 0.4rem;
+      visibility: hidden;
+    }
+    /* Minimum-applied state */
+    .quote-box.min-on {
+      background: linear-gradient(135deg, #b85e00 0%, #7d3e00 100%);
+    }
+    .quote-box.min-on .quote-label { color: #ffd699; }
+    .quote-box.min-on .quote-amount { color: #ffe5b3; }
+    .quote-box.min-on .min-badge { visibility: visible; }
+
+    /* ── Copy button ────────────────────────────────────────────────────── */
+    .copy-btn {
+      display: block;
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      background: var(--gold);
+      color: var(--green-dark);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.18s, transform 0.1s, color 0.18s;
+      min-height: 52px;
+      touch-action: manipulation;
+      box-shadow: 0 4px 14px rgba(241,178,74,0.35);
+      letter-spacing: 0.02em;
+    }
+    .copy-btn:hover { background: var(--gold-hover); }
+    .copy-btn:active { transform: scale(0.98); }
+    .copy-btn.copied {
+      background: var(--mint);
+      color: var(--green-dark);
+      box-shadow: 0 4px 14px rgba(164,210,194,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="brand">Go Green Scrap Pros</div>
+    <h1>Slick &amp; Vanilla Quoting Engine</h1>
+  </header>
+
+  <div class="app-layout">
+
+    <!-- ── Inputs ──────────────────────────────────────────────────────── -->
+    <section class="panel" aria-label="Job inputs">
+      <div class="panel-header">Job Details</div>
+      <div class="panel-body">
+
+        <div class="field">
+          <label for="project-name">Project Name</label>
+          <input type="text" id="project-name" placeholder="e.g. Smith garage cleanout" autocomplete="off">
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Labor</div>
+
+        <div class="field-group">
+          <div class="field">
+            <label for="laborers">Laborers</label>
+            <input type="number" id="laborers" value="2" min="1" max="20" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="hours">Hours / Day</label>
+            <input type="number" id="hours" value="1" min="0.5" step="0.5" inputmode="decimal">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field">
+            <label for="laborer-rate">Laborer Rate ($/hr)</label>
+            <input type="number" id="laborer-rate" value="50" min="0" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="your-rate">Your Rate ($/hr)</label>
+            <input type="number" id="your-rate" value="35" min="0" inputmode="numeric">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="days">Number of Days</label>
+          <input type="number" id="days" value="1" min="1" inputmode="numeric">
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Equipment &amp; Load</div>
+
+        <div class="field">
+          <label for="equipment">Equipment</label>
+          <select id="equipment">
+            <option value="50">Trailer — $50 / day</option>
+            <option value="250">Truck — $250 / day</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="load-type">Load Type</label>
+          <select id="load-type">
+            <option value="trash">Trash Only</option>
+            <option value="mixed">Scrap + Trash</option>
+            <option value="scrap">Scrap Only</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="tons">Weight (tons)</label>
+          <input type="number" id="tons" value="1" min="0" step="0.25" inputmode="decimal">
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Surcharges</div>
+
+        <div class="field">
+          <div class="toggle-row">
+            <label class="toggle-label" for="distance-toggle">Distance over 10 miles? (+$50)</label>
+            <label class="toggle">
+              <input type="checkbox" id="distance-toggle">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label id="stairs-label">Stairs / Flights (+$25 each)</label>
+          <div class="stepper" role="group" aria-labelledby="stairs-label">
+            <button type="button" id="stairs-dec" aria-label="Remove one flight" disabled>−</button>
+            <div class="stepper-val" id="stairs-val" aria-live="polite" aria-atomic="true">0</div>
+            <button type="button" id="stairs-inc" aria-label="Add one flight">+</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">Pricing Floor</div>
+
+        <div class="field">
+          <label for="min-charge">Minimum Charge ($)</label>
+          <input type="number" id="min-charge" value="150" min="0" inputmode="numeric">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Results ─────────────────────────────────────────────────────── -->
+    <div class="results-col">
+
+      <div class="panel">
+        <div class="panel-header">Internal Breakdown</div>
+        <div class="panel-body">
+          <table class="breakdown-table" aria-label="Cost breakdown">
+            <tbody>
+              <tr>
+                <td>Labor / hr</td>
+                <td id="out-labor-hr">$—</td>
+              </tr>
+              <tr>
+                <td>Labor total</td>
+                <td id="out-labor-total">$—</td>
+              </tr>
+              <tr>
+                <td>Equipment</td>
+                <td id="out-equipment">$—</td>
+              </tr>
+              <tr id="row-disposal">
+                <td>Disposal</td>
+                <td id="out-disposal">$—</td>
+              </tr>
+              <tr id="row-distance">
+                <td>Distance fee</td>
+                <td id="out-distance">—</td>
+              </tr>
+              <tr id="row-stairs">
+                <td>Stairs fee</td>
+                <td id="out-stairs">—</td>
+              </tr>
+              <tr class="row-subtotal">
+                <td>Subtotal</td>
+                <td id="out-subtotal">$—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="quote-box" id="quote-box" aria-live="polite" aria-atomic="true">
+        <div class="quote-label" id="quote-label">Customer Quote</div>
+        <div class="quote-amount" id="out-final">$0</div>
+        <div class="min-badge" id="min-badge" aria-label="Minimum charge applied">Minimum applied</div>
+      </div>
+
+      <button class="copy-btn" id="copy-btn" type="button">Copy Quote Summary</button>
+
+    </div><!-- .results-col -->
+
+  </div><!-- .app-layout -->
+
+  <script>
+    'use strict';
+
+    // ── localStorage helpers ─────────────────────────────────────────────
+    function lsGet(key, fallback) {
+      try {
+        const v = localStorage.getItem(key);
+        return v !== null ? JSON.parse(v) : fallback;
+      } catch (_) { return fallback; }
+    }
+    function lsSet(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) { /* graceful no-op */ }
+    }
+
+    // ── DOM refs ─────────────────────────────────────────────────────────
+    const el = id => document.getElementById(id);
+
+    const elProjectName  = el('project-name');
+    const elLaborers     = el('laborers');
+    const elHours        = el('hours');
+    const elLaborRate    = el('laborer-rate');
+    const elYourRate     = el('your-rate');
+    const elDays         = el('days');
+    const elEquipment    = el('equipment');
+    const elLoadType     = el('load-type');
+    const elTons         = el('tons');
+    const elDistance     = el('distance-toggle');
+    const elMinCharge    = el('min-charge');
+    const elStairsVal    = el('stairs-val');
+    const elStairsDec    = el('stairs-dec');
+    const elStairsInc    = el('stairs-inc');
+    const elQuoteBox     = el('quote-box');
+    const elMinBadge     = el('min-badge');
+    const elQuoteLabel   = el('quote-label');
+    const elCopyBtn      = el('copy-btn');
+
+    // ── Stair stepper state ──────────────────────────────────────────────
+    let flights = 0;
+
+    elStairsInc.addEventListener('click', () => {
+      flights++;
+      elStairsVal.textContent = flights;
+      elStairsDec.disabled = false;
+      recalc();
+    });
+
+    elStairsDec.addEventListener('click', () => {
+      if (flights > 0) {
+        flights--;
+        elStairsVal.textContent = flights;
+        elStairsDec.disabled = flights === 0;
+        recalc();
+      }
+    });
+
+    // ── Restore persisted values ─────────────────────────────────────────
+    elYourRate.value  = lsGet('ggsp_yourRate',   35);
+    elMinCharge.value = lsGet('ggsp_minCharge', 150);
+
+    elYourRate.addEventListener('change',  () => lsSet('ggsp_yourRate',  +elYourRate.value));
+    elMinCharge.addEventListener('change', () => lsSet('ggsp_minCharge', +elMinCharge.value));
+
+    // ── Currency formatter ───────────────────────────────────────────────
+    const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+
+    // ── Main calculation ─────────────────────────────────────────────────
+    function recalc() {
+      const laborers  = Math.max(0, +elLaborers.value  || 0);
+      const laborRate = Math.max(0, +elLaborRate.value || 0);
+      const yourRate  = Math.max(0, +elYourRate.value  || 0);
+      const hours     = Math.max(0, +elHours.value     || 0);
+      const days      = Math.max(1, +elDays.value      || 1);
+      const equipFee  = Math.max(0, +elEquipment.value || 0);
+      const tons      = Math.max(0, +elTons.value      || 0);
+      const loadType  = elLoadType.value;
+      const overDist  = elDistance.checked;
+      const minCharge = Math.max(0, +elMinCharge.value || 0);
+
+      // Core calculations
+      const laborPerHr  = (laborers * laborRate) + yourRate;
+      const laborTotal  = laborPerHr * hours * days;
+      const equipTotal  = equipFee * days;
+      const disposal    = loadType === 'scrap' ? 0 : (tons * 150) * 1.2;
+      const distanceFee = overDist ? 50 : 0;
+      const stairsFee   = flights * 25;
+      const surcharges  = distanceFee + stairsFee;
+      const subtotal    = ((equipFee + (laborPerHr * hours)) * days) + disposal + surcharges;
+      const finalQuote  = Math.max(minCharge, subtotal);
+      const minApplied  = finalQuote > subtotal;
+
+      // ── Update breakdown rows ──────────────────────────────────────────
+      el('out-labor-hr').textContent    = fmt(laborPerHr);
+      el('out-labor-total').textContent = fmt(laborTotal);
+      el('out-equipment').textContent   = fmt(equipTotal);
+      el('out-subtotal').textContent    = fmt(subtotal);
+      el('out-final').textContent       = fmt(finalQuote);
+
+      // Disposal — muted when Scrap Only
+      if (loadType === 'scrap') {
+        el('out-disposal').textContent = '—';
+        el('row-disposal').classList.add('row-muted');
+      } else {
+        el('out-disposal').textContent = fmt(disposal);
+        el('row-disposal').classList.remove('row-muted');
+      }
+
+      // Distance fee
+      const showDist = overDist;
+      el('out-distance').textContent = showDist ? fmt(distanceFee) : '—';
+      el('row-distance').classList.toggle('row-muted', !showDist);
+
+      // Stairs fee
+      const showStairs = flights > 0;
+      el('out-stairs').textContent = showStairs ? fmt(stairsFee) : '—';
+      el('row-stairs').classList.toggle('row-muted', !showStairs);
+
+      // ── Quote box state ────────────────────────────────────────────────
+      elQuoteBox.classList.toggle('min-on', minApplied);
+
+      // Project name in quote label
+      const proj = elProjectName.value.trim();
+      elQuoteLabel.textContent = proj || 'Customer Quote';
+    }
+
+    // ── Copy quote summary ───────────────────────────────────────────────
+    elCopyBtn.addEventListener('click', () => {
+      const laborers  = Math.max(0, +elLaborers.value || 0);
+      const hours     = Math.max(0, +elHours.value    || 0);
+      const days      = Math.max(1, +elDays.value     || 1);
+      const loadType  = elLoadType.value;
+
+      const loadLabel = loadType === 'trash' ? 'Trash Only'
+                      : loadType === 'mixed' ? 'Scrap + Trash'
+                      : 'Scrap Only';
+
+      const equipLabel = elEquipment.options[elEquipment.selectedIndex].text
+                           .replace(/ —.*/, '');
+
+      const proj   = elProjectName.value.trim() || 'Unnamed Job';
+      const extras = [];
+      if (elDistance.checked) extras.push('Distance >10 mi (+$50)');
+      if (flights > 0) extras.push(`${flights} flight${flights !== 1 ? 's' : ''} of stairs (+$${flights * 25})`);
+
+      // Derive min-applied from rendered values
+      const subtotalNum = parseFloat(el('out-subtotal').textContent.replace(/[$,]/g, ''));
+      const finalNum    = parseFloat(el('out-final').textContent.replace(/[$,]/g, ''));
+      const minApplied  = Math.round(finalNum) > Math.round(subtotalNum);
+
+      const lines = [
+        'Go Green Scrap Pros — Quote',
+        `Project: ${proj}`,
+        `Equipment: ${equipLabel}`,
+        `Load: ${loadLabel}`,
+        `Labor: ${laborers} laborer${laborers !== 1 ? 's' : ''},  ${hours}h × ${days} day${days !== 1 ? 's' : ''}`,
+        extras.length ? `Extras: ${extras.join(' | ')}` : null,
+        '─────────────────────────────',
+        `TOTAL: ${el('out-final').textContent}${minApplied ? '  (minimum applied)' : ''}`,
+      ].filter(Boolean).join('\n');
+
+      const finish = () => {
+        elCopyBtn.textContent = 'Copied!';
+        elCopyBtn.classList.add('copied');
+        setTimeout(() => {
+          elCopyBtn.textContent = 'Copy Quote Summary';
+          elCopyBtn.classList.remove('copied');
+        }, 2200);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(lines).then(finish).catch(() => fallbackCopy(lines, finish));
+      } else {
+        fallbackCopy(lines, finish);
+      }
+    });
+
+    function fallbackCopy(text, cb) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try { document.execCommand('copy'); } catch (_) { /* ignore */ }
+      document.body.removeChild(ta);
+      cb();
+    }
+
+    // ── Wire all live inputs to recalc ───────────────────────────────────
+    [elProjectName, elLaborers, elHours, elLaborRate, elYourRate,
+     elDays, elEquipment, elLoadType, elTons, elDistance, elMinCharge
+    ].forEach(input => input.addEventListener('input', recalc));
+
+    // ── Initial render ───────────────────────────────────────────────────
+    recalc();
+  </script>
+</body>
+</html>
