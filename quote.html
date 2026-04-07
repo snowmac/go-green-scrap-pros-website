@@ -630,18 +630,294 @@
       font-style: italic;
     }
 
+    /* ── Generate Client Quote button ───────────────────────────────────── */
+    .btn-generate {
+      width: 100%;
+      background: var(--gold);
+      color: var(--green-dark);
+      font-size: 0.95rem;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(241,178,74,0.4);
+      margin-top: 0;
+    }
+    .btn-generate:hover { background: var(--gold-hover); }
+
+    /* ── Client quote overlay ────────────────────────────────────────────── */
+    #client-quote { display: none; }
+    body[data-mode="client"] .app-header,
+    body[data-mode="client"] .app-layout,
+    body[data-mode="client"] .customer-panel { display: none !important; }
+    body[data-mode="client"] #client-quote {
+      display: block;
+      min-height: 100vh;
+      background: var(--bg);
+    }
+
+    /* Sticky toolbar */
+    .cq-toolbar {
+      background: var(--green-dark);
+      padding: 0.65rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      flex-wrap: wrap;
+    }
+    .cq-toolbar-title {
+      flex: 1;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mint);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .cq-btn {
+      padding: 0.45rem 0.9rem;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      min-height: 38px;
+      touch-action: manipulation;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .cq-btn:active { transform: scale(0.97); }
+    .cq-btn-back {
+      background: transparent;
+      color: var(--mint);
+      border: 1.5px solid rgba(164,210,194,0.35);
+    }
+    .cq-btn-back:hover { background: rgba(164,210,194,0.1); }
+    .cq-btn-copy {
+      background: var(--gold);
+      color: var(--green-dark);
+    }
+    .cq-btn-copy:hover { background: var(--gold-hover); }
+    .cq-btn-copy.copied { background: var(--mint); }
+    .cq-btn-print {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+    }
+    .cq-btn-print:hover { background: rgba(255,255,255,0.2); }
+
+    /* Document card */
+    .cq-doc {
+      max-width: 720px;
+      margin: 1.25rem auto 2.5rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    /* Doc header: branding + title */
+    .cq-doc-header {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .cq-brand-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .cq-brand-tagline {
+      font-size: 0.68rem;
+      color: var(--mint);
+      margin-top: 0.15rem;
+    }
+    .cq-doc-meta { text-align: right; }
+    .cq-doc-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+    .cq-doc-date {
+      font-size: 0.72rem;
+      color: var(--mint);
+      margin-top: 0.2rem;
+    }
+
+    /* Sections */
+    .cq-section {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .cq-section-label {
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    /* Customer info fields */
+    .cq-customer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+    }
+    .cq-field { display: flex; flex-direction: column; gap: 0.22rem; }
+    .cq-field label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--green);
+      letter-spacing: 0.02em;
+    }
+    .cq-field input[type="text"] {
+      padding: 0.55rem 0.85rem;
+      font-size: 0.88rem;
+      font-family: inherit;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--text);
+      min-height: 42px;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+    }
+    .cq-field input[type="text"]:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 2px rgba(30,90,74,0.12);
+    }
+    .cq-field-full { grid-column: 1 / -1; }
+
+    /* Service details table */
+    .cq-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .cq-table thead tr { border-bottom: 2px solid var(--border); }
+    .cq-table th {
+      padding: 0.35rem 0.4rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+    }
+    .cq-table tbody tr { border-bottom: 1px solid var(--border); }
+    .cq-table tbody tr:last-child { border-bottom: none; }
+    .cq-table td {
+      padding: 0.5rem 0.4rem;
+      vertical-align: middle;
+    }
+    .cq-table td:first-child {
+      color: var(--muted);
+      font-size: 0.8rem;
+      width: 38%;
+    }
+    .cq-table td:last-child {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Total */
+    .cq-total-section {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .cq-total-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: 0.3rem;
+    }
+    .cq-total-amount {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .cq-valid-note {
+      font-size: 0.7rem;
+      color: var(--mint);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* Notes textarea */
+    .cq-notes {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      font-family: inherit;
+      font-size: 0.85rem;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface-alt);
+      color: var(--text);
+      resize: vertical;
+      min-height: 78px;
+      line-height: 1.55;
+      transition: border-color 0.15s;
+    }
+    .cq-notes:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 2px rgba(30,90,74,0.12);
+    }
+
+    /* Business contact footer */
+    .cq-contact-footer {
+      background: var(--surface-alt);
+      border-top: 2px solid var(--border);
+      padding: 0.9rem 1.5rem;
+    }
+    .cq-contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.75rem;
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .cq-contact-grid strong { color: var(--green); display: block; }
+
+    /* Mobile */
+    @media (max-width: 520px) {
+      .cq-toolbar-title { display: none; }
+      .cq-customer-grid { grid-template-columns: 1fr; }
+      .cq-contact-grid { grid-template-columns: 1fr 1fr; }
+      .cq-total-amount { font-size: 2.6rem; }
+      .cq-doc { margin: 0.75rem; border-radius: var(--radius); }
+    }
+
     /* ── Print stylesheet ────────────────────────────────────────────────── */
     @media print {
       .no-print { display: none !important; }
 
       body { background: white; }
 
-      .customer-panel {
+      /* ── Default print: show .customer-panel, hide client-quote ── */
+      body:not([data-mode="client"]) .customer-panel {
         max-width: 100%;
         padding: 0;
         margin: 0;
       }
-      .cp-card {
+      body:not([data-mode="client"]) .cp-card {
         box-shadow: none;
         border-radius: 0;
         border: none;
@@ -652,6 +928,44 @@
         print-color-adjust: exact;
       }
       .est-note { display: block; }
+
+      /* ── Client mode print: show #client-quote only ── */
+      body[data-mode="client"] .customer-panel { display: none !important; }
+      body[data-mode="client"] #client-quote {
+        display: block !important;
+        background: white;
+      }
+      body[data-mode="client"] .cq-doc {
+        max-width: 100%;
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+        border: none;
+      }
+      .cq-doc-header,
+      .cq-total-section {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      /* Render editable fields as plain text */
+      body[data-mode="client"] .cq-field input[type="text"] {
+        border: none;
+        padding: 0;
+        min-height: auto;
+        background: transparent;
+        font-size: 0.88rem;
+      }
+      body[data-mode="client"] .cq-notes {
+        border: none;
+        background: transparent;
+        padding: 0;
+        min-height: auto;
+        resize: none;
+      }
+      /* Hide empty optional fields on print */
+      body[data-mode="client"] .cq-field input[type="text"]:placeholder-shown {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -918,6 +1232,9 @@
         <button class="action-btn btn-copy" id="copy-btn" type="button">Copy Quote</button>
         <button class="action-btn btn-print" id="print-btn" type="button">Print / PDF</button>
       </div>
+      <button class="action-btn btn-generate" id="gen-client-quote" type="button">
+        Generate Client Quote →
+      </button>
 
     </div><!-- .results-col -->
   </div><!-- .app-layout -->
@@ -978,6 +1295,131 @@
       * Volume and weight are estimates based on debris type density. Final disposal charges may vary.
     </p>
   </div><!-- .customer-panel -->
+
+  <!-- ── Client-facing quote view ──────────────────────────────────────── -->
+  <!-- Hidden until "Generate Client Quote" is clicked.                      -->
+  <!-- Contains NO internal pricing mechanics.                               -->
+  <div id="client-quote">
+
+    <!-- Toolbar (no-print) -->
+    <div class="cq-toolbar no-print">
+      <button class="cq-btn cq-btn-back" id="cq-back" type="button">← Back to Tool</button>
+      <span class="cq-toolbar-title">Client Quote Preview</span>
+      <button class="cq-btn cq-btn-copy" id="cq-copy" type="button">Copy Client Quote</button>
+      <button class="cq-btn cq-btn-print" id="cq-print" type="button">Print / PDF</button>
+    </div>
+
+    <!-- Printable document -->
+    <div class="cq-doc">
+
+      <!-- Branding header -->
+      <div class="cq-doc-header">
+        <div>
+          <div class="cq-brand-name">Go Green Scrap Pros</div>
+          <div class="cq-brand-tagline">Junk Removal &amp; Scrap Metal · Denver Metro Area</div>
+        </div>
+        <div class="cq-doc-meta">
+          <div class="cq-doc-title">Service Quote</div>
+          <div class="cq-doc-date" id="cq-date"></div>
+        </div>
+      </div>
+
+      <!-- Bill To (optional customer info) -->
+      <div class="cq-section">
+        <div class="cq-section-label">Bill To</div>
+        <div class="cq-customer-grid">
+          <div class="cq-field">
+            <label for="cq-customer-name">Customer Name</label>
+            <input type="text" id="cq-customer-name" placeholder="(optional)">
+          </div>
+          <div class="cq-field">
+            <label for="cq-customer-contact">Phone / Email</label>
+            <input type="text" id="cq-customer-contact" placeholder="(optional)">
+          </div>
+          <div class="cq-field cq-field-full">
+            <label for="cq-customer-address">Service Address</label>
+            <input type="text" id="cq-customer-address" placeholder="(optional)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Service summary -->
+      <div class="cq-section">
+        <div class="cq-section-label">Service Details</div>
+        <table class="cq-table" aria-label="Service details">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Project</td>
+              <td id="cq-project">—</td>
+            </tr>
+            <tr>
+              <td>Service Type</td>
+              <td id="cq-service-type">Junk Removal &amp; Haul Away</td>
+            </tr>
+            <tr>
+              <td>Vehicle</td>
+              <td id="cq-vehicle">—</td>
+            </tr>
+            <tr>
+              <td>Load Type</td>
+              <td id="cq-load">—</td>
+            </tr>
+            <tr id="cq-vol-row" hidden>
+              <td>Est. Volume</td>
+              <td id="cq-volume">—</td>
+            </tr>
+            <tr id="cq-weight-row">
+              <td>Est. Weight</td>
+              <td id="cq-weight">—</td>
+            </tr>
+            <tr id="cq-extras-row" hidden>
+              <td>Additional Info</td>
+              <td id="cq-extras">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Total -->
+      <div class="cq-total-section">
+        <div class="cq-total-label">Total Quote</div>
+        <div class="cq-total-amount" id="cq-total">$0</div>
+        <div class="cq-valid-note">This quote is valid for 7 days from the date issued.</div>
+      </div>
+
+      <!-- Notes / disclaimer (editable) -->
+      <div class="cq-section">
+        <div class="cq-section-label">Notes &amp; Terms</div>
+        <textarea class="cq-notes" id="cq-notes" rows="3"></textarea>
+      </div>
+
+      <!-- Business contact footer -->
+      <div class="cq-contact-footer">
+        <div class="cq-contact-grid">
+          <div>
+            <strong>Go Green Scrap Pros</strong>
+            Thornton, CO 80229
+          </div>
+          <div>
+            <strong>Call or Text</strong>
+            720-675-7693
+          </div>
+          <div>
+            <strong>Hours</strong>
+            Mon–Sun 8am–6pm<br>
+            Same-day available
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .cq-doc -->
+  </div><!-- #client-quote -->
 
   <script>
     'use strict';
@@ -1302,8 +1744,147 @@
       cb();
     }
 
-    // ── Print button ──────────────────────────────────────────────────────
+    // ── Print button (internal / preview) ────────────────────────────────
     el('print-btn').addEventListener('click', () => window.print());
+
+    // ── Build & populate the client quote view ────────────────────────────
+    // Only populates computed fields. Customer info fields (name, contact,
+    // address) and notes are left alone once the user has typed in them.
+    const DEFAULT_NOTES = 'All quotes are subject to on-site assessment. '
+      + 'Volume and weight figures are estimates only. '
+      + 'Payment is due upon completion of service. '
+      + 'Scrap metal offset may reduce final cost.';
+
+    function buildClientQuote() {
+      const proj     = elProjectName.value.trim() || 'Unnamed Project';
+      const today    = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      const equipLbl = elEquipment.options[elEquipment.selectedIndex].text.replace(/ —.*/, '');
+      const loadType = elLoadType.value;
+      const loadLbl  = {
+        trash: 'Junk Removal &amp; Haul Away',
+        mixed: 'Junk Removal &amp; Scrap Metal Pickup',
+        scrap: 'Free Scrap Metal Pickup',
+      }[loadType];
+      const svcLbl   = {
+        trash: 'Junk Removal &amp; Haul Away',
+        mixed: 'Junk Removal with Scrap Metal Diversion',
+        scrap: 'Scrap Metal Pickup &amp; Recycling',
+      }[loadType];
+
+      // Computed fields — always refreshed
+      el('cq-date').textContent        = today;
+      el('cq-project').textContent     = proj;
+      el('cq-vehicle').textContent     = equipLbl;
+      el('cq-load').innerHTML          = loadLbl;
+      el('cq-service-type').innerHTML  = svcLbl;
+      el('cq-total').textContent       = el('out-final').textContent;
+
+      // Volume / weight rows
+      if (volMode === 'volume') {
+        el('cq-vol-row').hidden    = false;
+        el('cq-weight-row').hidden = false;
+        el('cq-volume').innerHTML  = el('out-cubic-yards').textContent
+          + ' cu yd <span class="est-tag">~est</span>';
+        el('cq-weight').innerHTML  = el('out-est-tons').textContent
+          + ' tons <span class="est-tag">~est</span>';
+      } else {
+        el('cq-vol-row').hidden = true;
+        const manualTons = Math.max(0, +elTons.value || 0);
+        if (manualTons > 0) {
+          el('cq-weight-row').hidden = false;
+          el('cq-weight').textContent = fmtDec(manualTons, 2) + ' tons';
+        } else {
+          el('cq-weight-row').hidden = true;
+        }
+      }
+
+      // Extras row (surcharges, phrased for customer — no dollar amounts)
+      const extras = [];
+      if (elDistance.checked) extras.push('Extended distance service (>10 miles)');
+      if (flights > 0) extras.push(`Stair carry — ${flights} flight${flights > 1 ? 's' : ''}`);
+      el('cq-extras-row').hidden = extras.length === 0;
+      el('cq-extras').textContent = extras.join('; ');
+
+      // Notes — seed default text only if field is empty
+      const notesEl = el('cq-notes');
+      if (!notesEl.value.trim()) {
+        notesEl.value = DEFAULT_NOTES;
+      }
+    }
+
+    // ── Generate Client Quote button ──────────────────────────────────────
+    el('gen-client-quote').addEventListener('click', () => {
+      buildClientQuote();
+      document.body.dataset.mode = 'client';
+      window.scrollTo(0, 0);
+    });
+
+    // ── Back to tool ──────────────────────────────────────────────────────
+    el('cq-back').addEventListener('click', () => {
+      delete document.body.dataset.mode;
+      window.scrollTo(0, 0);
+    });
+
+    // ── Print client quote ────────────────────────────────────────────────
+    el('cq-print').addEventListener('click', () => window.print());
+
+    // ── Copy client quote ─────────────────────────────────────────────────
+    el('cq-copy').addEventListener('click', () => {
+      const name    = el('cq-customer-name').value.trim();
+      const contact = el('cq-customer-contact').value.trim();
+      const address = el('cq-customer-address').value.trim();
+      const notes   = el('cq-notes').value.trim();
+
+      // Strip HTML tags from rendered cells
+      const stripHtml = s => s.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').trim();
+
+      const hasCustomer = name || contact || address;
+      const lines = [
+        'GO GREEN SCRAP PROS',
+        'Service Quote',
+        '─'.repeat(36),
+        hasCustomer ? (name    ? `Customer: ${name}`    : null) : null,
+        hasCustomer ? (contact ? `Contact:  ${contact}` : null) : null,
+        hasCustomer ? (address ? `Address:  ${address}` : null) : null,
+        hasCustomer ? '─'.repeat(36) : null,
+        `Project:  ${el('cq-project').textContent}`,
+        `Date:     ${el('cq-date').textContent}`,
+        `Service:  ${stripHtml(el('cq-service-type').innerHTML)}`,
+        `Vehicle:  ${el('cq-vehicle').textContent}`,
+        `Load:     ${stripHtml(el('cq-load').innerHTML)}`,
+        !el('cq-vol-row').hidden
+          ? `Volume:   ${stripHtml(el('cq-volume').innerHTML)}`
+          : null,
+        !el('cq-weight-row').hidden
+          ? `Weight:   ${stripHtml(el('cq-weight').innerHTML)}`
+          : null,
+        !el('cq-extras-row').hidden
+          ? `Notes:    ${el('cq-extras').textContent}`
+          : null,
+        '─'.repeat(36),
+        `TOTAL:    ${el('cq-total').textContent}`,
+        notes ? '\n' + notes : null,
+        '─'.repeat(36),
+        'Go Green Scrap Pros  ·  720-675-7693  ·  gogreenscrappros.com',
+        'Thornton, CO  ·  Mon–Sun 8am–6pm  ·  Same-day service available',
+      ].filter(Boolean).join('\n');
+
+      const btn = el('cq-copy');
+      const finish = () => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy Client Quote';
+          btn.classList.remove('copied');
+        }, 2200);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(lines).then(finish).catch(() => fallbackCopy(lines, finish));
+      } else {
+        fallbackCopy(lines, finish);
+      }
+    });
 
     // ── Wire remaining live inputs to recalc ──────────────────────────────
     // (elLaborers and elEquipment have their own listeners above)
