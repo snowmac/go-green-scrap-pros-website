@@ -878,10 +878,13 @@
                 <td id="out-total-cost">—</td>
               </tr>
               <tr>
-                <td>Target Margin</td>
+                <td>
+                  Target Net Profit Margin
+                  <div style="font-size:0.68rem;color:var(--muted);font-weight:400;margin-top:0.1rem">% of selling price</div>
+                </td>
                 <td>
                   <div class="margin-cell">
-                    <input type="number" id="margin-pct" value="30" min="0" max="99" inputmode="numeric" aria-label="Target margin percentage">
+                    <input type="number" id="margin-pct" value="30" min="0" max="99" inputmode="numeric" aria-label="Target net profit margin as percentage of selling price">
                     <span class="pct-sym">%</span>
                   </div>
                 </td>
@@ -889,6 +892,10 @@
               <tr>
                 <td>Suggested Quote</td>
                 <td id="out-suggested">—</td>
+              </tr>
+              <tr>
+                <td>Net Profit</td>
+                <td id="out-net-profit" style="color:var(--green)">—</td>
               </tr>
               <tr class="row-total">
                 <td>Rounded Quote (+$25)</td>
@@ -1176,8 +1183,15 @@
       el('row-stairs').classList.toggle('row-muted', flights === 0);
 
       // ── Update pricing panel ──────────────────────────────────────────────
+      // netProfit = suggestedQuote - subtotal
+      // Verify: netProfit / suggestedQuote == margin/100  (net margin on selling price)
+      const netProfit       = suggestedQuote - subtotal;
+      const verifiedMargin  = suggestedQuote > 0 ? (netProfit / suggestedQuote) * 100 : 0;
+
       el('out-total-cost').textContent = fmtUSD(subtotal);
       el('out-suggested').textContent  = fmtUSD(suggestedQuote);
+      el('out-net-profit').textContent = fmtUSD(netProfit)
+        + '  (' + fmtDec(verifiedMargin, 1) + '% of sale)';
       el('out-rounded').textContent    = fmtUSD(roundedQuote);
       el('out-final').textContent      = fmtUSD(finalQuote);
 
@@ -1251,7 +1265,7 @@
         extras.length ? `Extras:    ${extras.join(' | ')}` : null,
         '─'.repeat(34),
         `Cost:      ${el('out-subtotal').textContent}`,
-        `Margin:    ${margin}%`,
+        `Net Margin: ${margin}% of selling price`,
         `Suggested: ${el('out-suggested').textContent}`,
         `Rounded:   ${el('out-rounded').textContent}`,
         '─'.repeat(34),
