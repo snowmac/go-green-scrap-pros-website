@@ -24,7 +24,7 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- Original city pages -->
+  <!-- Denver Metro city pages -->
   <url>
     <loc>https://gogreenscrappros.com/junk-removal-thornton/</loc>
     <lastmod>2026-04-14</lastmod>
@@ -74,7 +74,7 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- New city pages — Boulder County & Northern Colorado -->
+  <!-- Boulder County & Northern Colorado city pages -->
   <url>
     <loc>https://gogreenscrappros.com/junk-removal-boulder/</loc>
     <lastmod>2026-04-14</lastmod>
@@ -119,6 +119,27 @@
 
   <url>
     <loc>https://gogreenscrappros.com/junk-removal-niwot/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-hygiene/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-lyons/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-gunbarrel/</loc>
     <lastmod>2026-04-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
