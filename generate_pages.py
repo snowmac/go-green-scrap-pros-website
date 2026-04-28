@@ -2,6 +2,10 @@
 """
 Generate 56 city+service HTML pages for Go Green Scrap Pros.
 8 services x 7 cities = 56 unique pages.
+
+Note: Visible price amounts/ranges are intentionally not rendered. Pages drive
+visitors toward calling/texting for a quote. The "free" qualifier remains where
+genuinely applicable (e.g. curbside scrap metal, curbside fridge/freezer pickup).
 """
 import os
 import json
@@ -109,13 +113,16 @@ CITIES = {
 }
 
 # ─── Service Data ────────────────────────────────────────────────────────────
+# Each service has:
+#   - price_free: True only when curbside pickup is genuinely free
+#   - intro/why/faqs/items: visible copy with NO dollar amounts. Quote-oriented
+#     CTAs are used instead. The "free" wording remains for genuinely free
+#     services (curbside scrap metal pickup) since that is not a price amount.
 SERVICES = {
     "tv-recycling": {
         "name": "TV Recycling",
         "slug": "tv-recycling",
         "item": "TV",
-        "price": "$50",
-        "price_num": "50",
         "price_free": False,
         "short": "TV recycling",
         "action": "Curbside TV pickup and responsible e-waste recycling",
@@ -130,7 +137,7 @@ SERVICES = {
                 "that don't belong in any landfill. That's where Go Green Scrap Pros comes in."
             ),
             (
-                "For a flat $50, we'll pick up your old TV curbside anywhere in {city_name} — "
+                "We'll pick up your old TV curbside anywhere in {city_name} — "
                 "zip codes {zips_text}. No hauling it to a drop-off. No loading it in your car. "
                 "Just set it at the curb and we'll handle the rest. We properly disassemble and recycle "
                 "every TV we collect, recovering metals, plastics, and circuit boards for responsible processing."
@@ -138,16 +145,16 @@ SERVICES = {
             (
                 "Serving {neighborhoods_short} and every neighborhood in between, "
                 "we make TV recycling in {city_name} as easy as a phone call. "
-                "Text or call Adam at 720-675-7693 and we'll get your old TV picked up — usually same-day or next-day."
+                "Text or call Adam at 720-675-7693 for a free quote — usually same-day or next-day pickup."
             ),
         ],
         "how_it_works": [
-            ("Schedule Your Pickup", "Call or text Adam at 720-675-7693. Let us know what type and size of TV you have. We'll confirm a pickup window — most jobs are same-day or next-day."),
+            ("Schedule Your Pickup", "Call or text Adam at 720-675-7693 for a free quote. Let us know what type and size of TV you have. We'll confirm a pickup window — most jobs are same-day or next-day."),
             ("Set It at the Curb", "Place your TV at the curb or driveway. No need to box it or wrap it. CRTs, flat screens, any size — just get it outside and we take it from there."),
             ("We Recycle It Right", "Your TV gets properly disassembled and recycled. Metals, glass, plastics, and circuit boards are separated and sent to certified processing facilities — not the landfill."),
         ],
         "why_choose": [
-            "Flat $50 rate — no hidden fees, no surprises",
+            "Flat-rate curbside pickup — no hidden fees, no surprises",
             "CRTs, flat screens, plasma, LED, LCD — we take them all",
             "Proper e-waste recycling with certified processors",
             "Curbside pickup — you don't have to haul it anywhere",
@@ -155,8 +162,8 @@ SERVICES = {
             "Locally owned and operated — you deal with Adam directly",
         ],
         "faqs": [
-            ("How much does TV recycling cost in {city_name}?",
-             "TV recycling in {city_name} is a flat $50 per TV with Go Green Scrap Pros. That covers curbside pickup and responsible e-waste recycling — no extra fees regardless of TV type or size."),
+            ("How do I get a TV recycling quote in {city_name}?",
+             "Call or text Adam at 720-675-7693 with your address and the type of TV you need picked up. We'll quote you on the spot — flat-rate curbside pickup with no surprise fees."),
             ("Do you pick up CRT TVs in {city_name}?",
              "Yes, we pick up all TV types in {city_name} including CRT, LED, LCD, plasma, and projection TVs. CRTs are some of the most important to recycle properly because of the lead in the glass."),
             ("Why can't I just throw my old TV in the trash?",
@@ -166,18 +173,17 @@ SERVICES = {
             ("How quickly can you pick up my old TV in {city_name}?",
              "Most TV pickups in {city_name} are same-day or next-day. Call or text Adam at 720-675-7693 and we'll lock in a time that works for you."),
         ],
-        "pricing_section": [
-            ("Single TV (any type, any size)", "$50"),
-            ("Multiple TVs", "$50 each"),
-            ("TV + other e-waste (monitors, printers)", "Call for bundle price"),
+        "items_section": [
+            "Flat screen TVs (LED, LCD, plasma)",
+            "CRT (tube) TVs of any size",
+            "Projection TVs and rear-projection units",
+            "Computer monitors and bundled e-waste",
         ],
     },
     "mattress-removal": {
         "name": "Mattress Removal",
         "slug": "mattress-removal",
         "item": "mattress",
-        "price": "$80",
-        "price_num": "80",
         "price_free": False,
         "short": "mattress removal",
         "action": "Curbside mattress pickup and eco-friendly disposal",
@@ -189,57 +195,56 @@ SERVICES = {
                 "The city won't take it with regular trash. Most mattress stores won't haul your old one away "
                 "unless you buy from them — and even then, they charge extra. Meanwhile, that worn-out mattress "
                 "is taking up space in your garage, leaning against a wall, or blocking a room you actually need. "
-                "Go Green Scrap Pros solves this for $80 flat."
+                "Go Green Scrap Pros makes it simple: call for a flat-rate quote and we handle the rest."
             ),
             (
                 "We'll pick up your mattress curbside anywhere in {city_name} — all zip codes including "
-                "{zips_text}. Twin, full, queen, king — doesn't matter. Box springs too, at the same $80 rate. "
+                "{zips_text}. Twin, full, queen, king — doesn't matter. Box springs too. "
                 "We separate the steel springs, foam, and fabric for recycling whenever possible, "
                 "keeping as much out of the landfill as we can."
             ),
             (
                 "If you're in {neighborhoods_short} or anywhere else in {city_name}, "
-                "just text Adam at 720-675-7693. Most pickups are same-day or next-day. "
+                "just text Adam at 720-675-7693 for a free quote. Most pickups are same-day or next-day. "
                 "Stop stepping over that mattress — let us take it."
             ),
         ],
         "how_it_works": [
-            ("Text or Call Adam", "Reach out at 720-675-7693. Let us know the mattress size and where you are in {city_name}. We'll confirm a pickup window right away."),
+            ("Text or Call Adam", "Reach out at 720-675-7693 for a free quote. Let us know the mattress size and where you are in {city_name}. We'll confirm a pickup window right away."),
             ("Place It Curbside", "Drag it to the curb or driveway — that's all you need to do. If it's still in a bedroom and you need help, ask about our in-home removal option."),
             ("We Haul & Recycle", "We take it away and separate what we can — steel springs go to metal recycling, foam and fabric get processed. No illegal dumping, no shortcuts."),
         ],
         "why_choose": [
-            "Flat $80 rate for any mattress size — twin to king",
-            "Box springs also $80 — same flat price",
+            "Flat-rate quote for any mattress size — twin to king",
+            "Box springs covered too — same flat-rate pickup",
             "We recycle springs, foam, and fabric when possible",
             "Curbside pickup — no need to haul it to a dump yourself",
             "Same-day and next-day pickup available in {city_name}",
             "Locally owned — Adam handles every job personally",
         ],
         "faqs": [
-            ("How much does mattress removal cost in {city_name}?",
-             "Mattress removal in {city_name} is $80 flat with Go Green Scrap Pros — any size, curbside pickup. Box springs are also $80. No hidden fees or upcharges."),
+            ("How do I get a quote for mattress removal in {city_name}?",
+             "Call or text Adam at 720-675-7693. Mattress removal in {city_name} is flat-rate — any size, curbside pickup, no hidden fees or upcharges. We'll confirm pricing before we ever roll up."),
             ("Do you take box springs too?",
-             "Yes. Box springs are $80, same as mattresses. If you're replacing a full set, we'll take both in the same trip."),
+             "Yes. Box springs are picked up at the same flat rate as mattresses. If you're replacing a full set, we'll take both in the same trip — call us for a combined quote."),
             ("Can you pick up a mattress inside my house?",
-             "Our standard $80 rate is for curbside pickup. If you need the mattress removed from inside your home, give us a call and we can work something out — especially for stairs or tight spaces."),
+             "Our flat rate is for curbside pickup. If you need the mattress removed from inside your home, give us a call and we can work something out — especially for stairs or tight spaces."),
             ("What zip codes in {city_name} do you cover?",
              "We cover all of {city_name} — zip codes {zips_text}. From {neighborhoods_two} and everywhere in between."),
             ("What happens to my old mattress after pickup?",
              "We separate recyclable materials — steel springs, foam, and fabric — and send them to appropriate recycling facilities. We keep as much out of the landfill as possible."),
         ],
-        "pricing_section": [
-            ("Mattress Removal (any size)", "$80"),
-            ("Box Spring Removal", "$80"),
-            ("Mattress + Box Spring combo", "$160 ($80 each)"),
+        "items_section": [
+            "Twin, full, queen, and king mattresses",
+            "Box springs (any size)",
+            "Futons and mattress toppers",
+            "Pillow-top, memory foam, and hybrid mattresses",
         ],
     },
     "large-appliance-removal": {
         "name": "Large Appliance Removal",
         "slug": "large-appliance-removal",
         "item": "appliance",
-        "price": "$100",
-        "price_num": "100",
         "price_free": False,
         "short": "large appliance removal",
         "action": "Curbside pickup for washers, dryers, stoves, and dishwashers",
@@ -253,7 +258,7 @@ SERVICES = {
                 "with flat-rate curbside appliance removal for {city_name} and the surrounding area."
             ),
             (
-                "For $100 flat, we'll pick up your old washer, dryer, stove, oven, dishwasher, "
+                "We'll pick up your old washer, dryer, stove, oven, dishwasher, "
                 "or any other large household appliance from curbside. We serve all of {city_name} — "
                 "zip codes {zips_text}. Every appliance we pick up gets stripped for metal, which goes straight "
                 "to recycling. That's the Go Green way."
@@ -261,16 +266,16 @@ SERVICES = {
             (
                 "Whether you're upgrading your kitchen in {neighborhoods_sample} or "
                 "finally replacing that 20-year-old washer, we've got you covered. "
-                "Call or text Adam at 720-675-7693 for same-day or next-day pickup in {city_name}."
+                "Call or text Adam at 720-675-7693 for a free quote — same-day or next-day pickup in {city_name}."
             ),
         ],
         "how_it_works": [
-            ("Call or Text Us", "Reach Adam at 720-675-7693. Tell us what appliance you need removed and your address in {city_name}. We'll set up a pickup window."),
+            ("Call or Text Us", "Reach Adam at 720-675-7693 for a free quote. Tell us what appliance you need removed and your address in {city_name}. We'll set up a pickup window."),
             ("Move It to the Curb", "Get the appliance to curbside or your driveway. If it's too heavy or awkward, let us know and we can discuss options."),
             ("We Pick Up & Recycle", "We load it up, haul it away, and recycle every bit of metal from the unit. Steel, copper, aluminum — it all gets a second life."),
         ],
         "why_choose": [
-            "Flat $100 rate per appliance — no surprise fees",
+            "Flat-rate quote per appliance — no surprise fees",
             "Washers, dryers, stoves, dishwashers — all covered",
             "Metal from every appliance gets recycled",
             "Curbside pickup means zero hassle for you",
@@ -278,8 +283,8 @@ SERVICES = {
             "Owner-operated — Adam handles your job personally",
         ],
         "faqs": [
-            ("How much does appliance removal cost in {city_name}?",
-             "Large appliance removal in {city_name} is $100 flat per appliance with Go Green Scrap Pros. That covers curbside pickup and recycling for washers, dryers, stoves, dishwashers, and more."),
+            ("How do I get an appliance removal quote in {city_name}?",
+             "Call or text Adam at 720-675-7693 with the appliance type and your {city_name} address. We quote flat-rate per appliance — curbside pickup and recycling for washers, dryers, stoves, dishwashers, and more."),
             ("Do you take refrigerators too?",
              "Refrigerators require special handling for freon recovery, so they have a separate service. Check our refrigerator removal page for {city_name} for details on that."),
             ("What happens to the old appliance?",
@@ -287,21 +292,19 @@ SERVICES = {
             ("What {city_name} zip codes do you serve?",
              "We serve all of {city_name} including zip codes {zips_text}. {neighborhoods_two} — we cover every neighborhood."),
             ("Can you pick up multiple appliances at once?",
-             "Absolutely. If you're doing a kitchen or laundry room overhaul in {city_name}, we'll take all the old appliances in one trip. Each unit is $100."),
+             "Absolutely. If you're doing a kitchen or laundry room overhaul in {city_name}, we'll take all the old appliances in one trip. Call for a multi-unit quote."),
         ],
-        "pricing_section": [
-            ("Washer or Dryer Removal", "$100"),
-            ("Stove / Oven / Range Removal", "$100"),
-            ("Dishwasher Removal", "$100"),
-            ("Multiple appliances", "$100 each"),
+        "items_section": [
+            "Washers and dryers (gas or electric)",
+            "Stoves, ovens, ranges, and cooktops",
+            "Dishwashers and trash compactors",
+            "Microwaves, range hoods, and similar large kitchen appliances",
         ],
     },
     "refrigerator-removal": {
         "name": "Refrigerator Removal",
         "slug": "refrigerator-removal",
         "item": "refrigerator",
-        "price": "$100",
-        "price_num": "100",
         "price_free": False,
         "short": "refrigerator removal",
         "action": "Safe curbside fridge pickup with proper freon recovery",
@@ -315,7 +318,7 @@ SERVICES = {
                 "Go Green Scrap Pros handles all of that for you, legally and responsibly."
             ),
             (
-                "For $100 flat, we'll pick up your old fridge, stand-up freezer, mini-fridge, or wine cooler "
+                "We pick up your old fridge, stand-up freezer, mini-fridge, or wine cooler "
                 "from curbside anywhere in {city_name} — zip codes {zips_text}. "
                 "We ensure proper refrigerant recovery before the unit is dismantled, and the metal "
                 "gets recycled. It's the right way to get rid of an old fridge."
@@ -323,16 +326,16 @@ SERVICES = {
             (
                 "From {neighborhoods_short} to every corner of {city_name}, "
                 "we make fridge disposal easy and compliant. "
-                "Call or text Adam at 720-675-7693 — most pickups happen same-day or next-day."
+                "Call or text Adam at 720-675-7693 for a free quote — most pickups happen same-day or next-day."
             ),
         ],
         "how_it_works": [
-            ("Schedule the Pickup", "Call or text Adam at 720-675-7693. Let us know what type of unit you have — fridge, freezer, mini-fridge — and your {city_name} address."),
+            ("Schedule the Pickup", "Call or text Adam at 720-675-7693 for a free quote. Let us know what type of unit you have — fridge, freezer, mini-fridge — and your {city_name} address."),
             ("Set It Curbside", "Move the fridge to the curb or driveway. Defrost it if you can, but don't worry about cleaning it out — we've seen it all."),
             ("We Handle Freon & Recycling", "We ensure proper refrigerant recovery per EPA guidelines, then dismantle and recycle the metal. No shortcuts, no illegal dumping."),
         ],
         "why_choose": [
-            "Flat $100 rate — fridge, freezer, mini-fridge, wine cooler",
+            "Flat-rate pickup — fridge, freezer, mini-fridge, wine cooler",
             "Proper freon recovery per EPA regulations",
             "All metal gets recycled after refrigerant removal",
             "No fines, no risk — we handle compliance for you",
@@ -340,29 +343,28 @@ SERVICES = {
             "Honest, owner-operated service — call or text Adam",
         ],
         "faqs": [
-            ("How much does refrigerator removal cost in {city_name}?",
-             "Refrigerator removal in {city_name} is $100 flat with Go Green Scrap Pros. That covers curbside pickup, proper refrigerant recovery, and metal recycling."),
-            ("Why does fridge removal cost $100?",
+            ("How do I get a refrigerator removal quote in {city_name}?",
+             "Call or text Adam at 720-675-7693. Refrigerator removal in {city_name} is flat-rate and includes curbside pickup, proper refrigerant recovery, and metal recycling."),
+            ("Why does fridge removal cost more than other appliances?",
              "Fridges require certified refrigerant (freon) recovery before they can be recycled or disposed of. This extra step is required by the EPA and adds to the process — but it keeps harmful chemicals out of the atmosphere."),
             ("Do you take freezers and mini-fridges too?",
-             "Yes. Stand-up freezers, chest freezers, mini-fridges, wine coolers — any unit that contains refrigerant. Same $100 flat rate."),
+             "Yes. Stand-up freezers, chest freezers, mini-fridges, wine coolers — any unit that contains refrigerant. Same flat-rate pickup."),
             ("What {city_name} areas do you serve?",
              "We serve all of {city_name} — zip codes {zips_text} — including {neighborhoods_two} and surrounding areas."),
             ("Is it illegal to dump a refrigerator in {city_name}?",
              "Yes. Dumping appliances containing refrigerants is illegal under federal EPA regulations. Fines can be significant. We handle compliant disposal so you don't have to worry about it."),
         ],
-        "pricing_section": [
-            ("Refrigerator Removal", "$100"),
-            ("Stand-up Freezer Removal", "$100"),
-            ("Mini-Fridge or Wine Cooler", "$100"),
+        "items_section": [
+            "Full-size refrigerators (top, bottom, and side-by-side)",
+            "Stand-up and chest freezers",
+            "Mini-fridges and dorm-size units",
+            "Wine coolers and beverage refrigerators",
         ],
     },
     "air-conditioner-removal": {
         "name": "Air Conditioner Removal",
         "slug": "air-conditioner-removal",
         "item": "air conditioner",
-        "price": "$50",
-        "price_num": "50",
         "price_free": False,
         "short": "AC removal",
         "action": "Curbside pickup for window units and portable ACs",
@@ -376,24 +378,24 @@ SERVICES = {
                 "safely and recycle the materials responsibly."
             ),
             (
-                "For just $50, we'll pick up your window AC or portable air conditioner curbside anywhere in "
+                "We'll pick up your window AC or portable air conditioner curbside anywhere in "
                 "{city_name}. We serve zip codes {zips_text} and handle proper refrigerant recovery before "
                 "recycling the metal housing, copper coils, and other materials. "
-                "It's cheap, easy, and the right thing to do."
+                "Affordable, easy, and the right thing to do."
             ),
             (
                 "Whether you're in {neighborhoods_short} or anywhere else in {city_name}, "
                 "AC removal doesn't have to be a headache. "
-                "Text or call Adam at 720-675-7693 and we'll schedule a quick pickup."
+                "Text or call Adam at 720-675-7693 for a free estimate and we'll schedule a quick pickup."
             ),
         ],
         "how_it_works": [
-            ("Contact Adam", "Call or text 720-675-7693. Let us know how many AC units you have and your location in {city_name}. We'll schedule your pickup."),
+            ("Contact Adam", "Call or text 720-675-7693 for a free estimate. Let us know how many AC units you have and your location in {city_name}. We'll schedule your pickup."),
             ("Put It at the Curb", "Window units and portable ACs are small enough to carry outside. Just set it at the curb or driveway and we'll grab it."),
             ("Proper Disposal & Recycling", "We recover any refrigerant safely, then recycle the metal — copper coils, aluminum fins, steel housing. Done the right way."),
         ],
         "why_choose": [
-            "Only $50 per unit — affordable AC disposal",
+            "Flat-rate per unit — affordable AC disposal",
             "Window units and portable ACs both accepted",
             "Proper refrigerant handling — no shortcuts",
             "Metals recycled: copper, aluminum, steel",
@@ -401,8 +403,8 @@ SERVICES = {
             "Owner-operated — Adam picks up the phone and does the work",
         ],
         "faqs": [
-            ("How much does AC removal cost in {city_name}?",
-             "Air conditioner removal in {city_name} is $50 flat per unit with Go Green Scrap Pros. That covers curbside pickup, refrigerant handling, and metal recycling."),
+            ("How do I get an AC removal quote in {city_name}?",
+             "Call or text Adam at 720-675-7693 for a free estimate. Air conditioner removal in {city_name} is flat-rate per unit — covers curbside pickup, refrigerant handling, and metal recycling."),
             ("Do you remove central AC units?",
              "We focus on window units and portable AC units. Central AC systems require HVAC professionals for removal. If you have a window unit or portable AC, we're your guys."),
             ("Why can't I throw an AC unit in the trash?",
@@ -410,20 +412,19 @@ SERVICES = {
             ("What areas of {city_name} do you cover?",
              "All of {city_name} — zip codes {zips_text}. {neighborhoods_two} and every neighborhood in between."),
             ("Can you pick up multiple AC units at once?",
-             "Absolutely. If you're cleaning out a rental property or doing a seasonal purge, we'll take all your old AC units in one trip. $50 each."),
+             "Absolutely. If you're cleaning out a rental property or doing a seasonal purge, we'll take all your old AC units in one trip. Call us for a multi-unit estimate."),
         ],
-        "pricing_section": [
-            ("Window AC Unit Removal", "$50"),
-            ("Portable AC Removal", "$50"),
-            ("Multiple units", "$50 each"),
+        "items_section": [
+            "Window AC units of any BTU rating",
+            "Portable / floor-standing AC units",
+            "Through-the-wall AC sleeves",
+            "Dehumidifiers and small cooling units",
         ],
     },
     "treadmill-removal": {
         "name": "Treadmill Removal",
         "slug": "treadmill-removal",
         "item": "treadmill",
-        "price": "$150",
-        "price_num": "150",
         "price_free": False,
         "short": "treadmill removal",
         "action": "Curbside pickup for treadmills and heavy exercise equipment",
@@ -437,23 +438,23 @@ SERVICES = {
                 "doorways. {city_name} homeowners call Go Green Scrap Pros when they're done wrestling with it."
             ),
             (
-                "For $150 flat, we'll pick up your treadmill curbside anywhere in {city_name} — "
+                "We'll pick up your treadmill curbside anywhere in {city_name} — "
                 "zip codes {zips_text}. The metal frame, motor housing, and steel components all get recycled. "
                 "You get your space back, and another hunk of metal stays out of the landfill."
             ),
             (
                 "From {neighborhoods_short} to every corner of {city_name}, "
                 "we've hauled treadmills out of basements, spare bedrooms, and garages. "
-                "Call or text Adam at 720-675-7693 and let's get that thing gone."
+                "Call or text Adam at 720-675-7693 for a free quote and let's get that thing gone."
             ),
         ],
         "how_it_works": [
-            ("Call or Text Adam", "Reach out at 720-675-7693. Describe the equipment — treadmill, elliptical, weight machine — and your location in {city_name}."),
-            ("Get It to the Curb", "If you can get it to the curb or driveway, perfect — that's our $150 flat rate. Can't move it? Ask about our in-home removal option."),
+            ("Call or Text Adam", "Reach out at 720-675-7693 for a free quote. Describe the equipment — treadmill, elliptical, weight machine — and your location in {city_name}."),
+            ("Get It to the Curb", "If you can get it to the curb or driveway, perfect — that's our flat curbside rate. Can't move it? Ask about our in-home removal option."),
             ("We Haul & Recycle", "We load it up and recycle the metal frame, motor, and steel components. The heavy lifting is on us."),
         ],
         "why_choose": [
-            "$150 flat rate for treadmill removal — no surprises",
+            "Flat-rate curbside pickup for treadmill removal — no surprises",
             "Ellipticals, weight machines, exercise bikes also accepted",
             "Metal frames and motors get recycled",
             "We handle the heavy lifting — these things are beasts",
@@ -461,29 +462,28 @@ SERVICES = {
             "Locally owned — Adam gives you straight answers",
         ],
         "faqs": [
-            ("How much does treadmill removal cost in {city_name}?",
-             "Treadmill removal in {city_name} is $150 flat with Go Green Scrap Pros. That's for curbside pickup. If you need help getting it out of a basement or upstairs room, give us a call to discuss options."),
+            ("How do I get a treadmill removal quote in {city_name}?",
+             "Call or text Adam at 720-675-7693 for a free quote. Treadmill removal in {city_name} is flat-rate for curbside pickup. If you need help getting it out of a basement or upstairs room, mention it on the call and we'll work something out."),
             ("Do you take other exercise equipment besides treadmills?",
-             "Yes. Ellipticals, stationary bikes, weight machines, home gym systems — we take it all. Pricing depends on the item, but $150 is the treadmill rate."),
-            ("Why are treadmills so expensive to remove?",
-             "Treadmills are exceptionally heavy — most weigh 200-350 pounds. The motor assembly, steel frame, and belt mechanism make them one of the heaviest single household items. The $150 rate reflects the effort involved."),
+             "Yes. Ellipticals, stationary bikes, weight machines, home gym systems — we take it all. Pricing depends on the item, so give us a call for a quote."),
+            ("Why are treadmills more expensive to remove than smaller items?",
+             "Treadmills are exceptionally heavy — most weigh 200-350 pounds. The motor assembly, steel frame, and belt mechanism make them one of the heaviest single household items. The flat rate reflects the effort involved."),
             ("What {city_name} areas do you serve for treadmill removal?",
              "All of {city_name} — zip codes {zips_text}. From {neighborhoods_two} and everywhere in between. If you're in {city_name}, we'll come to you."),
             ("Can you pick up a treadmill from my basement?",
-             "Our $150 flat rate covers curbside pickup. Basement or upstairs removal is possible but may cost extra depending on the stairs and access. Call Adam at 720-675-7693 and we'll work something out."),
+             "Our flat curbside rate covers pickup at the curb or driveway. Basement or upstairs removal is possible but may add to the quote depending on the stairs and access. Call Adam at 720-675-7693 and we'll work something out."),
         ],
-        "pricing_section": [
-            ("Treadmill Removal (curbside)", "$150"),
-            ("Elliptical Removal", "Call for pricing"),
-            ("Exercise Bike / Weight Machine", "Call for pricing"),
+        "items_section": [
+            "Treadmills (folding and non-folding)",
+            "Ellipticals and stair-climbers",
+            "Stationary and recumbent exercise bikes",
+            "Weight benches, racks, and home gym systems",
         ],
     },
     "couch-removal": {
         "name": "Couch Removal",
         "slug": "couch-removal",
         "item": "couch",
-        "price": "$90",
-        "price_num": "90",
         "price_free": False,
         "short": "couch removal",
         "action": "Curbside pickup for couches, sofas, and sectionals",
@@ -497,7 +497,7 @@ SERVICES = {
                 "is way harder than it sounds. That's why Go Green Scrap Pros offers flat-rate curbside couch removal."
             ),
             (
-                "For $90 flat, we pick up your old couch, sofa, loveseat, or sectional from curbside "
+                "We pick up your old couch, sofa, loveseat, or sectional from curbside "
                 "anywhere in {city_name}. We serve all zip codes: {zips_text}. "
                 "When the couch is in decent shape, we'll try to donate it. When it's not, "
                 "we separate recyclable materials — wood frames, metal springs, foam — and handle disposal responsibly."
@@ -505,16 +505,16 @@ SERVICES = {
             (
                 "From {neighborhoods_short} to the rest of {city_name}, "
                 "we've hauled more couches than we can count. "
-                "Call or text Adam at 720-675-7693 and we'll get that couch out of your way."
+                "Call or text Adam at 720-675-7693 for a free quote and we'll get that couch out of your way."
             ),
         ],
         "how_it_works": [
-            ("Schedule the Pickup", "Text or call Adam at 720-675-7693. Let us know what you've got — couch, loveseat, sectional — and your {city_name} address."),
+            ("Schedule the Pickup", "Text or call Adam at 720-675-7693 for a free quote. Let us know what you've got — couch, loveseat, sectional — and your {city_name} address."),
             ("Get It to the Curb", "Drag it to the curb or driveway. Can't fit it through the door? We've been there — ask about our in-home removal option."),
             ("We Haul, Donate, or Recycle", "We pick it up and donate when possible. If it's past its useful life, we separate wood, metal, and foam for recycling."),
         ],
         "why_choose": [
-            "$90 flat rate — couches, sofas, loveseats",
+            "Flat-rate quote — couches, sofas, loveseats",
             "Sectionals and sofa beds accepted too",
             "Donation when the couch is still in good shape",
             "Materials recycled when donation isn't an option",
@@ -522,30 +522,28 @@ SERVICES = {
             "Honest pricing from a local, owner-operated business",
         ],
         "faqs": [
-            ("How much does couch removal cost in {city_name}?",
-             "Couch removal in {city_name} is $90 flat with Go Green Scrap Pros. That covers curbside pickup for a standard couch or sofa. Sectionals may be slightly more depending on size."),
+            ("How do I get a couch removal quote in {city_name}?",
+             "Call or text Adam at 720-675-7693 for a free quote. Couch removal in {city_name} is flat-rate for curbside pickup of a standard couch or sofa. Sectionals are quoted by size."),
             ("Do you take sectionals and sofa beds?",
-             "Yes. Sectionals, sofa beds, futons, recliners, loveseats — we take it all. Oversized sectionals may have a small upcharge, but we'll tell you upfront."),
+             "Yes. Sectionals, sofa beds, futons, recliners, loveseats — we take it all. Oversized sectionals may run a little higher, but we'll quote the whole job upfront before we ever roll up."),
             ("Will you donate my old couch?",
              "If the couch is in usable condition, we absolutely try to donate it to local charities. We'd rather see it get a second life than end up in a landfill."),
             ("What {city_name} zip codes do you serve?",
              "We serve all of {city_name} — zip codes {zips_text}. {neighborhoods_two} and every neighborhood in between."),
             ("Can you remove a couch from inside my house?",
-             "Our $90 rate is for curbside pickup. If you need help getting a couch out of a room, through a tight hallway, or down stairs, call Adam and we'll discuss options."),
+             "Our flat rate is for curbside pickup. If you need help getting a couch out of a room, through a tight hallway, or down stairs, call Adam and we'll discuss options."),
         ],
-        "pricing_section": [
-            ("Couch / Sofa Removal", "$90"),
-            ("Loveseat Removal", "$90"),
-            ("Sectional Removal", "From $90 (depends on size)"),
-            ("Recliner Removal", "$90"),
+        "items_section": [
+            "Standard couches and sofas",
+            "Loveseats and accent chairs",
+            "Sectionals (any configuration)",
+            "Sofa beds, futons, and recliners",
         ],
     },
     "scrap-metal-pickup": {
         "name": "Scrap Metal Pickup",
         "slug": "scrap-metal-pickup",
         "item": "scrap metal",
-        "price": "FREE",
-        "price_num": "0",
         "price_free": True,
         "short": "scrap metal pickup",
         "action": "Free curbside scrap metal pickup and recycling",
@@ -595,11 +593,11 @@ SERVICES = {
             ("How quickly can you pick up scrap metal in {city_name}?",
              "Most pickups are same-day or next-day. Call or text Adam at 720-675-7693 and we'll get on the schedule fast."),
         ],
-        "pricing_section": [
-            ("Scrap Metal Pickup (curbside)", "FREE"),
-            ("Steel, Iron, Aluminum", "FREE"),
-            ("Copper, Brass", "FREE"),
-            ("Mixed metals / clean-out piles", "FREE"),
+        "items_section": [
+            "Steel, iron, and tin (any condition)",
+            "Aluminum: cans, siding, gutters, frames",
+            "Copper pipe, copper wire, brass fittings",
+            "Mixed metal piles, old appliances, bed frames, fencing",
         ],
     },
 }
@@ -641,7 +639,6 @@ def fill_template(text, city, service):
         .replace("{neighborhoods_short}", neighborhoods_short(city))
         .replace("{neighborhoods_two}", neighborhoods_two(city))
         .replace("{neighborhoods_sample}", neighborhoods_sample(city))
-        .replace("{price}", service["price"])
         .replace("{service_name}", service["name"])
     )
 
@@ -653,8 +650,6 @@ def generate_page(city_key, service_key):
     slug = f"{service['slug']}-{city['slug']}"
     city_name = city["name"]
     service_name = service["name"]
-    price = service["price"]
-    price_num = service["price_num"]
     is_free = service["price_free"]
 
     canonical = f"https://gogreenscrappros.com/{slug}/"
@@ -664,7 +659,7 @@ def generate_page(city_key, service_key):
     if is_free:
         title = f"{service_name} {city_name} CO | Free Curbside Pickup"
     else:
-        title = f"{service_name} {city_name} CO | {price} Curbside Pickup"
+        title = f"{service_name} {city_name} CO | Free Quote, Same-Day Pickup"
 
     # --- Meta description ---
     if is_free:
@@ -674,8 +669,8 @@ def generate_page(city_key, service_key):
         )
     else:
         meta_desc = (
-            f"{service_name} in {city_name}, CO — {price} flat rate curbside pickup. "
-            f"{service['what_we_take']}. Call Adam: 720-675-7693."
+            f"{service_name} in {city_name}, CO — flat-rate curbside pickup. "
+            f"{service['what_we_take']}. Call Adam for a free quote: 720-675-7693."
         )
 
     # --- OG tags ---
@@ -683,10 +678,10 @@ def generate_page(city_key, service_key):
         og_title = f"Free {service_name} in {city_name} CO | Go Green Scrap Pros"
         og_desc = f"Free curbside {service['short']} in {city_name}. We recycle all metals. Call 720-675-7693."
     else:
-        og_title = f"{service_name} {city_name} CO | {price} Flat Rate"
-        og_desc = f"{service_name} in {city_name} — {price} flat. {service['action']}. Call 720-675-7693."
+        og_title = f"{service_name} {city_name} CO | Free Quote"
+        og_desc = f"{service_name} in {city_name} — {service['action']}. Call 720-675-7693 for a free quote."
 
-    # --- JSON-LD: LocalBusiness ---
+    # --- JSON-LD: LocalBusiness (no price values exposed in offers) ---
     local_business = {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
@@ -708,7 +703,7 @@ def generate_page(city_key, service_key):
             "longitude": city["lng"]
         },
         "openingHours": "Mo-Su 08:00-18:00",
-        "description": f"{service_name} in {city_name}, CO. {service['action']}. Call 720-675-7693.",
+        "description": f"{service_name} in {city_name}, CO. {service['action']}. Call 720-675-7693 for a free quote.",
         "areaServed": city_name,
         "hasOfferCatalog": {
             "@type": "OfferCatalog",
@@ -716,9 +711,7 @@ def generate_page(city_key, service_key):
             "itemListElement": [
                 {
                     "@type": "Offer",
-                    "itemOffered": {"@type": "Service", "name": service["schema_name"]},
-                    "price": price_num,
-                    "priceCurrency": "USD"
+                    "itemOffered": {"@type": "Service", "name": service["schema_name"]}
                 }
             ]
         }
@@ -794,13 +787,11 @@ def generate_page(city_key, service_key):
         city_nav_links.append(f'      <a href="{href}"{active}>{cd["name"]}</a>')
     city_nav_html = "\n".join(city_nav_links)
 
-    # --- Pricing rows ---
-    pricing_rows = []
-    for item_name, item_price in service["pricing_section"]:
-        pricing_rows.append(
-            f'          <li>{item_name} <span class="price">{item_price}</span></li>'
-        )
-    pricing_html = "\n".join(pricing_rows)
+    # --- "What we take" rows (no prices, just items) ---
+    items_rows = []
+    for item_text in service["items_section"]:
+        items_rows.append(f"          <li>{item_text}</li>")
+    items_html = "\n".join(items_rows)
 
     # --- How it works HTML ---
     how_html = []
@@ -834,15 +825,19 @@ def generate_page(city_key, service_key):
     nh_items.append(f'          <li>All zip codes: {zips_text}</li>')
     nh_html = "\n".join(nh_items)
 
-    # --- CTA text ---
+    # --- CTA / hero text (no dollar amounts) ---
     if is_free:
         hero_subtitle = f"Free curbside {service['short']} — steel, aluminum, copper, brass. Serving all of {city_name}."
-        cta_text = f"Book Now &mdash; Free {service_name} in {city_name}"
+        cta_text = f"Schedule Free {service_name} in {city_name}"
         final_cta_heading = f"Schedule Your Free Pickup in {city_name}"
+        items_heading = f"What We Pick Up &mdash; Free in {city_name}"
+        items_intro = "We take any metal item. No minimums. No charge for curbside pickup."
     else:
-        hero_subtitle = f"{service_name} {price} flat rate — curbside pickup serving all of {city_name}."
-        cta_text = f"Book Now &mdash; {service_name} in {city_name}"
-        final_cta_heading = f"Get a Quote in {city_name}"
+        hero_subtitle = f"{service_name} in {city_name} — flat-rate curbside pickup. Call or text for a free quote."
+        cta_text = f"Request a Free Quote — {service_name} in {city_name}"
+        final_cta_heading = f"Get a Free Quote in {city_name}"
+        items_heading = f"What We Take &mdash; {service_name} in {city_name}"
+        items_intro = "Flat-rate curbside pickup. Call or text us for a free quote — no surprises when we arrive."
 
     # --- Footer city links (keep pointing to junk-removal-* pages like existing site) ---
     footer_city_links = []
@@ -850,6 +845,23 @@ def generate_page(city_key, service_key):
         cd = CITIES[ck]
         footer_city_links.append(f'        <a href="/junk-removal-{ck}/">{cd["name"]}</a>')
     footer_cities_html = "\n".join(footer_city_links)
+
+    # --- Footer service links (cross-link to other services in this city) ---
+    footer_service_links = []
+    for sk in ["junk-removal", "mattress-removal", "couch-removal", "large-appliance-removal",
+               "refrigerator-removal", "tv-recycling", "scrap-metal-pickup", "treadmill-removal",
+               "air-conditioner-removal"]:
+        if sk == "junk-removal":
+            label = f"Junk Removal {city_name}"
+            href = f"/junk-removal-{city_key}/"
+        else:
+            svc = SERVICES.get(sk)
+            if svc is None:
+                continue
+            label = f"{svc['name']} {city_name}"
+            href = f"/{sk}-{city_key}/"
+        footer_service_links.append(f'        <a href="{href}">{label}</a>')
+    footer_services_html = "\n".join(footer_service_links)
 
     # === Build the full HTML ===
     html = f'''<!DOCTYPE html>
@@ -891,6 +903,7 @@ def generate_page(city_key, service_key):
       <div class="nav-links">
         <a href="/mattress-removal/">Mattress Removal</a>
         <a href="/scrap-metal-pickup/">Scrap Metal</a>
+        <a href="/sitemap/">Service Areas</a>
         <a href="/about/">About</a>
         <a href="/contact/">Contact</a>
       </div>
@@ -920,7 +933,7 @@ def generate_page(city_key, service_key):
     <div class="container">
       <h1>{service_name} in {city_name}, Colorado</h1>
       <p>{hero_subtitle}</p>
-      <a href="/booking.html?ref={slug}" class="cta-button">{cta_text}</a>
+      <a href="tel:7206757693" class="cta-button">{cta_text}</a>
     </div>
   </div>
 
@@ -942,13 +955,13 @@ def generate_page(city_key, service_key):
 
     <section class="services">
       <div class="container">
-        <h2>{service_name} &mdash; Pricing in {city_name}</h2>
-        <p class="intro-text">Straight prices. No surprise charges when we arrive.</p>
+        <h2>{items_heading}</h2>
+        <p class="intro-text">{items_intro}</p>
         <ul class="services-list">
-{pricing_html}
+{items_html}
         </ul>
         <div style="text-align:center;margin-top:2rem;">
-          <a href="/booking.html?ref={slug}" class="cta-button">{cta_text}</a>
+          <a href="tel:7206757693" class="cta-button">{cta_text}</a>
         </div>
       </div>
     </section>
@@ -1011,11 +1024,14 @@ def generate_page(city_key, service_key):
     <section>
       <div class="container">
         <h2>{final_cta_heading}</h2>
-        <p class="intro-text">Call or text 720-675-7693. We'll get back to you fast — usually within the hour.</p>
-        <a href="/booking.html?ref={slug}" class="cta-button">{cta_text}</a>
+        <p class="intro-text">Call or text 720-675-7693 for a free quote. We'll get back to you fast — usually within the hour.</p>
+        <a href="tel:7206757693" class="cta-button">{cta_text}</a>
         <p class="nearby-cities" style="margin-top:2rem;">
           Also serving nearby:
           {nearby_html}
+        </p>
+        <p style="margin-top:1.5rem;">
+          See all our service areas on the <a href="/sitemap/">site map</a>.
         </p>
       </div>
     </section>
@@ -1025,10 +1041,14 @@ def generate_page(city_key, service_key):
     <div class="container">
       <div class="footer-nav">
         <a href="/">Home</a>
-        <a href="tel:7206757693">Get a Quote</a>
+        <a href="/sitemap/">Site Map</a>
+        <a href="tel:7206757693">Get a Free Quote</a>
       </div>
       <div class="footer-cities">
 {footer_cities_html}
+      </div>
+      <div class="footer-cities" aria-label="{city_name} services">
+{footer_services_html}
       </div>
       <p>Go Green Scrap Pros &mdash; Thornton, CO 80229 &mdash; 720-675-7693</p>
       <p style="margin-top:1.5rem;font-size:0.9rem;">&copy; 2026 Go Green Scrap Pros. All Rights Reserved.</p>
