@@ -322,6 +322,138 @@
       background: var(--surface);
     }
 
+    /* ── Equipment selector (multi-select cards) ─────────────────────────── */
+    .equip-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+    .equip-card {
+      position: relative;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      padding: 0.75rem 0.85rem;
+      transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+      cursor: pointer;
+    }
+    .equip-card:hover { border-color: var(--mint); }
+    .equip-card.selected {
+      border-color: var(--green);
+      background: var(--surface-alt);
+      box-shadow: 0 0 0 3px rgba(30,90,74,0.12);
+    }
+    .equip-card-head {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+    }
+    .equip-card-head input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--green);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .equip-card-title {
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+      font-size: 0.95rem;
+    }
+    .equip-card-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .equip-card-body {
+      margin-top: 0.7rem;
+      padding-top: 0.7rem;
+      border-top: 1px dashed var(--border);
+    }
+    .equip-card-body[hidden] { display: none; }
+    .equip-price-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .equip-price-row label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      flex: 1;
+    }
+    .equip-price-row .price-input {
+      position: relative;
+      width: 110px;
+    }
+    .equip-price-row .price-input input {
+      width: 100%;
+      padding: 0.45rem 0.55rem 0.45rem 1.4rem;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: var(--surface);
+    }
+    .equip-price-row .price-input input:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+    .equip-price-row .price-input::before {
+      content: '$';
+      position: absolute;
+      left: 0.55rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+    .dumpster-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.2rem;
+    }
+    .dumpster-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .dumpster-cell label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-align: center;
+    }
+    .dumpster-cell .dz-price {
+      font-size: 0.62rem;
+      color: var(--muted);
+      font-weight: 400;
+      text-align: center;
+    }
+    .dumpster-cell input[type="number"] {
+      width: 100%;
+      padding: 0.4rem 0.3rem;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      text-align: center;
+      background: var(--surface);
+      -moz-appearance: textfield;
+    }
+    .dumpster-cell input[type="number"]::-webkit-outer-spin-button,
+    .dumpster-cell input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .dumpster-cell input[type="number"]:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
     /* ── Estimate badge ──────────────────────────────────────────────────── */
     .est-tag {
       display: inline-block;
@@ -1024,11 +1156,62 @@
         <div class="section-label">Equipment &amp; Load</div>
 
         <div class="field">
-          <label for="equipment">Equipment</label>
-          <select id="equipment">
-            <option value="50">Trailer — $50 / day</option>
-            <option value="250">Truck — $250 / day</option>
-          </select>
+          <label>Equipment</label>
+          <div class="equip-grid" role="group" aria-label="Equipment selection">
+
+            <!-- Trailer card -->
+            <div class="equip-card" id="card-trailer">
+              <label class="equip-card-head" for="eq-trailer">
+                <input type="checkbox" id="eq-trailer">
+                <span class="equip-card-title">Trailer
+                  <div class="equip-card-sub">Editable day rate</div>
+                </span>
+              </label>
+              <div class="equip-card-body" id="trailer-body" hidden>
+                <div class="equip-price-row">
+                  <label for="trailer-price">Trailer rate ($/day)</label>
+                  <div class="price-input">
+                    <input type="number" id="trailer-price" value="50" min="0" step="1" inputmode="numeric">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dumpster card -->
+            <div class="equip-card" id="card-dumpster">
+              <label class="equip-card-head" for="eq-dumpster">
+                <input type="checkbox" id="eq-dumpster">
+                <span class="equip-card-title">Dumpster
+                  <div class="equip-card-sub">Denver/Thornton avg per haul</div>
+                </span>
+              </label>
+              <div class="equip-card-body" id="dumpster-body" hidden>
+                <div class="dumpster-grid">
+                  <div class="dumpster-cell">
+                    <label for="dz-10">10 yd</label>
+                    <input type="number" id="dz-10" value="0" min="0" step="1" inputmode="numeric">
+                    <div class="dz-price">$348 ea</div>
+                  </div>
+                  <div class="dumpster-cell">
+                    <label for="dz-20">20 yd</label>
+                    <input type="number" id="dz-20" value="0" min="0" step="1" inputmode="numeric">
+                    <div class="dz-price">$421 ea</div>
+                  </div>
+                  <div class="dumpster-cell">
+                    <label for="dz-30">30 yd</label>
+                    <input type="number" id="dz-30" value="0" min="0" step="1" inputmode="numeric">
+                    <div class="dz-price">$455 ea</div>
+                  </div>
+                  <div class="dumpster-cell">
+                    <label for="dz-40">40 yd</label>
+                    <input type="number" id="dz-40" value="0" min="0" step="1" inputmode="numeric">
+                    <div class="dz-price">$563 ea</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
 
         <div class="field">
@@ -1459,8 +1642,29 @@
     const elLaborRate   = el('laborer-rate');
     const elYourRate    = el('your-rate');
     const elDays        = el('days');
-    const elEquipment   = el('equipment');
     const elLoadType    = el('load-type');
+
+    // ── Equipment refs ────────────────────────────────────────────────────
+    const elEqTrailer    = el('eq-trailer');
+    const elTrailerPrice = el('trailer-price');
+    const elTrailerBody  = el('trailer-body');
+    const elCardTrailer  = el('card-trailer');
+
+    const elEqDumpster   = el('eq-dumpster');
+    const elDumpsterBody = el('dumpster-body');
+    const elCardDumpster = el('card-dumpster');
+    const elDz10 = el('dz-10');
+    const elDz20 = el('dz-20');
+    const elDz30 = el('dz-30');
+    const elDz40 = el('dz-40');
+
+    // Researched Denver/Thornton average prices per haul
+    const DUMPSTER_PRICES = {
+      10: 348,
+      20: 421,
+      30: 455,
+      40: 563,
+    };
     const elTons        = el('tons');
     const elVolLength   = el('vol-length');
     const elVolWidth    = el('vol-width');
@@ -1511,14 +1715,25 @@
     elModeManual.addEventListener('click', () => setVolMode('manual'));
     elModeVolume.addEventListener('click', () => setVolMode('volume'));
 
-    // ── Equipment → laborer auto-default ─────────────────────────────────
-    // Fires on equipment change; only applies default if user hasn't manually
-    // edited laborers yet.
-    elEquipment.addEventListener('input', () => {
-      if (laborAutoSet) {
-        // Trailer (value=50) → 0 laborers; Truck (value=250) → 1 laborer
-        elLaborers.value = elEquipment.value === '50' ? 0 : 1;
-      }
+    // ── Equipment selection toggles ───────────────────────────────────────
+    function syncEquipUI() {
+      elTrailerBody.hidden  = !elEqTrailer.checked;
+      elCardTrailer.classList.toggle('selected', elEqTrailer.checked);
+      elDumpsterBody.hidden = !elEqDumpster.checked;
+      elCardDumpster.classList.toggle('selected', elEqDumpster.checked);
+    }
+    elEqTrailer.addEventListener('change', () => {
+      syncEquipUI();
+      lsSet('ggsp_eqTrailer', elEqTrailer.checked);
+      recalc();
+    });
+    elEqDumpster.addEventListener('change', () => {
+      syncEquipUI();
+      lsSet('ggsp_eqDumpster', elEqDumpster.checked);
+      recalc();
+    });
+    elTrailerPrice.addEventListener('input', () => {
+      lsSet('ggsp_trailerPrice', +elTrailerPrice.value || 0);
       recalc();
     });
 
@@ -1529,9 +1744,13 @@
     });
 
     // ── Restore persisted values ──────────────────────────────────────────
-    elYourRate.value  = lsGet('ggsp_yourRate',   35);
-    elMinCharge.value = lsGet('ggsp_minCharge', 150);
-    elMarginPct.value = lsGet('ggsp_marginPct',  30);
+    elYourRate.value     = lsGet('ggsp_yourRate',     35);
+    elMinCharge.value    = lsGet('ggsp_minCharge',   150);
+    elMarginPct.value    = lsGet('ggsp_marginPct',    30);
+    elTrailerPrice.value = lsGet('ggsp_trailerPrice', 50);
+    elEqTrailer.checked  = lsGet('ggsp_eqTrailer',  false);
+    elEqDumpster.checked = lsGet('ggsp_eqDumpster', false);
+    syncEquipUI();
 
     elYourRate.addEventListener('change',  () => lsSet('ggsp_yourRate',  +elYourRate.value));
     elMinCharge.addEventListener('change', () => lsSet('ggsp_minCharge', +elMinCharge.value));
@@ -1541,6 +1760,30 @@
     const fmtUSD = n => '$' + Math.round(n).toLocaleString('en-US');
     const fmtDec = (n, d) => (+n).toFixed(d);
 
+    // ── Equipment label builder (shared by customer / copy / client views)
+    function buildEquipLabel() {
+      const parts = [];
+      if (elEqTrailer.checked) {
+        const rate = Math.max(0, +elTrailerPrice.value || 0);
+        parts.push(`Trailer ($${rate}/day)`);
+      }
+      if (elEqDumpster.checked) {
+        const sizes = [10, 20, 30, 40];
+        const chunks = sizes
+          .map(s => {
+            const q = Math.max(0, Math.floor(+el('dz-' + s).value || 0));
+            return q > 0 ? `${q}× ${s} yd` : null;
+          })
+          .filter(Boolean);
+        if (chunks.length) {
+          parts.push('Dumpster: ' + chunks.join(', '));
+        } else {
+          parts.push('Dumpster (none selected)');
+        }
+      }
+      return parts.length ? parts.join(' + ') : 'No equipment';
+    }
+
     // ── Main calculation ──────────────────────────────────────────────────
     function recalc() {
       // Read inputs (clamp negatives to 0)
@@ -1549,8 +1792,30 @@
       const yourRate  = Math.max(0, +elYourRate.value  || 0);
       const hours     = Math.max(0, +elHours.value     || 0);
       const days      = Math.max(1, +elDays.value      || 1);
-      const equipFee  = Math.max(0, +elEquipment.value || 0);
       const loadType  = elLoadType.value;
+
+      // ── Equipment selection ───────────────────────────────────────────────
+      // Trailer: editable per-day rate × days (only if selected)
+      // Dumpster: sum of (qty × researched avg price per size), one-time per haul
+      const trailerSelected  = elEqTrailer.checked;
+      const dumpsterSelected = elEqDumpster.checked;
+      const trailerRate = Math.max(0, +elTrailerPrice.value || 0);
+      const trailerCost = trailerSelected ? trailerRate * days : 0;
+
+      const dz = {
+        10: Math.max(0, Math.floor(+elDz10.value || 0)),
+        20: Math.max(0, Math.floor(+elDz20.value || 0)),
+        30: Math.max(0, Math.floor(+elDz30.value || 0)),
+        40: Math.max(0, Math.floor(+elDz40.value || 0)),
+      };
+      const dumpsterCost = dumpsterSelected
+        ? (dz[10] * DUMPSTER_PRICES[10])
+        + (dz[20] * DUMPSTER_PRICES[20])
+        + (dz[30] * DUMPSTER_PRICES[30])
+        + (dz[40] * DUMPSTER_PRICES[40])
+        : 0;
+
+      const equipTotal = trailerCost + dumpsterCost;
       const overDist  = elDistance.checked;
       const minCharge = Math.max(0, +elMinCharge.value || 0);
       const margin    = Math.min(99, Math.max(0, +elMarginPct.value || 0));
@@ -1583,11 +1848,11 @@
       // ── Core cost calculations ────────────────────────────────────────────
       const laborPerHr  = (laborers * laborRate) + yourRate;
       const laborTotal  = laborPerHr * hours * days;
-      const equipTotal  = equipFee * days;
       const disposal    = loadType === 'scrap' ? 0 : (tons * 150) * 1.2;
       const distanceFee = overDist ? 50 : 0;
       const stairsFee   = flights * 25;
-      const subtotal    = ((equipFee + (laborPerHr * hours)) * days)
+      const subtotal    = laborTotal
+                        + equipTotal
                         + disposal
                         + distanceFee
                         + stairsFee;
@@ -1644,7 +1909,7 @@
 
       // ── Customer panel ────────────────────────────────────────────────────
       const today      = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      const equipLabel = elEquipment.options[elEquipment.selectedIndex].text.replace(/ —.*/, '');
+      const equipLabel = buildEquipLabel();
       const loadLabel  = { trash: 'Trash Only', mixed: 'Scrap + Trash', scrap: 'Scrap Only' }[loadType];
 
       el('cp-project').textContent = proj || '—';
@@ -1680,7 +1945,7 @@
 
       const proj      = elProjectName.value.trim() || 'Unnamed Job';
       const today     = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      const equipLbl  = elEquipment.options[elEquipment.selectedIndex].text.replace(/ —.*/, '');
+      const equipLbl  = buildEquipLabel();
       const loadLbl   = { trash: 'Trash Only', mixed: 'Scrap + Trash', scrap: 'Scrap Only' }[loadType];
 
       const extras = [];
@@ -1758,7 +2023,7 @@
     function buildClientQuote() {
       const proj     = elProjectName.value.trim() || 'Unnamed Project';
       const today    = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      const equipLbl = elEquipment.options[elEquipment.selectedIndex].text.replace(/ —.*/, '');
+      const equipLbl = buildEquipLabel();
       const loadType = elLoadType.value;
       const loadLbl  = {
         trash: 'Junk Removal &amp; Haul Away',
@@ -1887,17 +2152,12 @@
     });
 
     // ── Wire remaining live inputs to recalc ──────────────────────────────
-    // (elLaborers and elEquipment have their own listeners above)
+    // (elLaborers and equipment checkboxes have their own listeners above)
     [elProjectName, elHours, elLaborRate, elYourRate, elDays,
      elLoadType, elTons, elVolLength, elVolWidth, elVolHeight,
-     elDebrisType, elDistance, elMinCharge, elMarginPct
+     elDebrisType, elDistance, elMinCharge, elMarginPct,
+     elDz10, elDz20, elDz30, elDz40
     ].forEach(input => input.addEventListener('input', recalc));
-
-    // ── Apply initial laborer default based on equipment ──────────────────
-    // Trailer is default (value=50) → 0 laborers
-    if (laborAutoSet) {
-      elLaborers.value = elEquipment.value === '50' ? 0 : 1;
-    }
 
     // ── Initial render ────────────────────────────────────────────────────
     recalc();
