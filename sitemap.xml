@@ -52,6 +52,13 @@
     <priority>0.6</priority>
   </url>
 
+  <url>
+    <loc>https://gogreenscrappros.com/booking.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Junk Removal — by city -->
   <url>
     <loc>https://gogreenscrappros.com/junk-removal-thornton/</loc>
