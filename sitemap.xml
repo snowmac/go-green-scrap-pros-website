@@ -9,27 +9,6 @@
     <priority>1.0</priority>
   </url>
 
-  <url>
-    <loc>https://gogreenscrappros.com/about/</loc>
-    <lastmod>2026-04-28</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://gogreenscrappros.com/contact/</loc>
-    <lastmod>2026-04-28</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://gogreenscrappros.com/sitemap/</loc>
-    <lastmod>2026-04-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
   <!-- Service hub pages -->
   <url>
     <loc>https://gogreenscrappros.com/mattress-removal/</loc>
@@ -59,7 +38,37 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Junk Removal — by city -->
+  <!-- Info pages -->
+  <url>
+    <loc>https://gogreenscrappros.com/about/</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://gogreenscrappros.com/contact/</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Sitemap pages (human-readable) -->
+  <url>
+    <loc>https://gogreenscrappros.com/sitemap/</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://gogreenscrappros.com/sitemap.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Junk Removal — Denver Metro city pages -->
   <url>
     <loc>https://gogreenscrappros.com/junk-removal-thornton/</loc>
     <lastmod>2026-04-28</lastmod>
@@ -99,6 +108,68 @@
   <url>
     <loc>https://gogreenscrappros.com/junk-removal-northglenn/</loc>
     <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Junk Removal — Boulder County & Northern Colorado city pages -->
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-boulder/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-longmont/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-loveland/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-dacono/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-firestone/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-frederick/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-niwot/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-hygiene/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-lyons/</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-gunbarrel/</loc>
+    <lastmod>2026-04-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

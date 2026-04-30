@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Sitemaps
 Sitemap: https://gogreenscrappros.com/sitemap.xml
+
+# Crawl-delay hint (optional, ignored by Google but respected by some bots)
+Crawl-delay: 1
