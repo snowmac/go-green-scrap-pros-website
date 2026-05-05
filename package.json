@@ -1,0 +1,17 @@
+{
+  "name": "go-green-scrap-pros-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Go Green Scrap Pros static site + Vercel serverless booking/prepayment API",
+  "scripts": {
+    "syntax": "node -e \"['lib/pricing.js','lib/validation.js','lib/stripe.js','lib/supabase.js','lib/email.js','lib/sms.js','lib/calendar.js','lib/captcha.js','api/_helpers.js','api/create-payment-intent.js','api/submit-booking.js','api/verify-captcha.js','api/public-config.js'].forEach(f=>require('./'+f))\"",
+    "test": "node test/pricing.test.js && node test/validation.test.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "stripe": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
