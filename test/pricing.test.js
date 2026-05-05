@@ -35,4 +35,28 @@ const { calculate } = require('../lib/pricing');
   assert.strictEqual(t.subtotal, 0);
 })();
 
+(function appliancesAreScrapFlat(){
+  // Refrigerator/washer/etc moved from junk ($75/ea) to scrap (flat $50).
+  const t = calculate({ scrap: { refrigerator: true, washer: true, dryer: true } });
+  assert.strictEqual(t.junkTotal, 0);
+  assert.strictEqual(t.scrapTotal, 50);
+  assert.strictEqual(t.subtotal, 50);
+})();
+
+(function appliancesUnderJunkKeyAreIgnored(){
+  // If a stale client posts an appliance under junk, pricing must not charge $75.
+  const t = calculate({ junk: { refrigerator: 3 } });
+  assert.strictEqual(t.junkTotal, 0);
+  assert.strictEqual(t.subtotal, 0);
+})();
+
+(function removedItemsAreIgnored(){
+  const removed = ['patio_set_section','cardboard_box','trash_bag','piano_upright','hot_tub_section','carpet_roll','pool_table_section'];
+  const junk = {};
+  removed.forEach(k => { junk[k] = 2; });
+  const t = calculate({ junk });
+  assert.strictEqual(t.junkTotal, 0);
+  assert.strictEqual(t.subtotal, 0);
+})();
+
 console.log('pricing.test.js ok');

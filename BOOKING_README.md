@@ -23,8 +23,10 @@ All errors are `{ error: true, message, code }` with no internals.
 
 ## Pricing
 
-- Junk / furniture / appliances: $75 per quantity, max 20 per item.
-- Scrap metal: flat $50 if any selected.
+- Junk / furniture: $75 per quantity, max 20 per item.
+- Scrap metal & appliances: flat $50 if any selected (includes
+  refrigerators, freezers, washers, dryers, dishwashers, stoves,
+  microwaves, water heaters, AC units alongside ferrous/non-ferrous metals).
 - E-waste: flat $50 if any selected.
 - Sales tax: 8.5% (Thornton — the licensing city, not the pickup city).
   Override via `TAX_RATE_DEFAULT`.
