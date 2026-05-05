@@ -91,6 +91,58 @@
     }
     .conf h2 { color:#1e5a4a; margin-bottom:0.5rem; }
     .conf .number { font-size:1.4rem; font-weight:700; color:#1e5a4a; letter-spacing:0.04em; }
+
+    .bk-faq h2 { color:#1e5a4a; font-size:1.35rem; margin-bottom:0.4rem; }
+    .bk-faq .muted { color:#666; font-size:0.95rem; margin-bottom:0.75rem; }
+    .bk-faq-group { margin-top:1.25rem; }
+    .bk-faq-group:first-of-type { margin-top:0.5rem; }
+    .bk-faq-group h3 {
+      color:#1e5a4a; font-size:1.05rem; font-weight:700;
+      margin:0 0 0.5rem; padding-bottom:0.35rem;
+      border-bottom:1px solid #e2ece8;
+    }
+    .bk-faq details {
+      border:1px solid #e2ece8; border-radius:8px; background:#fff;
+      margin-bottom:0.5rem; overflow:hidden;
+    }
+    .bk-faq details + details { margin-top:0.5rem; }
+    .bk-faq details[open] { border-color:#cfe0d8; box-shadow:0 1px 4px rgba(30,90,74,0.06); }
+    .bk-faq summary {
+      list-style:none; cursor:pointer; padding:0.85rem 1rem;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:0.75rem; font-weight:600; color:#1a1a1a; font-size:0.98rem;
+      line-height:1.4;
+    }
+    .bk-faq summary::-webkit-details-marker { display:none; }
+    .bk-faq summary:focus { outline:2px solid #1e5a4a; outline-offset:2px; }
+    .bk-faq summary:hover { background:#f6faf8; }
+    .bk-faq .bk-faq-icon {
+      flex:0 0 auto; width:22px; height:22px; border-radius:50%;
+      border:1.5px solid #1e5a4a; color:#1e5a4a;
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:1rem; font-weight:700; line-height:1;
+      transition:transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+    }
+    .bk-faq details[open] .bk-faq-icon {
+      transform:rotate(45deg); background:#1e5a4a; color:#fff;
+    }
+    .bk-faq .bk-faq-body {
+      padding:0 1rem 1rem; color:#333; font-size:0.95rem; line-height:1.6;
+    }
+    .bk-faq .bk-faq-body p { margin:0 0 0.6rem; }
+    .bk-faq .bk-faq-body p:last-child { margin-bottom:0; }
+    .bk-faq .bk-faq-body ul { margin:0 0 0.6rem 1.25rem; padding:0; }
+    .bk-faq .bk-faq-body li { margin-bottom:0.25rem; }
+    .bk-faq-cta {
+      margin-top:1.25rem; text-align:center;
+    }
+    .bk-faq-cta .submit-btn {
+      width:auto; display:inline-block; padding:0.85rem 1.75rem;
+      margin-top:0; text-decoration:none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bk-faq .bk-faq-icon { transition:none; }
+    }
   </style>
 </head>
 <body>
@@ -261,6 +313,261 @@
           </div>
         </section>
       </form>
+
+      <!-- FAQ -->
+      <section class="bk-card bk-faq" aria-labelledby="bk-faq-heading">
+        <h2 id="bk-faq-heading">Frequently Asked Questions</h2>
+        <div class="muted">Quick answers about pricing, scheduling, what we take, where we go, and how booking works.</div>
+
+        <div class="bk-faq-group" aria-labelledby="bk-faq-pricing">
+          <h3 id="bk-faq-pricing">Pricing</h3>
+
+          <details>
+            <summary data-testid="faq-summary-pricing-how-priced">
+              <span>How is pricing calculated?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Pricing on this booking page is straightforward and shown live in your Order Summary as you add items:</p>
+              <ul>
+                <li><strong>Junk, furniture, and appliances:</strong> $75 per item, with quantity adjustable up to 20 per line.</li>
+                <li><strong>Scrap metal:</strong> a flat $50 if you select any scrap metal item, regardless of how many types you list. Quantities listed are reference only — we grade and weigh on site.</li>
+                <li><strong>Electronics / e-waste:</strong> a flat $50 if you select any e-waste item, regardless of how many you list.</li>
+                <li><strong>Sales tax:</strong> 8.5% Colorado/Thornton sales tax applies to your subtotal.</li>
+              </ul>
+              <p>Your total is recalculated server-side at checkout for safety, so what you see in the summary is what you'll pay.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-pricing-electronics">
+              <span>Are electronics really $50 flat, even if I have several?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Yes. The Electronics / E-Waste category is a single flat $50 if you select any e-waste items — TVs, computers, printers, monitors, gaming consoles, cables, and similar. Quantities are reference only so we know what to expect.</p>
+              <p>Heads up: TVs and electronics that we list under <em>Junk &amp; Furniture &amp; Appliances</em> (such as some large appliances) follow the $75-per-item rule. The Order Summary always reflects the correct rule based on which category you check.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-pricing-scrap">
+              <span>How does scrap metal pricing work?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>If you select any scrap metal items in the form, you'll see a flat $50 added to your total. That covers the pickup. We grade and weigh metals on site — you don't need to estimate weights or values when booking.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-pricing-tax">
+              <span>Why is sales tax based on Thornton?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>We're licensed in Thornton, CO, so Colorado state and Thornton local sales tax (8.5% combined) apply to bookings, regardless of which service-area city the pickup happens in.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="bk-faq-group" aria-labelledby="bk-faq-scheduling">
+          <h3 id="bk-faq-scheduling">Scheduling &amp; Pickup</h3>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-days">
+              <span>What days do you run pickups?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Pickups run on <strong>Mondays, Wednesdays, and Fridays</strong>. The booking calendar only shows those days, so you can be sure your selected date is one we service.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-leadtime">
+              <span>How soon can I book a pickup?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>The earliest available date is at least <strong>48 hours from now</strong>, on the next available Mon/Wed/Fri. The latest available date is <strong>14 days out</strong>. The date dropdown only lists dates that meet both rules — pick whichever works for you.</p>
+              <p>Need it sooner? Call or text us at <a href="tel:7206757693">720-675-7693</a> and we'll see what we can do, but online bookings always require a 48-hour lead time.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-curbside">
+              <span>What time do items need to be out?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p><strong>Curbside service only.</strong> All items must be at the curb or end of the driveway by <strong>8:00 AM</strong> on your scheduled pickup day. We aren't able to enter homes, garages, or backyards.</p>
+              <p>If items aren't accessible from the street by 8 AM, we may not be able to complete the pickup that day.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-window">
+              <span>Will I get a specific time window?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Pickups happen between <strong>8:00 AM and 12:00 PM Mountain Time</strong> on your scheduled day. Because routes are sequenced morning-of, we don't give a tighter window — but as long as your items are at the curb by 8 AM, you don't need to be home.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-reschedule">
+              <span>Can I reschedule or cancel?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Yes. Call or text <a href="tel:7206757693">720-675-7693</a> as soon as you know. The sooner the better — same-day reschedules are harder to fit into the route.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="bk-faq-group" aria-labelledby="bk-faq-take">
+          <h3 id="bk-faq-take">What We Take</h3>
+
+          <details>
+            <summary data-testid="faq-summary-take-list">
+              <span>What items can you pick up?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Most household junk, furniture, large appliances, scrap metal, and electronics. Common examples:</p>
+              <ul>
+                <li><strong>Junk &amp; furniture:</strong> mattresses, box springs, sofas, sectionals, recliners, dressers, tables, chairs, bed frames, bookshelves, TV stands.</li>
+                <li><strong>Appliances:</strong> refrigerators, freezers, washers, dryers, dishwashers, stoves, microwaves, water heaters, AC units.</li>
+                <li><strong>Fitness &amp; outdoor:</strong> treadmills, exercise bikes, ellipticals, weight benches, grills, lawn mowers, snow blowers, patio furniture.</li>
+                <li><strong>Scrap metal:</strong> copper, brass, aluminum, steel, iron, stainless, lead, zinc, wire/cable, auto batteries, rims, radiators, sheet metal, rebar, pipe.</li>
+                <li><strong>Electronics / e-waste:</strong> TVs (CRT and flat-panel), computers, laptops, monitors, printers, scanners, routers, cable boxes, gaming consoles, stereos, speakers, phones, tablets, cables.</li>
+              </ul>
+              <p>Don't see your item? Add it as <em>Other / misc item</em> in the form, or call us with details.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-take-large">
+              <span>Do you handle very large items like pianos or hot tubs?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Yes — upright pianos, hot tubs, pool tables, and carpet rolls are all in the booking form. Hot tubs and pool tables are priced per section ($75 each), since they're typically dismantled before curbside pickup.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-take-not">
+              <span>Is there anything you can't take?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>We can't accept hazardous waste (paint, solvents, motor oil, propane tanks, asbestos, medical/biohazard waste) or anything that requires entering the home. If you're not sure about an item, give us a quick call before booking.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="bk-faq-group" aria-labelledby="bk-faq-area">
+          <h3 id="bk-faq-area">Service Area</h3>
+
+          <details>
+            <summary data-testid="faq-summary-area-cities">
+              <span>Which cities do you serve?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>The booking form services these north and west Denver Metro cities:</p>
+              <ul>
+                <li>Thornton</li>
+                <li>Arvada</li>
+                <li>Westminster</li>
+                <li>Golden</li>
+                <li>Wheat Ridge</li>
+                <li>Broomfield</li>
+                <li>Northglenn</li>
+              </ul>
+              <p>If you choose <em>Other / Not Listed</em> in the city dropdown, online booking is blocked — we don't currently service that area. Check back soon as we expand.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-area-zip">
+              <span>My ZIP looks different from my city — is that a problem?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Some metro ZIPs straddle multiple cities. If our soft check thinks your ZIP belongs to a different city, you'll see a yellow heads-up — but it won't block your booking. Pick the city that matches your billing/service address.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-area-outside">
+              <span>What if I'm just outside your service area?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Online booking is limited to the cities above. If you're nearby and not on the list, call or text <a href="tel:7206757693">720-675-7693</a> — we may still be able to help on a case-by-case basis.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="bk-faq-group" aria-labelledby="bk-faq-booking">
+          <h3 id="bk-faq-booking">Booking</h3>
+
+          <details>
+            <summary data-testid="faq-summary-booking-how">
+              <span>How does the booking flow work?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Three steps, all on this page:</p>
+              <ul>
+                <li>Fill in your contact info, address, and pickup date (Mon/Wed/Fri, 48 h to 14 d out).</li>
+                <li>Select the items you have in the Junk, Scrap Metal, and Electronics sections. Your total updates live.</li>
+                <li>Complete the captcha, prepay with a card via Stripe, and you'll see a confirmation screen with your booking number. We'll also email and text the details.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-booking-payment">
+              <span>Is payment secure?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Yes. Card payments are processed by Stripe — we never see or store your card number. The page also runs an hCaptcha challenge before payment to keep out bots.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-booking-confirmation">
+              <span>How will I know my booking is confirmed?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>As soon as Stripe confirms payment, you'll see an on-screen confirmation with a booking number that looks like <code>GGS-YYYYMMDD-XXXX</code>. We also send an email and text confirmation. Save the booking number — it's the quickest way to look up your pickup if you need to call.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-booking-issue">
+              <span>What if I run into an error during checkout?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>If the card is declined, the page will tell you and let you try again. If payment succeeds but something else fails, you'll see a message asking you to call <a href="tel:7206757693">720-675-7693</a> with your card receipt — we'll find your charge and finish booking by hand.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="bk-faq-cta">
+          <a href="#booking-form" class="submit-btn" id="faq-back-to-form" data-testid="faq-cta-back-to-form">
+            Back to Booking
+          </a>
+        </div>
+      </section>
 
       <!-- Step 2: confirmation -->
       <section id="confirmation" class="step">
@@ -852,9 +1159,28 @@
       renderHCaptcha();
     }
 
+    function wireFaqCta() {
+      var cta = document.getElementById('faq-back-to-form');
+      if (!cta) return;
+      cta.addEventListener('click', function(ev){
+        ev.preventDefault();
+        var form = document.getElementById('booking-form');
+        var conf = document.getElementById('confirmation');
+        // If we're on the confirmation step, scroll the user there instead.
+        var target = (conf && conf.classList.contains('active')) ? conf : form;
+        if (!target) return;
+        target.scrollIntoView({ behavior:'smooth', block:'start' });
+        var firstField = target.querySelector('input, select, textarea, button');
+        if (firstField && typeof firstField.focus === 'function') {
+          // Defer focus until after the smooth scroll begins so iOS doesn't override it.
+          setTimeout(function(){ firstField.focus({ preventScroll:true }); }, 250);
+        }
+      });
+    }
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else { init(); }
+      document.addEventListener('DOMContentLoaded', function(){ init(); wireFaqCta(); });
+    } else { init(); wireFaqCta(); }
   })();
   </script>
 </body>
