@@ -540,6 +540,76 @@ SERVICES = {
             "Sofa beds, futons, and recliners",
         ],
     },
+    "estate-cleanout": {
+        "name": "Estate Cleanout",
+        "slug": "estate-cleanout",
+        "item": "estate",
+        "price_free": False,
+        "short": "estate cleanout",
+        "action": "Full estate cleanouts, inherited property reclamation, and hoarder cleanouts",
+        "what_we_take": "Furniture, appliances, household goods, yard debris, scrap metal, and general junk from every room, closet, garage, basement, attic, shed, and outbuilding",
+        "schema_name": "Estate Cleanout & Inherited Property Reclamation",
+        "intro_templates": [
+            (
+                "Clearing out an estate in {city_name} is rarely just about the stuff. It's grief, paperwork, a tight timeline, "
+                "and a property that doesn't feel like yours yet \u2014 all at once. Whether you've inherited a home that hasn't "
+                "been cleared in years, you're working through probate, or you're a realtor prepping a {city_name} listing, "
+                "Go Green Scrap Pros handles the cleanout so you can handle everything else."
+            ),
+            (
+                "We serve all of {city_name} \u2014 zip codes {zips_text} \u2014 and the broader Denver Metro area. "
+                "We work respectfully, on your schedule, and we tell you honestly what's recoverable, what's donatable, and what "
+                "has to go to the transfer station. We recycle first and landfill last. "
+                "On our recent Northglenn estate cleanout we moved 50,000 lbs of steel and 160 cubic yards of debris \u2014 "
+                "<a href=\"/case-studies/northglenn-estate-cleanout/\">see the full case study</a>."
+            ),
+            (
+                "Serving {neighborhoods_short} and every neighborhood in between. For families on tight estate budgets with "
+                "substantial recoverable scrap on the property, we offer flexible labor + expenses + scrap pricing structures "
+                "that can make jobs affordable when hourly pricing would have priced them out of reach. Text or call Adam "
+                "at 720-675-7693 with a few photos of the property and we'll come back with a straight quote."
+            ),
+        ],
+        "how_it_works": [
+            ("Walk the Property With Us", "Call or text Adam at 720-675-7693. Send a few photos or schedule an on-site walk-through in {city_name}. We'll identify what's recoverable, flag any hazmat, and quote the job honestly \u2014 no high-pressure sales."),
+            ("We Build a Plan Around Your Constraints", "Tight budget, tight timeline, working around showings or court dates \u2014 we plan the job around your reality. For larger properties we coordinate dumpsters; for smaller ones we run trucks and trailers."),
+            ("We Clear, Sort, and Recycle", "Furniture, appliances, scrap metal, yard debris, household goods \u2014 every zone of the property. Metals get sorted and recycled. Reusable items get diverted. Only what can't be diverted goes to landfill."),
+        ],
+        "why_choose": [
+            "Flexible pricing for tight estate budgets \u2014 labor + expenses + scrap structures available",
+            "Compassionate, respectful crew \u2014 we've worked these jobs and we get it",
+            "Recycling-first disposal \u2014 majority of material weight stays out of the landfill",
+            "Hazmat-aware \u2014 we identify it, give you 3 disposal options, and adjust the plan",
+            "Coordination with realtors, executors, and estate attorneys",
+            "Locally owned, owner-operated in {city_name} and across Denver Metro",
+            "Real case studies with real numbers \u2014 not stock photos",
+        ],
+        "faqs": [
+            ("How much does an estate cleanout cost in {city_name}?",
+             "Most estate cleanouts in {city_name} run between $500 and $3,500+ depending on size, volume, access, and whether hoarding or hazmat is involved. For families on tight budgets with substantial recoverable scrap on the property, we offer a flexible labor + expenses + scrap pricing model. Text us a few photos at 720-675-7693 for a straight quote."),
+            ("How long does an estate cleanout take in {city_name}?",
+             "A standard furnished single-family home in {city_name} typically takes one to two days. Larger properties, hoarding, or properties with outbuildings and workshops can take a full week or more. Our recent Northglenn estate cleanout was a 7-day, 3-crew job that moved 50,000 lbs of steel and 160 cubic yards of trash."),
+            ("What's included in an estate cleanout?",
+             "Furniture, appliances, household goods, yard debris, scrap metal, and general junk from every room, closet, garage, basement, attic, shed, and outbuilding in {city_name}. We sort donatable items from recyclables and from landfill-bound trash, coordinate dumpsters when warranted, and provide photo documentation for estate records on request."),
+            ("Do you handle hoarder cleanouts in {city_name}?",
+             "Yes. We've worked properties that hadn't been cleared in years, with tight access, unstable piles, pests, and mixed debris throughout. We work respectfully, at a safe pace, and we don't gut working systems \u2014 we sort and preserve what's worth keeping."),
+            ("Do you handle hazardous materials?",
+             "No \u2014 we're not licensed to transport hazmat. But if we find oils, paints, solvents, or other flammables on your {city_name} property, we'll identify them, give you three vetted disposal options in writing, and adjust the plan around them. We don't pretend, and we don't leave you to figure it out alone."),
+            ("Do you work with realtors and estate attorneys in {city_name}?",
+             "Yes. We coordinate with realtors prepping {city_name} listings, executors handling probate, and families managing inherited properties. We work around showings, court timelines, and family schedules."),
+            ("What {city_name} zip codes do you serve?",
+             "We serve all of {city_name} including zip codes {zips_text}. From {neighborhoods_two} and everywhere in between."),
+        ],
+        "items_section": [
+            "Furniture (couches, beds, dressers, tables, chairs)",
+            "Appliances (washers, dryers, stoves, dishwashers, refrigerators)",
+            "Household goods, clothing, books, and personal items",
+            "Yard debris, fencing, and outdoor accumulation",
+            "Scrap metal \u2014 sorted and recycled",
+            "Garage, basement, attic, shed, and workshop contents",
+            "Estate-record photo documentation on request",
+        ],
+    },
     "scrap-metal-pickup": {
         "name": "Scrap Metal Pickup",
         "slug": "scrap-metal-pickup",

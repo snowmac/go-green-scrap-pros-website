@@ -25,6 +25,27 @@
   </url>
 
   <url>
+    <loc>https://gogreenscrappros.com/estate-cleanout/</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://gogreenscrappros.com/case-studies/</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://gogreenscrappros.com/case-studies/northglenn-estate-cleanout/</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://gogreenscrappros.com/quote.html</loc>
     <lastmod>2026-04-28</lastmod>
     <changefreq>monthly</changefreq>
@@ -236,6 +257,15 @@
   <url><loc>https://gogreenscrappros.com/tv-recycling-wheat-ridge/</loc><lastmod>2026-04-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://gogreenscrappros.com/tv-recycling-broomfield/</loc><lastmod>2026-04-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://gogreenscrappros.com/tv-recycling-northglenn/</loc><lastmod>2026-04-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Estate Cleanout — by city -->
+  <url><loc>https://gogreenscrappros.com/estate-cleanout-thornton/</loc><lastmod>2026-05-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gogreenscrappros.com/estate-cleanout-arvada/</loc><lastmod>2026-05-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gogreenscrappros.com/estate-cleanout-westminster/</loc><lastmod>2026-05-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gogreenscrappros.com/estate-cleanout-golden/</loc><lastmod>2026-05-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gogreenscrappros.com/estate-cleanout-wheat-ridge/</loc><lastmod>2026-05-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gogreenscrappros.com/estate-cleanout-broomfield/</loc><lastmod>2026-05-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gogreenscrappros.com/estate-cleanout-northglenn/</loc><lastmod>2026-05-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Scrap Metal Pickup — by city (free curbside) -->
   <url><loc>https://gogreenscrappros.com/scrap-metal-pickup-thornton/</loc><lastmod>2026-04-28</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
