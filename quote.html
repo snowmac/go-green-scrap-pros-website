@@ -433,6 +433,38 @@
       font-weight: 400;
       text-align: center;
     }
+    .dumpster-cell .dz-suggest {
+      display: block;
+      width: 100%;
+      margin-top: 0.25rem;
+      padding: 0.3rem 0.2rem;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .dumpster-cell .dz-suggest:hover:not(:disabled) {
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .dumpster-cell .dz-suggest.active {
+      background: var(--green);
+      border-color: var(--green);
+      border-style: solid;
+      color: #fff;
+    }
+    .dumpster-cell .dz-suggest:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
     .dumpster-cell input[type="number"] {
       width: 100%;
       padding: 0.4rem 0.3rem;
@@ -1191,21 +1223,25 @@
                     <label for="dz-10">10 yd</label>
                     <input type="number" id="dz-10" value="0" min="0" step="1" inputmode="numeric">
                     <div class="dz-price">$348 ea</div>
+                    <button type="button" class="dz-suggest" id="dz-sg-10" data-size="10" disabled>Enter volume</button>
                   </div>
                   <div class="dumpster-cell">
                     <label for="dz-20">20 yd</label>
                     <input type="number" id="dz-20" value="0" min="0" step="1" inputmode="numeric">
                     <div class="dz-price">$421 ea</div>
+                    <button type="button" class="dz-suggest" id="dz-sg-20" data-size="20" disabled>Enter volume</button>
                   </div>
                   <div class="dumpster-cell">
                     <label for="dz-30">30 yd</label>
                     <input type="number" id="dz-30" value="0" min="0" step="1" inputmode="numeric">
                     <div class="dz-price">$455 ea</div>
+                    <button type="button" class="dz-suggest" id="dz-sg-30" data-size="30" disabled>Enter volume</button>
                   </div>
                   <div class="dumpster-cell">
                     <label for="dz-40">40 yd</label>
                     <input type="number" id="dz-40" value="0" min="0" step="1" inputmode="numeric">
                     <div class="dz-price">$563 ea</div>
+                    <button type="button" class="dz-suggest" id="dz-sg-40" data-size="40" disabled>Enter volume</button>
                   </div>
                 </div>
               </div>
@@ -1658,6 +1694,31 @@
     const elDz30 = el('dz-30');
     const elDz40 = el('dz-40');
 
+    // Suggestion buttons (auto-fill recommended dumpster count)
+    const dzSuggestBtns = [10, 20, 30, 40].map(s => el('dz-sg-' + s));
+    const dzInputsBySize = { 10: elDz10, 20: elDz20, 30: elDz30, 40: elDz40 };
+
+    // Click a suggestion: fill that size with the recommended count,
+    // zero out the other sizes (radio-style — pick one size per haul).
+    dzSuggestBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        const size = +btn.dataset.size;
+        const count = +btn.dataset.count || 0;
+        if (count <= 0) return;
+        // Auto-enable the dumpster card so the cost flows into the quote
+        if (!elEqDumpster.checked) {
+          elEqDumpster.checked = true;
+          lsSet('ggsp_eqDumpster', true);
+          syncEquipUI();
+        }
+        Object.entries(dzInputsBySize).forEach(([s, input]) => {
+          input.value = (+s === size) ? count : 0;
+        });
+        recalc();
+      });
+    });
+
     // Researched Denver/Thornton average prices per haul
     const DUMPSTER_PRICES = {
       10: 348,
@@ -1808,6 +1869,7 @@
         30: Math.max(0, Math.floor(+elDz30.value || 0)),
         40: Math.max(0, Math.floor(+elDz40.value || 0)),
       };
+      const dzActiveSize = [40, 30, 20, 10].find(s => dz[s] > 0) || null;
       const dumpsterCost = dumpsterSelected
         ? (dz[10] * DUMPSTER_PRICES[10])
         + (dz[20] * DUMPSTER_PRICES[20])
@@ -1933,6 +1995,36 @@
 
       // Estimate disclaimer note below panel
       el('cp-est-note').hidden = !isEstimate;
+
+      // ── Dumpster suggestion badges ────────────────────────────────────────
+      // Derive cubic yards needed from whichever mode is active.
+      // Volume mode: use computed cubicYards directly.
+      // Manual mode: reverse-derive from tons via load-type density
+      //   (scrap-only loads are dense metal; trash/mixed use MSW default).
+      let needYards = 0;
+      if (volMode === 'volume') {
+        needYards = cubicYards;
+      } else if (tons > 0) {
+        // density lb/cu yd — pick a sensible default per load type
+        const manualDensity = loadType === 'scrap' ? 800 : 417; // msw default
+        needYards = (tons * 2000) / manualDensity;
+      }
+
+      [10, 20, 30, 40].forEach((size, i) => {
+        const sg = dzSuggestBtns[i];
+        if (needYards > 0) {
+          const count = Math.max(1, Math.ceil(needYards / size));
+          sg.disabled = false;
+          sg.dataset.count = count;
+          sg.textContent = `Need ${count} × ${size} yd`;
+          sg.classList.toggle('active', dzActiveSize === size && dz[size] === count);
+        } else {
+          sg.disabled = true;
+          sg.dataset.count = 0;
+          sg.textContent = 'Enter volume';
+          sg.classList.remove('active');
+        }
+      });
     }
 
     // ── Copy quote summary ────────────────────────────────────────────────
