@@ -3,144 +3,145 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Online booking for Go Green Scrap Pros is coming soon. For now, request a free quote and we'll confirm availability by text or phone — same-day pickup most days.">
+  <meta name="description" content="Book and prepay for a Go Green Scrap Pros pickup in Thornton, Arvada, Westminster, Golden, Wheat Ridge, Broomfield, or Northglenn.">
   <meta name="author" content="Go Green Scrap Pros">
   <meta property="og:title" content="Book a Pickup | Go Green Scrap Pros">
-  <meta property="og:description" content="Online booking is coming soon. Request a free quote and we'll confirm availability by text or phone — same-day pickup most days.">
+  <meta property="og:description" content="Pick a date, list your items, and prepay online. Curbside pickup across the Denver Metro.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://gogreenscrappros.com/booking.html">
   <meta property="og:image" content="https://gogreenscrappros.com/assets/images/logo.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://gogreenscrappros.com/assets/images/logo.png">
-  <meta name="twitter:title" content="Book a Pickup | Go Green Scrap Pros">
-  <meta name="twitter:description" content="Online booking is coming soon. Request a free quote and we'll confirm availability by text or phone.">
   <link rel="canonical" href="https://gogreenscrappros.com/booking.html">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://gogreenscrappros.com" },
-      { "@type": "ListItem", "position": 2, "name": "Book a Pickup", "item": "https://gogreenscrappros.com/booking.html" }
-    ]
-  }
-  </script>
-
   <meta name="robots" content="index, follow">
   <meta name="geo.region" content="US-CO">
   <meta name="geo.placename" content="Thornton">
-  <title>Book a Pickup | Go Green Scrap Pros — Online Booking Coming Soon</title>
+  <title>Book a Pickup | Go Green Scrap Pros</title>
   <link rel="stylesheet" href="assets/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"></noscript>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://hcaptcha.com/1/api.js" async defer></script>
   <style>
-    .booking-card {
-      max-width: 760px;
-      margin: 2rem auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-      padding: 2rem;
-      text-align: center;
+    .bk-wrap { max-width: 880px; margin: 1.5rem auto; padding: 0 1rem; }
+    .bk-card {
+      background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.08);
+      padding:1.75rem; margin-bottom:1.25rem;
     }
-    .booking-badge {
-      display: inline-block;
-      background: #e9f5f1;
-      color: #1e5a4a;
-      font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.4rem 0.9rem;
-      border-radius: 999px;
-      margin-bottom: 1rem;
+    .bk-card h2 { color:#1e5a4a; font-size:1.35rem; margin-bottom:0.4rem; }
+    .bk-card h3 { color:#1e5a4a; font-size:1.05rem; margin:1rem 0 0.5rem; }
+    .bk-card .muted { color:#666; font-size:0.95rem; margin-bottom:0.6rem; }
+    .bk-curbside {
+      border-left:4px solid #f1b24a; background:#fff8e8; color:#5a3b00;
+      padding:0.9rem 1rem; border-radius:8px; font-size:0.95rem; line-height:1.55;
     }
-    .booking-card h2 {
-      color: #1e5a4a;
-      margin-bottom: 0.75rem;
+    .bk-row { display:grid; gap:0.8rem; grid-template-columns:1fr 1fr; }
+    .bk-row.three { grid-template-columns:2fr 1fr 1fr; }
+    @media (max-width: 640px) {
+      .bk-row, .bk-row.three { grid-template-columns:1fr; }
+      .bk-card { padding:1.25rem; }
     }
-    .booking-card p {
-      color: #555;
-      font-size: 1.05rem;
-      line-height: 1.7;
+    .bk-field label { display:block; font-weight:600; font-size:0.9rem; margin-bottom:0.25rem; color:#333; }
+    .bk-field input, .bk-field select {
+      width:100%; padding:0.65rem 0.75rem; font-family:inherit; font-size:1rem;
+      border:1px solid #cfd8d3; border-radius:8px; background:#fff; color:#1a1a1a;
     }
-    .booking-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      justify-content: center;
-      margin-top: 1.5rem;
+    .bk-field input:focus, .bk-field select:focus { outline:2px solid #1e5a4a; outline-offset:1px; }
+    .bk-field input[readonly] { background:#f3f6f4; color:#666; }
+    .bk-error { color:#b3261e; font-size:0.85rem; margin-top:0.25rem; min-height:1em; }
+
+    .item-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.4rem 1rem; }
+    @media (max-width: 640px) { .item-grid { grid-template-columns:1fr; } }
+    .item-row { display:flex; align-items:center; gap:0.6rem; padding:0.35rem 0; }
+    .item-row label { flex:1; font-size:0.95rem; cursor:pointer; }
+    .item-row .price { color:#666; font-size:0.85rem; }
+    .qty-ctrl { display:inline-flex; align-items:center; gap:0.3rem; }
+    .qty-ctrl button {
+      width:28px; height:28px; border:1px solid #1e5a4a; background:#fff; color:#1e5a4a;
+      border-radius:6px; font-weight:700; cursor:pointer; line-height:1;
     }
-    .booking-actions .cta-button {
-      margin: 0;
+    .qty-ctrl button:disabled { opacity:0.4; cursor:not-allowed; }
+    .qty-ctrl input { width:42px; text-align:center; padding:0.3rem; border:1px solid #cfd8d3; border-radius:6px; }
+
+    .summary { display:grid; grid-template-columns:1fr auto; gap:0.4rem 1rem; font-size:1rem; }
+    .summary .label { color:#444; }
+    .summary .val { font-variant-numeric:tabular-nums; }
+    .summary .total .label, .summary .total .val { font-size:1.15rem; font-weight:700; color:#1e5a4a; padding-top:0.5rem; border-top:1px solid #e2ece8; }
+
+    .alert {
+      background:#fdecea; color:#7a1f17; border-left:4px solid #b3261e;
+      padding:0.75rem 1rem; border-radius:8px; margin:0.75rem 0;
     }
-    .btn-secondary {
-      display: inline-block;
-      padding: 0.85rem 1.5rem;
-      background: #fff;
-      color: #1e5a4a;
-      border: 2px solid #1e5a4a;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
+    .notice { background:#e9f5f1; color:#1e5a4a; padding:0.75rem 1rem; border-radius:8px; margin:0.75rem 0; }
+
+    .submit-btn {
+      width:100%; padding:1rem; background:#1e5a4a; color:#fff; border:none;
+      border-radius:10px; font-weight:700; font-size:1.05rem; cursor:pointer;
+      margin-top:1rem;
     }
-    .btn-secondary:hover {
-      background: #1e5a4a;
-      color: #fff;
+    .submit-btn:disabled { opacity:0.55; cursor:not-allowed; }
+
+    #payment-element { padding:0.5rem 0 0.5rem; }
+    .step { display:none; }
+    .step.active { display:block; }
+
+    .conf {
+      background:#e9f5f1; border:1px solid #c8e2d5; border-radius:12px;
+      padding:1.5rem; text-align:center;
     }
-    .booking-steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-      max-width: 900px;
-      margin: 2rem auto 0;
+    .conf h2 { color:#1e5a4a; margin-bottom:0.5rem; }
+    .conf .number { font-size:1.4rem; font-weight:700; color:#1e5a4a; letter-spacing:0.04em; }
+
+    .bk-faq h2 { color:#1e5a4a; font-size:1.35rem; margin-bottom:0.4rem; }
+    .bk-faq .muted { color:#666; font-size:0.95rem; margin-bottom:0.75rem; }
+    .bk-faq-group { margin-top:1.25rem; }
+    .bk-faq-group:first-of-type { margin-top:0.5rem; }
+    .bk-faq-group h3 {
+      color:#1e5a4a; font-size:1.05rem; font-weight:700;
+      margin:0 0 0.5rem; padding-bottom:0.35rem;
+      border-bottom:1px solid #e2ece8;
     }
-    .booking-step {
-      background: #fff;
-      border-radius: 10px;
-      padding: 1.25rem;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-      text-align: left;
+    .bk-faq details {
+      border:1px solid #e2ece8; border-radius:8px; background:#fff;
+      margin-bottom:0.5rem; overflow:hidden;
     }
-    .booking-step .num {
-      display: inline-block;
-      width: 1.8rem;
-      height: 1.8rem;
-      line-height: 1.8rem;
-      background: #1e5a4a;
-      color: #fff;
-      border-radius: 50%;
-      text-align: center;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
+    .bk-faq details + details { margin-top:0.5rem; }
+    .bk-faq details[open] { border-color:#cfe0d8; box-shadow:0 1px 4px rgba(30,90,74,0.06); }
+    .bk-faq summary {
+      list-style:none; cursor:pointer; padding:0.85rem 1rem;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:0.75rem; font-weight:600; color:#1a1a1a; font-size:0.98rem;
+      line-height:1.4;
     }
-    .booking-step h3 {
-      color: #1e5a4a;
-      font-size: 1.05rem;
-      margin-bottom: 0.4rem;
+    .bk-faq summary::-webkit-details-marker { display:none; }
+    .bk-faq summary:focus { outline:2px solid #1e5a4a; outline-offset:2px; }
+    .bk-faq summary:hover { background:#f6faf8; }
+    .bk-faq .bk-faq-icon {
+      flex:0 0 auto; width:22px; height:22px; border-radius:50%;
+      border:1.5px solid #1e5a4a; color:#1e5a4a;
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:1rem; font-weight:700; line-height:1;
+      transition:transform 0.18s ease, background 0.18s ease, color 0.18s ease;
     }
-    .booking-step p {
-      color: #555;
-      font-size: 0.95rem;
-      line-height: 1.6;
+    .bk-faq details[open] .bk-faq-icon {
+      transform:rotate(45deg); background:#1e5a4a; color:#fff;
     }
-    .booking-faq {
-      max-width: 760px;
-      margin: 2rem auto 0;
-      text-align: left;
+    .bk-faq .bk-faq-body {
+      padding:0 1rem 1rem; color:#333; font-size:0.95rem; line-height:1.6;
     }
-    .booking-faq h3 {
-      color: #1e5a4a;
-      margin: 1.25rem 0 0.4rem;
-      font-size: 1.1rem;
+    .bk-faq .bk-faq-body p { margin:0 0 0.6rem; }
+    .bk-faq .bk-faq-body p:last-child { margin-bottom:0; }
+    .bk-faq .bk-faq-body ul { margin:0 0 0.6rem 1.25rem; padding:0; }
+    .bk-faq .bk-faq-body li { margin-bottom:0.25rem; }
+    .bk-faq-cta {
+      margin-top:1.25rem; text-align:center;
     }
-    .booking-faq p {
-      color: #555;
-      line-height: 1.7;
+    .bk-faq-cta .submit-btn {
+      width:auto; display:inline-block; padding:0.85rem 1.75rem;
+      margin-top:0; text-decoration:none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bk-faq .bk-faq-icon { transition:none; }
     }
   </style>
 </head>
@@ -163,18 +164,6 @@
     </div>
   </nav>
 
-  <nav class="city-nav" aria-label="Service areas">
-    <div class="container">
-      <a href="/junk-removal-thornton/">Thornton</a>
-      <a href="/junk-removal-arvada/">Arvada</a>
-      <a href="/junk-removal-westminster/">Westminster</a>
-      <a href="/junk-removal-golden/">Golden</a>
-      <a href="/junk-removal-wheat-ridge/">Wheat Ridge</a>
-      <a href="/junk-removal-broomfield/">Broomfield</a>
-      <a href="/junk-removal-northglenn/">Northglenn</a>
-    </div>
-  </nav>
-
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <div class="container">
       <ol>
@@ -186,123 +175,1000 @@
 
   <div class="location-hero">
     <div class="container">
-      <h1>Book a Pickup</h1>
-      <p>Online booking is coming soon. For now, request a free quote and we'll confirm availability by text or phone — usually within the hour.</p>
-      <a href="tel:7206757693" class="cta-button">Call or Text 720-675-7693</a>
+      <h1>Book &amp; Prepay for a Pickup</h1>
+      <p>Pick your date, list your items, and lock in your pickup. Curbside service across the north and west Denver Metro.</p>
     </div>
   </div>
 
   <main>
-    <section>
-      <div class="container">
-        <div class="booking-card">
-          <span class="booking-badge">Online Booking — Coming Soon</span>
-          <h2>We're Building Something Better</h2>
-          <p>
-            We're putting the finishing touches on a self-serve booking app where you'll be able to
-            pick a time, describe your items, and lock in a pickup right from this page.
-          </p>
-          <p style="margin-top:0.75rem;">
-            <strong>In the meantime</strong>, the fastest way to get on the schedule is to request a free quote.
-            Send a photo of what needs to go and your address — Adam will confirm availability and a straight price by text or phone.
-          </p>
-          <div class="booking-actions">
-            <a href="tel:7206757693" class="cta-button" id="cta-call">Call for a Free Quote</a>
-            <a href="sms:7206757693" class="btn-secondary" id="cta-text">Text a Photo</a>
-            <a href="/contact/" class="btn-secondary" id="cta-contact">Contact Page</a>
-            <a href="/quote.html" class="btn-secondary" id="cta-quote">Use the Quote Calculator</a>
+    <div class="bk-wrap">
+
+      <!-- Step 1: details -->
+      <form id="booking-form" class="step active" novalidate>
+
+        <section class="bk-card">
+          <h2>Curbside Service</h2>
+          <div class="bk-curbside">
+            <strong>Curbside Service Only:</strong> All items must be placed at the curb or end of
+            the driveway by <strong>8:00 AM</strong> on your scheduled pickup day. We are unable
+            to enter homes, garages, or backyards. Please ensure items are accessible from the street.
           </div>
+        </section>
+
+        <section class="bk-card">
+          <h2>Your Information</h2>
+          <div class="bk-row">
+            <div class="bk-field">
+              <label for="firstName">First name</label>
+              <input id="firstName" name="firstName" type="text" autocomplete="given-name" required>
+              <div class="bk-error" data-for="firstName"></div>
+            </div>
+            <div class="bk-field">
+              <label for="lastName">Last name</label>
+              <input id="lastName" name="lastName" type="text" autocomplete="family-name" required>
+              <div class="bk-error" data-for="lastName"></div>
+            </div>
+          </div>
+          <div class="bk-row">
+            <div class="bk-field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+              <div class="bk-error" data-for="email"></div>
+            </div>
+            <div class="bk-field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="numeric"
+                placeholder="(555) 555-5555" maxlength="14" required>
+              <div class="bk-error" data-for="phone"></div>
+            </div>
+          </div>
+          <div class="bk-field">
+            <label for="address">Street address</label>
+            <input id="address" name="address" type="text" autocomplete="street-address" required>
+            <div class="bk-error" data-for="address"></div>
+          </div>
+          <div class="bk-row three">
+            <div class="bk-field">
+              <label for="city">City</label>
+              <select id="city" name="city" required>
+                <option value="">Select your city…</option>
+                <option>Thornton</option>
+                <option>Arvada</option>
+                <option>Westminster</option>
+                <option>Golden</option>
+                <option>Wheat Ridge</option>
+                <option>Broomfield</option>
+                <option>Northglenn</option>
+                <option value="__OTHER__">Other / Not Listed</option>
+              </select>
+              <div class="bk-error" data-for="city"></div>
+            </div>
+            <div class="bk-field">
+              <label for="state">State</label>
+              <input id="state" name="state" type="text" value="CO" readonly>
+            </div>
+            <div class="bk-field">
+              <label for="zip">ZIP</label>
+              <input id="zip" name="zip" type="text" inputmode="numeric" pattern="\d{5}" maxlength="5" required>
+              <div class="bk-error" data-for="zip"></div>
+            </div>
+          </div>
+          <div id="city-other-warning" class="alert" style="display:none;">
+            We're sorry, we don't currently service your area. Check back soon!
+          </div>
+          <div id="city-mismatch-warning" class="notice" style="display:none;"></div>
+        </section>
+
+        <section class="bk-card">
+          <h2>Pickup Date</h2>
+          <div class="muted">Pickups run Monday, Wednesday, and Friday. Earliest available is 48 hours from now; latest is 14 days out.</div>
+          <div class="bk-field">
+            <label for="pickupDate">Choose a date</label>
+            <select id="pickupDate" name="pickupDate" required></select>
+            <div class="bk-error" data-for="pickupDate"></div>
+          </div>
+          <div id="pickupDateHuman" class="notice" style="display:none;"></div>
+        </section>
+
+        <section class="bk-card">
+          <h2>Junk &amp; Furniture</h2>
+          <div class="muted">$75 each. Tap to add an item, then adjust quantity (max 20).</div>
+          <div id="junk-grid" class="item-grid"></div>
+        </section>
+
+        <section class="bk-card">
+          <h2>Scrap Metal &amp; Appliances</h2>
+          <div class="muted">Flat $50 if you select any scrap or appliance items. Quantities are reference only — we'll grade and weigh on site.</div>
+          <div id="scrap-grid" class="item-grid"></div>
+        </section>
+
+        <section class="bk-card">
+          <h2>Electronics / E-Waste</h2>
+          <div class="muted">Flat $50 if you select any e-waste items. Quantities are reference only.</div>
+          <div id="ewaste-grid" class="item-grid"></div>
+        </section>
+
+        <section class="bk-card">
+          <h2>Order Summary</h2>
+          <div class="summary" id="summary">
+            <div class="label">Junk &amp; furniture</div><div class="val" id="sum-junk">$0.00</div>
+            <div class="label">Scrap metal &amp; appliances</div><div class="val" id="sum-scrap">$0.00</div>
+            <div class="label">Electronics</div><div class="val" id="sum-ewaste">$0.00</div>
+            <div class="label">Subtotal</div><div class="val" id="sum-subtotal">$0.00</div>
+            <div class="label" id="sum-tax-label">CO sales tax (Thornton, 8.5%)</div><div class="val" id="sum-tax">$0.00</div>
+            <div class="total label">Total</div><div class="total val" id="sum-total">$0.00</div>
+          </div>
+        </section>
+
+        <section class="bk-card">
+          <h2>Verify &amp; Pay</h2>
+          <div id="captcha-container" style="margin-bottom:0.75rem;"></div>
+          <div id="payment-element"></div>
+          <div id="payment-error" class="alert" style="display:none;"></div>
+          <button type="submit" id="submit-btn" class="submit-btn" disabled>
+            Pay &amp; Confirm Pickup
+          </button>
+          <div class="muted" style="margin-top:0.5rem; text-align:center;">
+            Secure payment via Stripe. You'll receive a confirmation email and text once payment succeeds.
+          </div>
+        </section>
+      </form>
+
+      <!-- FAQ -->
+      <section class="bk-card bk-faq" aria-labelledby="bk-faq-heading">
+        <h2 id="bk-faq-heading">Frequently Asked Questions</h2>
+        <div class="muted">Quick answers about pricing, scheduling, what we take, where we go, and how booking works.</div>
+
+        <div class="bk-faq-group" aria-labelledby="bk-faq-pricing">
+          <h3 id="bk-faq-pricing">Pricing</h3>
+
+          <details>
+            <summary data-testid="faq-summary-pricing-how-priced">
+              <span>How is pricing calculated?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Pricing on this booking page is straightforward and shown live in your Order Summary as you add items:</p>
+              <ul>
+                <li><strong>Junk and furniture:</strong> $75 per item, with quantity adjustable up to 20 per line.</li>
+                <li><strong>Scrap metal &amp; appliances:</strong> a flat $50 if you select any scrap metal or appliance item (refrigerator, washer, dryer, etc.), regardless of how many you list. Quantities are reference only — we grade and weigh on site.</li>
+                <li><strong>Electronics / e-waste:</strong> a flat $50 if you select any e-waste item, regardless of how many you list.</li>
+                <li><strong>Sales tax:</strong> 8.5% Colorado/Thornton sales tax applies to your subtotal.</li>
+              </ul>
+              <p>Your total is recalculated server-side at checkout for safety, so what you see in the summary is what you'll pay.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-pricing-electronics">
+              <span>Are electronics really $50 flat, even if I have several?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Yes. The Electronics / E-Waste category is a single flat $50 if you select any e-waste items — TVs, computers, printers, monitors, gaming consoles, cables, and similar. Quantities are reference only so we know what to expect.</p>
+              <p>The Order Summary always reflects the correct rule based on which category you check.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-pricing-scrap">
+              <span>How does scrap metal pricing work?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>If you select any scrap metal or appliance items in the form, you'll see a flat $50 added to your total. That covers the pickup. We grade and weigh metals on site — you don't need to estimate weights or values when booking.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-pricing-tax">
+              <span>Why is sales tax based on Thornton?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>We're licensed in Thornton, CO, so Colorado state and Thornton local sales tax (8.5% combined) apply to bookings, regardless of which service-area city the pickup happens in.</p>
+            </div>
+          </details>
         </div>
 
-        <div class="booking-steps" aria-label="How booking works today">
-          <div class="booking-step">
-            <span class="num">1</span>
-            <h3>Tell Us What You Have</h3>
-            <p>Call or text a quick description — or a photo. Mattresses, furniture, appliances, full cleanouts, scrap metal.</p>
-          </div>
-          <div class="booking-step">
-            <span class="num">2</span>
-            <h3>Get a Straight Price</h3>
-            <p>You'll get a free quote, no forms or hold music. Approve before we lift a thing.</p>
-          </div>
-          <div class="booking-step">
-            <span class="num">3</span>
-            <h3>Pick a Time</h3>
-            <p>Same-day and next-day slots available most days across the Denver Metro.</p>
-          </div>
-          <div class="booking-step">
-            <span class="num">4</span>
-            <h3>We Haul It Away</h3>
-            <p>We arrive on time, load everything, sweep up, and recycle or donate first — landfill last.</p>
-          </div>
+        <div class="bk-faq-group" aria-labelledby="bk-faq-scheduling">
+          <h3 id="bk-faq-scheduling">Scheduling &amp; Pickup</h3>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-days">
+              <span>What days do you run pickups?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Pickups run on <strong>Mondays, Wednesdays, and Fridays</strong>. The booking calendar only shows those days, so you can be sure your selected date is one we service.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-leadtime">
+              <span>How soon can I book a pickup?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>The earliest available date is at least <strong>48 hours from now</strong>, on the next available Mon/Wed/Fri. The latest available date is <strong>14 days out</strong>. The date dropdown only lists dates that meet both rules — pick whichever works for you.</p>
+              <p>Need it sooner? Call or text us at <a href="tel:7206757693">720-675-7693</a> and we'll see what we can do, but online bookings always require a 48-hour lead time.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-curbside">
+              <span>What time do items need to be out?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p><strong>Curbside service only.</strong> All items must be at the curb or end of the driveway by <strong>8:00 AM</strong> on your scheduled pickup day. We aren't able to enter homes, garages, or backyards.</p>
+              <p>If items aren't accessible from the street by 8 AM, we may not be able to complete the pickup that day.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-window">
+              <span>Will I get a specific time window?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Pickups happen between <strong>8:00 AM and 12:00 PM Mountain Time</strong> on your scheduled day. Because routes are sequenced morning-of, we don't give a tighter window — but as long as your items are at the curb by 8 AM, you don't need to be home.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-scheduling-reschedule">
+              <span>Can I reschedule or cancel?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Yes. Call or text <a href="tel:7206757693">720-675-7693</a> as soon as you know. The sooner the better — same-day reschedules are harder to fit into the route.</p>
+            </div>
+          </details>
         </div>
 
-        <div class="booking-faq">
-          <h3>Will I be able to book online soon?</h3>
-          <p>Yes. We're building a booking app that lets you choose a time slot and describe your job without a phone call. Until then, a quick call or text is the fastest path to a confirmed pickup.</p>
+        <div class="bk-faq-group" aria-labelledby="bk-faq-take">
+          <h3 id="bk-faq-take">What We Take</h3>
 
-          <h3>How fast can you come out?</h3>
-          <p>Same-day or next-day on most jobs. Text us a photo of your items and your address — you'll have a price and an ETA within the hour most days.</p>
+          <details>
+            <summary data-testid="faq-summary-take-list">
+              <span>What items can you pick up?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Most household junk, furniture, large appliances, scrap metal, and electronics. Common examples:</p>
+              <ul>
+                <li><strong>Junk &amp; furniture:</strong> mattresses, box springs, sofas, sectionals, recliners, dressers, tables, chairs, bed frames, bookshelves, TV stands.</li>
+                <li><strong>Fitness &amp; outdoor:</strong> treadmills, exercise bikes, ellipticals, weight benches, grills, lawn mowers, snow blowers.</li>
+                <li><strong>Scrap metal &amp; appliances</strong> (flat $50 category): copper, brass, aluminum, steel, iron, stainless, lead, zinc, wire/cable, auto batteries, rims, radiators, sheet metal, rebar, pipe — plus refrigerators, freezers, washers, dryers, dishwashers, stoves, microwaves, water heaters, and AC units.</li>
+                <li><strong>Electronics / e-waste:</strong> TVs (CRT and flat-panel), computers, laptops, monitors, printers, scanners, routers, cable boxes, gaming consoles, stereos, speakers, phones, tablets, cables.</li>
+              </ul>
+              <p>Don't see your item? Add it as <em>Other / misc item</em> in the form, or call us with details.</p>
+            </div>
+          </details>
 
-          <h3>What areas do you serve?</h3>
-          <p>Thornton, Arvada, Westminster, Golden, Wheat Ridge, Broomfield, Northglenn, and the surrounding north and west Denver Metro. See <a href="/sitemap/">all service areas</a>.</p>
+          <details>
+            <summary data-testid="faq-summary-take-large">
+              <span>Do you handle very large items like pianos or hot tubs?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Items like upright pianos, hot tubs, pool tables, and carpet rolls aren't available in the online booking form — they need a per-job quote. Call or text <a href="tel:7206757693">720-675-7693</a> and we'll work out pricing and pickup logistics with you.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-take-not">
+              <span>Is there anything you can't take?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>We can't accept hazardous waste (paint, solvents, motor oil, propane tanks, asbestos, medical/biohazard waste) or anything that requires entering the home. If you're not sure about an item, give us a quick call before booking.</p>
+            </div>
+          </details>
         </div>
-      </div>
-    </section>
 
-    <section class="contact-info">
-      <div class="container">
-        <h2>Ready to Schedule?</h2>
-        <p class="intro-text">
-          Call or text Adam directly. No forms, no waiting — just a straight price and a confirmed pickup time.
-        </p>
-        <a href="tel:7206757693" class="cta-button">Call or Text 720-675-7693</a>
-      </div>
-    </section>
+        <div class="bk-faq-group" aria-labelledby="bk-faq-area">
+          <h3 id="bk-faq-area">Service Area</h3>
+
+          <details>
+            <summary data-testid="faq-summary-area-cities">
+              <span>Which cities do you serve?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>The booking form services these north and west Denver Metro cities:</p>
+              <ul>
+                <li>Thornton</li>
+                <li>Arvada</li>
+                <li>Westminster</li>
+                <li>Golden</li>
+                <li>Wheat Ridge</li>
+                <li>Broomfield</li>
+                <li>Northglenn</li>
+              </ul>
+              <p>If you choose <em>Other / Not Listed</em> in the city dropdown, online booking is blocked — we don't currently service that area. Check back soon as we expand.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-area-zip">
+              <span>My ZIP looks different from my city — is that a problem?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Some metro ZIPs straddle multiple cities. If our soft check thinks your ZIP belongs to a different city, you'll see a yellow heads-up — but it won't block your booking. Pick the city that matches your billing/service address.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-area-outside">
+              <span>What if I'm just outside your service area?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Online booking is limited to the cities above. If you're nearby and not on the list, call or text <a href="tel:7206757693">720-675-7693</a> — we may still be able to help on a case-by-case basis.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="bk-faq-group" aria-labelledby="bk-faq-booking">
+          <h3 id="bk-faq-booking">Booking</h3>
+
+          <details>
+            <summary data-testid="faq-summary-booking-how">
+              <span>How does the booking flow work?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Three steps, all on this page:</p>
+              <ul>
+                <li>Fill in your contact info, address, and pickup date (Mon/Wed/Fri, 48 h to 14 d out).</li>
+                <li>Select the items you have in the Junk &amp; Furniture, Scrap Metal &amp; Appliances, and Electronics sections. Your total updates live.</li>
+                <li>Complete the captcha, prepay with a card via Stripe, and you'll see a confirmation screen with your booking number. We'll also email and text the details.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-booking-payment">
+              <span>Is payment secure?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>Yes. Card payments are processed by Stripe — we never see or store your card number. The page also runs an hCaptcha challenge before payment to keep out bots.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-booking-confirmation">
+              <span>How will I know my booking is confirmed?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>As soon as Stripe confirms payment, you'll see an on-screen confirmation with a booking number that looks like <code>GGS-YYYYMMDD-XXXX</code>. We also send an email and text confirmation. Save the booking number — it's the quickest way to look up your pickup if you need to call.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary data-testid="faq-summary-booking-issue">
+              <span>What if I run into an error during checkout?</span>
+              <span class="bk-faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="bk-faq-body">
+              <p>If the card is declined, the page will tell you and let you try again. If payment succeeds but something else fails, you'll see a message asking you to call <a href="tel:7206757693">720-675-7693</a> with your card receipt — we'll find your charge and finish booking by hand.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="bk-faq-cta">
+          <a href="#booking-form" class="submit-btn" id="faq-back-to-form" data-testid="faq-cta-back-to-form">
+            Back to Booking
+          </a>
+        </div>
+      </section>
+
+      <!-- Step 2: confirmation -->
+      <section id="confirmation" class="step">
+        <div class="conf bk-card">
+          <h2>Pickup Confirmed</h2>
+          <p>Thanks — your pickup is on the schedule.</p>
+          <p class="number" id="conf-number"></p>
+          <p style="margin-top:0.75rem;"><strong>Pickup date:</strong> <span id="conf-date"></span></p>
+          <p><strong>Total charged:</strong> <span id="conf-total"></span></p>
+          <p style="margin-top:1rem;">A confirmation email and text are on the way. Questions? Call or text <a href="tel:7206757693">720-675-7693</a>.</p>
+          <div class="bk-curbside" style="margin-top:1rem; text-align:left;">
+            <strong>Curbside Service Only:</strong> All items must be at the curb or end of the driveway by 8:00 AM on pickup day.
+          </div>
+          <p style="margin-top:1.25rem;"><a class="btn-secondary" href="/">Return to Home</a></p>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer>
     <div class="container">
-      <div class="footer-nav">
-        <a href="/">Home</a>
-        <a href="/booking.html">Book a Pickup</a>
-        <a href="/sitemap/">Site Map</a>
-        <a href="/about/">About</a>
-        <a href="/contact/">Contact</a>
-        <a href="tel:7206757693">Get a Quote</a>
-      </div>
-      <div class="footer-cities">
-        <a href="/junk-removal-thornton/">Thornton</a>
-        <a href="/junk-removal-arvada/">Arvada</a>
-        <a href="/junk-removal-westminster/">Westminster</a>
-        <a href="/junk-removal-golden/">Golden</a>
-        <a href="/junk-removal-wheat-ridge/">Wheat Ridge</a>
-        <a href="/junk-removal-broomfield/">Broomfield</a>
-        <a href="/junk-removal-northglenn/">Northglenn</a>
-      </div>
       <p>Go Green Scrap Pros — Thornton, CO 80229 — 720-675-7693</p>
-      <p style="margin-top:1.5rem;font-size:0.9rem;">© 2026 Go Green Scrap Pros. All Rights Reserved.</p>
+      <p style="margin-top:1rem;font-size:0.9rem;">© 2026 Go Green Scrap Pros. All Rights Reserved.</p>
     </div>
   </footer>
 
   <script>
-    // Preserve incoming ?ref=... when forwarding to the quote calculator and contact page.
-    (function () {
+  /* ============================================================
+   * Booking + prepayment client. Talks to /api/* serverless funcs.
+   * ============================================================ */
+  (function(){
+    'use strict';
+
+    var TAX_RATE = 0.085;
+    var JUNK_PER_QTY = 75;
+    var SCRAP_FLAT = 50;
+    var EWASTE_FLAT = 50;
+    var MAX_QTY = 20;
+
+    var JUNK_ITEMS = [
+      ['mattress_twin','Mattress — twin'],
+      ['mattress_full','Mattress — full'],
+      ['mattress_queen','Mattress — queen'],
+      ['mattress_king','Mattress — king'],
+      ['box_spring','Box spring'],
+      ['sofa','Sofa / couch'],
+      ['loveseat','Loveseat'],
+      ['sectional_section','Sectional (per section)'],
+      ['recliner','Recliner'],
+      ['chair','Chair'],
+      ['ottoman','Ottoman'],
+      ['coffee_table','Coffee table'],
+      ['end_table','End table'],
+      ['dining_table','Dining table'],
+      ['dining_chair','Dining chair'],
+      ['desk','Desk'],
+      ['office_chair','Office chair'],
+      ['dresser','Dresser'],
+      ['nightstand','Nightstand'],
+      ['bookshelf','Bookshelf'],
+      ['wardrobe','Wardrobe / armoire'],
+      ['bed_frame','Bed frame'],
+      ['headboard','Headboard'],
+      ['tv_stand','TV stand'],
+      ['treadmill','Treadmill'],
+      ['exercise_bike','Exercise bike'],
+      ['elliptical','Elliptical'],
+      ['weight_bench','Weight bench / set'],
+      ['grill','Grill'],
+      ['lawn_mower','Lawn mower'],
+      ['snow_blower','Snow blower'],
+      ['misc_item','Other / misc item']
+    ];
+
+    var SCRAP_ITEMS = [
+      ['copper','Copper'],['brass','Brass'],['aluminum','Aluminum'],
+      ['steel','Steel'],['iron','Iron'],['stainless_steel','Stainless steel'],
+      ['lead','Lead'],['zinc','Zinc'],['wire_cable','Wire / cable'],
+      ['auto_battery','Auto battery'],['rims','Rims / wheels'],
+      ['radiator','Radiator'],['catalytic_converter','Catalytic converter'],
+      ['sheet_metal','Sheet metal'],['rebar','Rebar'],['pipe','Pipe'],
+      ['refrigerator','Refrigerator'],['freezer','Freezer'],
+      ['washer','Washer'],['dryer','Dryer'],['dishwasher','Dishwasher'],
+      ['stove_oven','Stove / oven'],['microwave','Microwave'],
+      ['water_heater','Water heater'],['ac_unit','AC unit'],
+      ['misc_metal','Other / misc metal']
+    ];
+
+    var EWASTE_ITEMS = [
+      ['tv_crt','TV — CRT (tube)'],['tv_flat','TV — flat panel'],
+      ['computer_tower','Computer tower'],['laptop','Laptop'],
+      ['monitor','Monitor'],['printer','Printer'],['scanner','Scanner'],
+      ['fax_machine','Fax machine'],['keyboard_mouse','Keyboard / mouse'],
+      ['router_modem','Router / modem'],['cable_box','Cable box'],
+      ['gaming_console','Gaming console'],['stereo','Stereo / receiver'],
+      ['speakers','Speakers'],['cell_phone','Cell phone'],
+      ['tablet','Tablet'],['small_electronic','Small electronic'],
+      ['cables_cords','Cables / cords']
+    ];
+
+    var SERVICE_CITIES = ['Thornton','Arvada','Westminster','Golden','Wheat Ridge','Broomfield','Northglenn'];
+
+    var state = {
+      junk: {},
+      scrap: {},
+      ewaste: {},
+      stripe: null,
+      elements: null,
+      paymentElement: null,
+      clientSecret: null,
+      paymentIntentId: null,
+      bookingDraftId: null,
+      hcaptchaWidgetId: null,
+      hcaptchaToken: '',
+      submitting: false,
+      lastTotalCents: 0,
+      config: { hcaptchaSiteKey: '', stripePublishableKey: '', taxRate: TAX_RATE }
+    };
+
+    // ---------- Build item grids ----------
+    function $(id){ return document.getElementById(id); }
+    function fmt(n){ return '$' + (Math.round(n*100)/100).toFixed(2); }
+
+    function buildJunkGrid() {
+      var grid = $('junk-grid'); var html = '';
+      JUNK_ITEMS.forEach(function(it){
+        var k = it[0], label = it[1];
+        html += '<div class="item-row" data-key="'+k+'">' +
+                '<input type="checkbox" id="junk_'+k+'" data-junk="'+k+'">' +
+                '<label for="junk_'+k+'">'+label+' <span class="price">$75 each</span></label>' +
+                '<span class="qty-ctrl">' +
+                  '<button type="button" data-qty-dec="'+k+'" disabled>−</button>' +
+                  '<input type="number" min="1" max="'+MAX_QTY+'" value="1" data-qty="'+k+'" disabled>' +
+                  '<button type="button" data-qty-inc="'+k+'" disabled>+</button>' +
+                '</span></div>';
+      });
+      grid.innerHTML = html;
+    }
+
+    function buildSimpleGrid(elId, items, kind) {
+      var grid = $(elId); var html = '';
+      items.forEach(function(it){
+        var k = it[0], label = it[1];
+        html += '<div class="item-row" data-key="'+k+'">' +
+                '<input type="checkbox" id="'+kind+'_'+k+'" data-'+kind+'="'+k+'">' +
+                '<label for="'+kind+'_'+k+'">'+label+'</label>' +
+                '</div>';
+      });
+      grid.innerHTML = html;
+    }
+
+    // ---------- Pickup date select ----------
+    function buildPickupDates() {
+      var sel = $('pickupDate');
+      sel.innerHTML = '<option value="">Select a date…</option>';
+      // 48h from now → 14d from now in MT, only Mon/Wed/Fri.
+      var minMs = Date.now() + 48*3600*1000;
+      var maxMs = Date.now() + 14*24*3600*1000;
+      var added = 0;
+      for (var i = 2; i <= 14; i++) {
+        var dt = new Date(Date.now() + i*24*3600*1000);
+        if (dt.getTime() < minMs || dt.getTime() > maxMs) continue;
+        // Test Mountain Time weekday
+        var wd = new Intl.DateTimeFormat('en-US',{ timeZone:'America/Denver', weekday:'short' }).format(dt);
+        if (['Mon','Wed','Fri'].indexOf(wd) === -1) continue;
+        var iso = mtDateString(dt);
+        var human = new Intl.DateTimeFormat('en-US',{
+          timeZone:'America/Denver', weekday:'long', month:'long', day:'numeric'
+        }).format(dt);
+        var opt = document.createElement('option');
+        opt.value = iso; opt.textContent = human;
+        sel.appendChild(opt); added++;
+      }
+      if (!added) {
+        var o = document.createElement('option');
+        o.value=''; o.textContent='No dates available — please call us';
+        sel.appendChild(o);
+      }
+    }
+
+    function mtDateString(d) {
+      // YYYY-MM-DD in America/Denver
+      var parts = new Intl.DateTimeFormat('en-CA',{ timeZone:'America/Denver',
+        year:'numeric', month:'2-digit', day:'2-digit' }).formatToParts(d);
+      var y='',m='',day='';
+      parts.forEach(function(p){ if(p.type==='year')y=p.value; if(p.type==='month')m=p.value; if(p.type==='day')day=p.value; });
+      return y+'-'+m+'-'+day;
+    }
+
+    // ---------- Phone formatter ----------
+    function formatPhone(v) {
+      var d = (v||'').replace(/\D/g,'').slice(0,10);
+      if (d.length === 0) return '';
+      if (d.length < 4) return '(' + d;
+      if (d.length < 7) return '(' + d.slice(0,3) + ') ' + d.slice(3);
+      return '(' + d.slice(0,3) + ') ' + d.slice(3,6) + '-' + d.slice(6);
+    }
+
+    // ---------- Pricing ----------
+    function totals() {
+      var junkTotal = 0, hasScrap=false, hasEwaste=false;
+      for (var k in state.junk) {
+        var q = parseInt(state.junk[k],10) || 0;
+        if (q > 0) junkTotal += q * JUNK_PER_QTY;
+      }
+      for (var s in state.scrap) if (state.scrap[s]) hasScrap = true;
+      for (var e in state.ewaste) if (state.ewaste[e]) hasEwaste = true;
+      var scrap = hasScrap ? SCRAP_FLAT : 0;
+      var ewaste = hasEwaste ? EWASTE_FLAT : 0;
+      var subtotal = junkTotal + scrap + ewaste;
+      var tax = Math.round(subtotal * TAX_RATE * 100) / 100;
+      var total = Math.round((subtotal + tax) * 100) / 100;
+      return { junkTotal:junkTotal, scrap:scrap, ewaste:ewaste, subtotal:subtotal, tax:tax, total:total };
+    }
+
+    function renderSummary() {
+      var t = totals();
+      $('sum-junk').textContent = fmt(t.junkTotal);
+      $('sum-scrap').textContent = fmt(t.scrap);
+      $('sum-ewaste').textContent = fmt(t.ewaste);
+      $('sum-subtotal').textContent = fmt(t.subtotal);
+      $('sum-tax').textContent = fmt(t.tax);
+      $('sum-total').textContent = fmt(t.total);
+      updateSubmitState();
+    }
+
+    // ---------- Validation ----------
+    function setError(name, msg) {
+      var el = document.querySelector('[data-for="'+name+'"]');
+      if (el) el.textContent = msg || '';
+    }
+    function validateField(name) {
+      var v = ($(name) && $(name).value || '').trim();
+      switch (name) {
+        case 'firstName':
+        case 'lastName':
+          if (!v) { setError(name, 'Required'); return false; } break;
+        case 'email':
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { setError(name,'Enter a valid email'); return false; } break;
+        case 'phone':
+          if ((v.replace(/\D/g,'')).length !== 10) { setError(name,'Enter a 10-digit US phone'); return false; } break;
+        case 'address':
+          if (!v) { setError(name,'Required'); return false; } break;
+        case 'city':
+          if (v === '__OTHER__') { setError(name,'We do not service this area'); return false; }
+          if (SERVICE_CITIES.indexOf(v) === -1) { setError(name,'Choose a service city'); return false; } break;
+        case 'zip':
+          if (!/^\d{5}$/.test(v)) { setError(name,'5-digit ZIP'); return false; } break;
+        case 'pickupDate':
+          if (!v) { setError(name,'Pick a date'); return false; } break;
+      }
+      setError(name,''); return true;
+    }
+    function isFormValid() {
+      var names = ['firstName','lastName','email','phone','address','city','zip','pickupDate'];
+      var ok = true;
+      names.forEach(function(n){ if (!validateField(n)) ok = false; });
+      var t = totals();
+      if (t.total <= 0) ok = false;
+      return ok;
+    }
+
+    function updateSubmitState() {
+      var t = totals();
+      var btn = $('submit-btn');
+      var ok = isFormValid() && t.total > 0 && state.clientSecret && state.hcaptchaToken;
+      btn.disabled = !ok || state.submitting;
+    }
+
+    // ---------- Wire item interactions ----------
+    function wireJunkGrid() {
+      $('junk-grid').addEventListener('change', function(ev){
+        var t = ev.target;
+        if (t.matches('input[data-junk]')) {
+          var k = t.getAttribute('data-junk');
+          var qtyEl = document.querySelector('[data-qty="'+k+'"]');
+          var dec   = document.querySelector('[data-qty-dec="'+k+'"]');
+          var inc   = document.querySelector('[data-qty-inc="'+k+'"]');
+          if (t.checked) {
+            qtyEl.disabled = false; dec.disabled = false; inc.disabled = false;
+            qtyEl.value = qtyEl.value && qtyEl.value !== '0' ? qtyEl.value : '1';
+            state.junk[k] = parseInt(qtyEl.value,10) || 1;
+          } else {
+            qtyEl.disabled = true; dec.disabled = true; inc.disabled = true;
+            qtyEl.value = 1;
+            delete state.junk[k];
+          }
+          syncPaymentIntent(); renderSummary();
+        }
+        if (t.matches('input[data-qty]')) {
+          var k2 = t.getAttribute('data-qty');
+          var v = parseInt(t.value,10) || 1;
+          if (v < 1) v = 1; if (v > MAX_QTY) v = MAX_QTY;
+          t.value = v; state.junk[k2] = v;
+          syncPaymentIntent(); renderSummary();
+        }
+      });
+      $('junk-grid').addEventListener('click', function(ev){
+        var t = ev.target;
+        var k, qtyEl;
+        if (t.hasAttribute && t.hasAttribute('data-qty-inc')) {
+          k = t.getAttribute('data-qty-inc');
+          qtyEl = document.querySelector('[data-qty="'+k+'"]');
+          if (qtyEl.disabled) return;
+          var v = (parseInt(qtyEl.value,10)||1) + 1;
+          if (v > MAX_QTY) v = MAX_QTY;
+          qtyEl.value = v; state.junk[k] = v;
+          syncPaymentIntent(); renderSummary();
+        }
+        if (t.hasAttribute && t.hasAttribute('data-qty-dec')) {
+          k = t.getAttribute('data-qty-dec');
+          qtyEl = document.querySelector('[data-qty="'+k+'"]');
+          if (qtyEl.disabled) return;
+          var v2 = (parseInt(qtyEl.value,10)||1) - 1;
+          if (v2 < 1) v2 = 1;
+          qtyEl.value = v2; state.junk[k] = v2;
+          syncPaymentIntent(); renderSummary();
+        }
+      });
+    }
+
+    function wireSimpleGrid(elId, kind, target) {
+      $(elId).addEventListener('change', function(ev){
+        var t = ev.target;
+        if (t.matches('input[data-'+kind+']')) {
+          var k = t.getAttribute('data-'+kind);
+          if (t.checked) target[k] = true; else delete target[k];
+          syncPaymentIntent(); renderSummary();
+        }
+      });
+    }
+
+    // ---------- Customer form interactions ----------
+    function wireCustomerForm() {
+      var phone = $('phone');
+      phone.addEventListener('input', function(){ phone.value = formatPhone(phone.value); validateField('phone'); updateSubmitState(); });
+
+      var city = $('city');
+      city.addEventListener('change', function(){
+        var v = city.value;
+        $('city-other-warning').style.display = (v === '__OTHER__') ? 'block' : 'none';
+        validateField('city'); maybeShowZipMismatch(); syncPaymentIntent(); updateSubmitState();
+      });
+
+      var zip = $('zip');
+      zip.addEventListener('input', function(){
+        zip.value = zip.value.replace(/\D/g,'').slice(0,5);
+        validateField('zip'); maybeShowZipMismatch(); updateSubmitState();
+      });
+
+      ['firstName','lastName','email','address'].forEach(function(name){
+        $(name).addEventListener('input', function(){ validateField(name); updateSubmitState(); });
+      });
+      $('pickupDate').addEventListener('change', function(){
+        validateField('pickupDate');
+        var sel = $('pickupDate');
+        var human = sel.options[sel.selectedIndex] && sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].textContent : '';
+        var box = $('pickupDateHuman');
+        if (human) { box.textContent = 'Scheduled for ' + human + '. Items must be at the curb by 8 AM.'; box.style.display='block'; }
+        else box.style.display='none';
+        syncPaymentIntent(); updateSubmitState();
+      });
+    }
+
+    // Soft warning if ZIP looks like it disagrees with city — best-effort heuristic.
+    var ZIP_HINTS = {
+      '80229':'Thornton','80233':'Thornton','80241':'Thornton','80260':'Thornton','80602':'Thornton','80640':'Thornton',
+      '80003':'Arvada','80004':'Arvada','80005':'Arvada','80007':'Arvada','80002':'Arvada',
+      '80020':'Broomfield','80021':'Broomfield','80023':'Broomfield','80038':'Broomfield',
+      '80030':'Westminster','80031':'Westminster','80035':'Westminster','80036':'Westminster','80234':'Westminster',
+      '80401':'Golden','80402':'Golden','80403':'Golden','80419':'Golden',
+      '80033':'Wheat Ridge','80034':'Wheat Ridge','80212':'Wheat Ridge','80214':'Wheat Ridge','80215':'Wheat Ridge',
+      '80233':'Northglenn','80234':'Northglenn','80260':'Northglenn'
+    };
+    function maybeShowZipMismatch() {
+      var box = $('city-mismatch-warning');
+      var z = $('zip').value, c = $('city').value;
+      if (!z || !c || c === '__OTHER__' || !ZIP_HINTS[z]) { box.style.display='none'; return; }
+      if (ZIP_HINTS[z] !== c) {
+        box.textContent = 'Heads up: that ZIP looks like it might be in '+ZIP_HINTS[z]+'. Double-check your city if needed.';
+        box.style.display='block';
+      } else box.style.display='none';
+    }
+
+    // ---------- Backend talk ----------
+    function buildPayload() {
+      return {
+        customer: {
+          firstName: $('firstName').value.trim(),
+          lastName:  $('lastName').value.trim(),
+          email:     $('email').value.trim(),
+          phone:     $('phone').value.trim(),
+          address:   $('address').value.trim(),
+          city:      $('city').value,
+          state:     'CO',
+          zip:       $('zip').value.trim()
+        },
+        pickupDate: $('pickupDate').value,
+        junk:   state.junk,
+        scrap:  state.scrap,
+        ewaste: state.ewaste
+      };
+    }
+
+    var syncTimer = null, syncInFlight = false, syncPending = false;
+    function syncPaymentIntent() {
+      // Debounce — recreate the PaymentIntent only when the form is fully valid.
+      if (syncTimer) clearTimeout(syncTimer);
+      syncTimer = setTimeout(doSyncPaymentIntent, 350);
+    }
+    async function doSyncPaymentIntent() {
+      if (syncInFlight) { syncPending = true; return; }
+      if (!isFormValid()) return;
+      var t = totals();
+      if (t.total <= 0) return;
+      var totalCents = Math.round(t.total * 100);
+      // If the total hasn't changed and we already have a clientSecret, no need to recreate.
+      if (totalCents === state.lastTotalCents && state.clientSecret) { return; }
+      syncInFlight = true;
       try {
-        var params = new URLSearchParams(window.location.search);
-        var ref = params.get('ref');
-        if (!ref) return;
-        var encoded = encodeURIComponent(ref);
-        var ids = ['cta-quote', 'cta-contact'];
-        ids.forEach(function (id) {
-          var a = document.getElementById(id);
-          if (!a) return;
-          var href = a.getAttribute('href');
-          var sep = href.indexOf('?') === -1 ? '?' : '&';
-          a.setAttribute('href', href + sep + 'ref=' + encoded);
+        var res = await fetch('/api/create-payment-intent', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(buildPayload())
         });
-      } catch (e) { /* no-op */ }
-    })();
+        var data = await res.json();
+        if (!res.ok) {
+          showPaymentError(data.message || 'Could not initialize payment.');
+          state.clientSecret = null; state.paymentIntentId = null; state.lastTotalCents = 0;
+        } else {
+          state.clientSecret = data.clientSecret;
+          state.paymentIntentId = data.paymentIntentId;
+          state.bookingDraftId = data.bookingDraftId;
+          state.lastTotalCents = data.totalCents;
+          mountPaymentElement(data.clientSecret);
+          hidePaymentError();
+        }
+      } catch (e) {
+        showPaymentError('Network error initializing payment.');
+      } finally {
+        syncInFlight = false;
+        if (syncPending) { syncPending = false; doSyncPaymentIntent(); }
+        updateSubmitState();
+      }
+    }
+
+    function mountPaymentElement(clientSecret) {
+      if (!state.stripe) return;
+      // Re-create elements each time so the clientSecret matches the live total.
+      state.elements = state.stripe.elements({
+        clientSecret: clientSecret,
+        appearance: { theme: 'stripe', variables: { colorPrimary: '#1e5a4a' } }
+      });
+      var holder = $('payment-element');
+      holder.innerHTML = '';
+      state.paymentElement = state.elements.create('payment');
+      state.paymentElement.mount('#payment-element');
+    }
+
+    function showPaymentError(msg) {
+      var el = $('payment-error');
+      el.textContent = msg; el.style.display = 'block';
+    }
+    function hidePaymentError() { $('payment-error').style.display = 'none'; }
+
+    // ---------- Submit ----------
+    async function onSubmit(ev) {
+      ev.preventDefault();
+      if (state.submitting) return;
+      if (!isFormValid()) { updateSubmitState(); return; }
+      if (!state.clientSecret || !state.stripe || !state.elements) {
+        showPaymentError('Payment is not ready. Please wait a moment and try again.'); return;
+      }
+      if (!state.hcaptchaToken) {
+        showPaymentError('Please complete the captcha.'); return;
+      }
+
+      state.submitting = true;
+      $('submit-btn').textContent = 'Processing…';
+      updateSubmitState();
+      hidePaymentError();
+
+      try {
+        var confirmRes = await state.stripe.confirmPayment({
+          elements: state.elements,
+          redirect: 'if_required'
+        });
+        if (confirmRes.error) {
+          showPaymentError(confirmRes.error.message || 'Payment failed.');
+          state.submitting = false; $('submit-btn').textContent = 'Pay & Confirm Pickup';
+          updateSubmitState();
+          return;
+        }
+        var pi = confirmRes.paymentIntent;
+        if (!pi || pi.status !== 'succeeded') {
+          showPaymentError('Payment did not succeed. Please try a different card.');
+          state.submitting = false; $('submit-btn').textContent = 'Pay & Confirm Pickup';
+          updateSubmitState();
+          return;
+        }
+
+        var payload = buildPayload();
+        payload.paymentIntentId = pi.id;
+        payload.captchaToken = state.hcaptchaToken;
+
+        var res = await fetch('/api/submit-booking', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        var data = await res.json();
+        if (!res.ok || !data.success) {
+          showPaymentError((data && data.message) || 'We confirmed payment but could not save your booking. Please call 720-675-7693 with your card receipt.');
+          state.submitting = false; $('submit-btn').textContent = 'Retry';
+          updateSubmitState();
+          return;
+        }
+
+        showConfirmation(data, payload, totals());
+      } catch (e) {
+        showPaymentError('Unexpected error. Please try again.');
+        state.submitting = false; $('submit-btn').textContent = 'Pay & Confirm Pickup';
+        updateSubmitState();
+      }
+    }
+
+    function showConfirmation(data, payload, t) {
+      $('booking-form').classList.remove('active');
+      $('confirmation').classList.add('active');
+      $('conf-number').textContent = data.confirmationNumber;
+      var sel = $('pickupDate');
+      $('conf-date').textContent = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : payload.pickupDate;
+      $('conf-total').textContent = fmt(t.total);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ---------- Captcha ----------
+    window.onHCaptchaSuccess = function(token){ state.hcaptchaToken = token; updateSubmitState(); };
+    window.onHCaptchaExpired = function(){ state.hcaptchaToken = ''; updateSubmitState(); };
+
+    function renderHCaptcha() {
+      var key = state.config.hcaptchaSiteKey;
+      var holder = $('captcha-container');
+      if (!key) {
+        holder.innerHTML = '<div class="alert">CAPTCHA is not configured. Please contact support.</div>';
+        return;
+      }
+      holder.innerHTML = '<div class="h-captcha" data-sitekey="'+key+'" data-callback="onHCaptchaSuccess" data-expired-callback="onHCaptchaExpired"></div>';
+      // hCaptcha auto-renders new .h-captcha elements when its script is loaded.
+      if (window.hcaptcha && typeof window.hcaptcha.render === 'function') {
+        try { window.hcaptcha.render(holder.firstChild, { sitekey:key, callback:'onHCaptchaSuccess', 'expired-callback':'onHCaptchaExpired' }); } catch(e){}
+      }
+    }
+
+    // ---------- Init ----------
+    async function loadConfig() {
+      try {
+        var r = await fetch('/api/public-config');
+        if (r.ok) state.config = await r.json();
+      } catch(e){ /* keep defaults */ }
+      if (state.config.taxRate) TAX_RATE = state.config.taxRate;
+      if (state.config.stripePublishableKey && window.Stripe) {
+        state.stripe = window.Stripe(state.config.stripePublishableKey);
+      }
+    }
+
+    async function init() {
+      buildJunkGrid();
+      buildSimpleGrid('scrap-grid', SCRAP_ITEMS, 'scrap');
+      buildSimpleGrid('ewaste-grid', EWASTE_ITEMS, 'ewaste');
+      buildPickupDates();
+      wireJunkGrid();
+      wireSimpleGrid('scrap-grid','scrap', state.scrap);
+      wireSimpleGrid('ewaste-grid','ewaste', state.ewaste);
+      wireCustomerForm();
+      $('booking-form').addEventListener('submit', onSubmit);
+      renderSummary();
+      await loadConfig();
+      renderHCaptcha();
+    }
+
+    function wireFaqCta() {
+      var cta = document.getElementById('faq-back-to-form');
+      if (!cta) return;
+      cta.addEventListener('click', function(ev){
+        ev.preventDefault();
+        var form = document.getElementById('booking-form');
+        var conf = document.getElementById('confirmation');
+        // If we're on the confirmation step, scroll the user there instead.
+        var target = (conf && conf.classList.contains('active')) ? conf : form;
+        if (!target) return;
+        target.scrollIntoView({ behavior:'smooth', block:'start' });
+        var firstField = target.querySelector('input, select, textarea, button');
+        if (firstField && typeof firstField.focus === 'function') {
+          // Defer focus until after the smooth scroll begins so iOS doesn't override it.
+          setTimeout(function(){ firstField.focus({ preventScroll:true }); }, 250);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function(){ init(); wireFaqCta(); });
+    } else { init(); wireFaqCta(); }
+  })();
   </script>
 </body>
 </html>
