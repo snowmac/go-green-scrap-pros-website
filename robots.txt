@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /routes-trash/
 
 # Sitemaps
 Sitemap: https://gogreenscrappros.com/sitemap.xml
