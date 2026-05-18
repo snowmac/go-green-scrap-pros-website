@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>SCRAP-MAP — Denver LIP Route Lookup (Internal)</title>
+  <link rel="canonical" href="https://gogreenscrappros.com/routes-trash/">
+  <style>
+    :root {
+      --bg: #0f1216;
+      --panel: #161b21;
+      --panel-2: #1c232b;
+      --line: #2a323d;
+      --line-2: #3a4554;
+      --ink: #e7edf3;
+      --ink-dim: #93a1b1;
+      --ink-mute: #64727f;
+      --accent: #6fd08c;
+      --accent-dim: #2a5b38;
+      --warn: #f4b94a;
+      --warn-bg: #3a2a0e;
+      --danger: #ef6a5a;
+      --link: #7ab8ff;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, .mono { font-family: var(--mono); font-size: 12.5px; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 16px; }
+
+    header.top {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #131820, #0f1216);
+      position: sticky; top: 0; z-index: 5;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .brand .tag {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px;
+      color: var(--accent); border: 1px solid var(--accent-dim);
+      padding: 2px 6px; border-radius: 3px; background: rgba(111,208,140,.06);
+    }
+    .brand h1 {
+      margin: 0; font-size: 16px; font-weight: 600; letter-spacing: .2px;
+    }
+    .brand .sub { color: var(--ink-mute); font-size: 12px; }
+    .top .right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .pill {
+      font-family: var(--mono); font-size: 11.5px; padding: 4px 8px;
+      border: 1px solid var(--line-2); border-radius: 3px; color: var(--ink-dim);
+      background: var(--panel);
+    }
+    .pill.live { color: var(--accent); border-color: var(--accent-dim); }
+    .pill.warn { color: var(--warn); border-color: #6a4a14; background: var(--warn-bg); }
+
+    .grid {
+      display: grid; gap: 16px;
+      grid-template-columns: 320px 1fr;
+      margin-top: 16px;
+    }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
+      padding: 14px;
+    }
+    .panel h2 {
+      margin: 0 0 10px; font-size: 12px; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--ink-dim); font-weight: 600;
+      border-bottom: 1px dashed var(--line); padding-bottom: 8px;
+    }
+    .panel h3 { margin: 14px 0 6px; font-size: 13px; color: var(--ink); }
+
+    .field { display: block; margin-bottom: 10px; }
+    .field label {
+      display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--ink-mute); margin-bottom: 4px;
+    }
+    .field input, .field select {
+      width: 100%; padding: 8px 10px; background: var(--panel-2); color: var(--ink);
+      border: 1px solid var(--line-2); border-radius: 4px; font-size: 13px;
+      font-family: inherit;
+    }
+    .field input:focus, .field select:focus {
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-dim);
+    }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      padding: 7px 12px; background: var(--panel-2); color: var(--ink);
+      border: 1px solid var(--line-2); border-radius: 4px; cursor: pointer;
+      font-size: 12px; font-family: inherit;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn.primary { background: var(--accent-dim); border-color: var(--accent);
+      color: #d6f7df; }
+    .btn.primary:hover { color: #fff; }
+
+    .hero {
+      background:
+        radial-gradient(800px 200px at 0% 0%, rgba(111,208,140,.10), transparent 60%),
+        linear-gradient(180deg, #18242b 0%, #131a21 100%);
+      border: 1px solid var(--line-2); border-radius: 6px; padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    .hero .week-label {
+      font-family: var(--mono); font-size: 11.5px; letter-spacing: 1.6px;
+      color: var(--accent); text-transform: uppercase;
+    }
+    .hero h2 {
+      margin: 4px 0 2px; font-size: 28px; font-weight: 700; letter-spacing: -.2px;
+    }
+    .hero .range { color: var(--ink-dim); font-family: var(--mono); font-size: 13px; }
+    .hero .meta-row {
+      display: flex; gap: 18px; flex-wrap: wrap; margin-top: 14px;
+      font-size: 13px; color: var(--ink-dim);
+    }
+    .hero .meta-row b { color: var(--ink); font-weight: 600; }
+
+    .cards {
+      display: grid; gap: 10px;
+      grid-template-columns: repeat(5, 1fr);
+    }
+    @media (max-width: 1100px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px)  { .cards { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px)  { .cards { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 5px;
+      padding: 12px; position: relative;
+    }
+    .card.today { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent-dim); }
+    .card.past { opacity: .55; }
+    .card .day {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 1.4px;
+      color: var(--ink-mute); text-transform: uppercase;
+    }
+    .card.today .day { color: var(--accent); }
+    .card .date {
+      font-size: 19px; font-weight: 700; margin: 2px 0 6px;
+    }
+    .card .district {
+      font-size: 11.5px; color: var(--ink-dim);
+      padding: 4px 6px; background: var(--panel-2);
+      border: 1px solid var(--line); border-radius: 3px; display: inline-block;
+    }
+    .card .badge {
+      position: absolute; top: 10px; right: 10px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 1px;
+      color: var(--warn); border: 1px solid #6a4a14; background: var(--warn-bg);
+      padding: 2px 5px; border-radius: 3px;
+    }
+    .card .note {
+      margin-top: 8px; font-size: 12px; color: var(--ink-dim);
+    }
+    .card .out-by {
+      margin-top: 8px; font-family: var(--mono); font-size: 11.5px;
+      color: var(--ink); border-top: 1px dashed var(--line); padding-top: 6px;
+    }
+
+    .rotation-table {
+      width: 100%; border-collapse: collapse; font-size: 12.5px;
+      font-family: var(--mono);
+    }
+    .rotation-table th, .rotation-table td {
+      padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left;
+    }
+    .rotation-table th { color: var(--ink-mute); font-weight: 500;
+      text-transform: uppercase; letter-spacing: 1px; font-size: 10.5px; }
+    .rotation-table tr.active td { background: rgba(111,208,140,.08); color: var(--ink); }
+    .rotation-table tr.active td:first-child { border-left: 2px solid var(--accent); padding-left: 6px; }
+    .rotation-table .holiday { color: var(--warn); }
+
+    .ops {
+      display: grid; gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 16px;
+    }
+    @media (max-width: 900px) { .ops { grid-template-columns: 1fr; } }
+
+    .src-list { list-style: none; padding: 0; margin: 0; }
+    .src-list li { padding: 5px 0; border-bottom: 1px dashed var(--line); }
+    .src-list li:last-child { border: 0; }
+    .src-list .label {
+      display: inline-block; min-width: 110px; color: var(--ink-mute);
+      font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    }
+
+    .caveat {
+      background: var(--warn-bg); border: 1px solid #6a4a14; color: #f1d18a;
+      border-radius: 5px; padding: 10px 12px; font-size: 12.5px; line-height: 1.5;
+      margin-top: 12px;
+    }
+    .caveat b { color: var(--warn); }
+
+    .arch-list { padding-left: 18px; margin: 6px 0; color: var(--ink-dim); }
+    .arch-list li { margin: 4px 0; }
+    .arch-list b { color: var(--ink); font-weight: 600; }
+
+    footer.foot {
+      margin: 28px 0 16px; padding-top: 14px;
+      border-top: 1px solid var(--line); color: var(--ink-mute);
+      font-size: 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    .kbd {
+      font-family: var(--mono); font-size: 10.5px; padding: 1px 5px;
+      border: 1px solid var(--line-2); border-radius: 3px; background: var(--panel-2);
+      color: var(--ink-dim);
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="tag">SCRAP-MAP</span>
+      <h1>Denver LIP Route Lookup</h1>
+      <span class="sub">/ Internal Operations</span>
+    </div>
+    <div class="right">
+      <span id="pill-now" class="pill mono">--</span>
+      <span id="pill-week" class="pill live mono">--</span>
+      <span class="pill mono">PRIVATE</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="hero" class="hero">
+      <div class="week-label">This Week / Active Service Window</div>
+      <h2 id="hero-district">District —</h2>
+      <div class="range mono" id="hero-range">—</div>
+      <div class="meta-row">
+        <span><b>Out-by:</b> 6:00 a.m. on day of pickup</span>
+        <span><b>Limits:</b> 5 large items + 10 bags</span>
+        <span><b>LIP cycle:</b> every 9 weeks, on the regular trash day</span>
+        <span id="hero-holiday"></span>
+      </div>
+    </section>
+
+    <div class="grid">
+      <aside class="panel" aria-label="Lookup controls">
+        <h2>Lookup</h2>
+
+        <div class="field">
+          <label for="lookup-date">Date</label>
+          <input type="date" id="lookup-date" />
+        </div>
+
+        <div class="btn-row" style="margin-bottom:12px">
+          <button class="btn primary" id="btn-this-week">This week</button>
+          <button class="btn" id="btn-next-week">Next week</button>
+          <button class="btn" id="btn-prev-week">Prev week</button>
+        </div>
+
+        <div class="field">
+          <label for="lookup-day">Filter day</label>
+          <select id="lookup-day">
+            <option value="all">All days (Mon–Fri)</option>
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="lookup-district">Jump to district</label>
+          <select id="lookup-district">
+            <option value="">— pick district —</option>
+            <option value="1">District 1</option>
+            <option value="2">District 2</option>
+            <option value="3">District 3</option>
+            <option value="4">District 4</option>
+            <option value="5">District 5</option>
+            <option value="6">District 6</option>
+            <option value="7">District 7</option>
+            <option value="8">District 8</option>
+            <option value="9">District 9</option>
+          </select>
+        </div>
+
+        <h3>Quick actions</h3>
+        <div class="btn-row">
+          <a class="btn" href="https://Denvergov.org/TrashSchedule" target="_blank" rel="noreferrer">Trash Schedule</a>
+          <a class="btn" href="https://Denvergov.org/LIP" target="_blank" rel="noreferrer">LIP page</a>
+        </div>
+
+        <div class="caveat" style="margin-top:14px">
+          <b>Address-level certainty:</b> Use Denvergov.org/TrashSchedule or the Denver Trash &amp; Recycling app per address. District boundaries shown are a PoC operational hint, not authoritative.
+        </div>
+      </aside>
+
+      <section>
+        <div class="panel">
+          <h2 id="result-title">This week — route cards (Mon–Fri)</h2>
+          <div id="cards" class="cards"></div>
+          <p style="color:var(--ink-mute);font-size:12px;margin-top:10px">
+            LIP runs on the customer's <b>regular trash day</b> inside the active district. If a Monday observed federal holiday falls in the week, the entire week's trash collection shifts one day later (Mon→Tue, Tue→Wed, etc.) and Friday rolls to Saturday.
+          </p>
+        </div>
+
+        <div class="ops">
+          <section class="panel">
+            <h2>9-week rotation (anchored)</h2>
+            <table class="rotation-table" id="rotation"></table>
+            <p style="color:var(--ink-mute);font-size:11.5px;margin-top:8px">
+              Anchor: <b>May 18–22, 2026 = District 3</b> (per 2026 Week-B WasteWise). Rotation projects ±8 weeks from this week.
+            </p>
+          </section>
+
+          <section class="panel">
+            <h2>PoC architecture — SCRAP-MAP</h2>
+            <ul class="arch-list">
+              <li><b>Denver 9-week rotation:</b> deterministic district = ((weekIndex - anchorWeekIndex) mod 9) starting from D3 anchor.</li>
+              <li><b>Static GIS polygons:</b> ship district boundary GeoJSON as bundled static assets — no DB, no live API.</li>
+              <li><b>Seed-address polling:</b> verify each district by spot-checking ~3 seed addresses against Denvergov.org/TrashSchedule before each on-route shift.</li>
+              <li><b>Alley-vs-curb prioritization:</b> tag each block by collection side (alley/curb); route alley-loaded blocks first for visibility.</li>
+              <li><b>Holiday buffer:</b> when a federal Monday holiday falls in-week, shift Mon→Tue and roll Fri→Sat; flag the affected week explicitly.</li>
+            </ul>
+            <h3>Frontend</h3>
+            <p style="color:var(--ink-dim);font-size:12.5px;margin:4px 0 0">
+              Single-file static page, no JS framework, no storage APIs. Computes the active week and district at load time in <code>America/Denver</code>.
+            </p>
+          </section>
+        </div>
+
+        <section class="panel" style="margin-top:16px">
+          <h2>Sources &amp; verification</h2>
+          <ul class="src-list">
+            <li><span class="label">Week B PDF</span><a href="https://denvergov.org/files/assets/public/v/1/recycle-compost-and-trash/documents/2026-wastewise-newsletter-b-week.pdf" target="_blank" rel="noreferrer">2026 WasteWise Newsletter — B Week</a></li>
+            <li><span class="label">Week A PDF</span><a href="https://denvergov.org/files/assets/public/v/1/recycle-compost-and-trash/documents/2026-wastewise-newsletter-a-week.pdf" target="_blank" rel="noreferrer">2026 WasteWise Newsletter — A Week</a></li>
+            <li><span class="label">Address lookup</span><a href="https://Denvergov.org/TrashSchedule" target="_blank" rel="noreferrer">Denvergov.org/TrashSchedule</a></li>
+            <li><span class="label">LIP overview</span><a href="https://Denvergov.org/LIP" target="_blank" rel="noreferrer">Denvergov.org/LIP</a></li>
+            <li><span class="label">Program page</span><a href="https://www.denvergov.org/My-Property/Recycling-Compost-and-Trash/Large-Item-Pickup" target="_blank" rel="noreferrer">Large Item Pickup — Denvergov.org</a></li>
+          </ul>
+          <div class="caveat">
+            <b>Caveat:</b> Route-wide district boundary mapping in this PoC is operational guidance only and must be verified against the official Denver map or the Denver Trash &amp; Recycling app. Do not present district inferences as official.
+          </div>
+        </section>
+
+        <footer class="foot">
+          <span>SCRAP-MAP / Denver Bulk Infrastructure PoC — internal logistics only</span>
+          <span><span class="kbd">noindex</span> <span class="kbd">private</span></span>
+        </footer>
+      </section>
+    </div>
+  </main>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ---- Date utilities, fixed to America/Denver via wall-clock approximation.
+    // For PoC: we use the local browser time. Denver ops will run this in MT.
+    const DAY_MS = 86400000;
+
+    function startOfWeek(d) {
+      // Operational week starts Monday. On Sunday, look ahead to the next Monday
+      // since Sun isn't a trash-collection day and ops plan against the coming week.
+      const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      const dow = x.getDay(); // 0=Sun..6=Sat
+      const delta = (dow === 0 ? 1 : 1 - dow);
+      x.setDate(x.getDate() + delta);
+      return x;
+    }
+    function addDays(d, n) {
+      const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      x.setDate(x.getDate() + n);
+      return x;
+    }
+    function sameDay(a, b) {
+      return a.getFullYear() === b.getFullYear()
+        && a.getMonth() === b.getMonth()
+        && a.getDate() === b.getDate();
+    }
+    function fmtRange(mon, fri) {
+      const opts = { month: 'short', day: 'numeric' };
+      const yr = mon.getFullYear();
+      return mon.toLocaleDateString(undefined, opts)
+        + ' – ' + fri.toLocaleDateString(undefined, opts)
+        + ', ' + yr;
+    }
+    function fmtISO(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const da = String(d.getDate()).padStart(2, '0');
+      return y + '-' + m + '-' + da;
+    }
+    function weeksBetween(a, b) {
+      // Whole weeks between two Mondays (a -> b)
+      const ms = startOfWeek(b) - startOfWeek(a);
+      return Math.round(ms / (7 * DAY_MS));
+    }
+
+    // ---- Anchor: Mon May 18, 2026 = District 3
+    const ANCHOR = new Date(2026, 4, 18); // month is 0-indexed: 4 = May
+    const ANCHOR_DISTRICT = 3;
+
+    function districtForWeekStart(monday) {
+      const k = weeksBetween(ANCHOR, monday); // can be negative
+      // mod 9, mapping anchor -> 3
+      let d = ((ANCHOR_DISTRICT - 1) + (k % 9) + 9 * 100) % 9 + 1;
+      return d;
+    }
+
+    // ---- 2026 federal holidays observed for trash shift (Mon holidays primarily; Denver
+    // shifts collection by one day for the rest of the week when a Mon holiday lands).
+    const HOLIDAYS_2026 = [
+      { date: '2026-01-01', name: "New Year's Day", shift: false },
+      { date: '2026-01-19', name: 'MLK Jr. Day', shift: true },
+      { date: '2026-02-16', name: "Presidents' Day", shift: true },
+      { date: '2026-05-25', name: 'Memorial Day', shift: true },
+      { date: '2026-07-03', name: 'Independence Day (observed)', shift: false },
+      { date: '2026-09-07', name: 'Labor Day', shift: true },
+      { date: '2026-10-12', name: 'Columbus/Indigenous Peoples Day', shift: false },
+      { date: '2026-11-11', name: 'Veterans Day', shift: false },
+      { date: '2026-11-26', name: 'Thanksgiving Day', shift: false },
+      { date: '2026-12-25', name: 'Christmas Day', shift: false }
+    ];
+
+    function holidayInWeek(monday) {
+      const wkStart = fmtISO(monday);
+      const wkEnd = fmtISO(addDays(monday, 4));
+      return HOLIDAYS_2026.find(h => h.date >= wkStart && h.date <= wkEnd) || null;
+    }
+
+    // ---- Rendering
+    const cardsEl = document.getElementById('cards');
+    const heroDistrict = document.getElementById('hero-district');
+    const heroRange = document.getElementById('hero-range');
+    const heroHoliday = document.getElementById('hero-holiday');
+    const resultTitle = document.getElementById('result-title');
+    const pillNow = document.getElementById('pill-now');
+    const pillWeek = document.getElementById('pill-week');
+    const rotationEl = document.getElementById('rotation');
+    const dateInput = document.getElementById('lookup-date');
+    const daySelect = document.getElementById('lookup-day');
+    const districtSelect = document.getElementById('lookup-district');
+
+    const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
+    // Today, sticky to local browser. PoC assumption: operator runs in MT.
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    pillNow.textContent = 'NOW ' + today.toLocaleDateString(undefined,
+      { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+
+    function render(weekMondayInput, opts) {
+      opts = opts || {};
+      const monday = startOfWeek(weekMondayInput);
+      const friday = addDays(monday, 4);
+      const district = districtForWeekStart(monday);
+      const holiday = holidayInWeek(monday);
+
+      const isThisWeek = sameDay(startOfWeek(today), monday);
+      pillWeek.textContent = (isThisWeek ? 'THIS WEEK · ' : 'WEEK · ') + 'DISTRICT ' + district;
+      pillWeek.classList.toggle('live', isThisWeek);
+      pillWeek.classList.toggle('warn', !isThisWeek);
+
+      heroDistrict.textContent = 'District ' + district + (isThisWeek ? '' : ' (selected week)');
+      heroRange.textContent = fmtRange(monday, friday);
+
+      if (holiday) {
+        heroHoliday.innerHTML = '<b style="color:var(--warn)">Holiday:</b> ' + holiday.name
+          + (holiday.shift ? ' — collection rolls +1 day, Fri rolls to Sat.' : ' — verify Denver schedule.');
+      } else {
+        heroHoliday.textContent = '';
+      }
+
+      resultTitle.textContent = (isThisWeek ? 'This week' : 'Selected week')
+        + ' — route cards · District ' + district;
+
+      // Day filter
+      const dayFilter = daySelect.value === 'all' ? null : parseInt(daySelect.value, 10);
+
+      cardsEl.innerHTML = '';
+      for (let i = 0; i < 5; i++) {
+        if (dayFilter !== null && (i + 1) !== dayFilter) continue;
+
+        const d = addDays(monday, i);
+        let collectionDay = d;
+        let shiftedNote = '';
+        if (holiday && holiday.shift) {
+          // Mon holiday -> Mon collection rolls Tue, Tue->Wed, ..., Fri->Sat
+          collectionDay = addDays(d, 1);
+          shiftedNote = '+1 day (' + holiday.name + ')';
+        }
+
+        const isToday = sameDay(today, d);
+        const isPast = d < today && !isToday;
+
+        const card = document.createElement('div');
+        card.className = 'card' + (isToday ? ' today' : '') + (isPast ? ' past' : '');
+
+        const collectionLabel = collectionDay.toLocaleDateString(undefined,
+          { weekday: 'short', month: 'short', day: 'numeric' });
+
+        card.innerHTML =
+          '<div class="day">' + DAY_NAMES[i] + (isToday ? ' · TODAY' : '') + '</div>'
+          + '<div class="date">' + d.getDate() + ' '
+            + d.toLocaleDateString(undefined, { month: 'short' }) + '</div>'
+          + '<div class="district">District ' + district + ' · regular trash day</div>'
+          + (shiftedNote ? '<div class="badge">' + shiftedNote + '</div>' : '')
+          + '<div class="note">LIP collected on the customer\'s regular trash day inside D' + district + '. Watch alley vs. curb side.</div>'
+          + '<div class="out-by">Out by 6:00a · Collect ' + collectionLabel + '</div>';
+
+        cardsEl.appendChild(card);
+      }
+
+      // Update inputs without firing infinite loops
+      if (!opts.skipDate) {
+        dateInput.value = fmtISO(monday);
+      }
+
+      renderRotation(monday);
+    }
+
+    function renderRotation(currentMonday) {
+      // 17 rows: -8..+8 weeks from anchor sliding around currentMonday
+      const rows = [];
+      for (let i = -4; i <= 12; i++) {
+        const mon = addDays(currentMonday, i * 7);
+        const fri = addDays(mon, 4);
+        const d = districtForWeekStart(mon);
+        const h = holidayInWeek(mon);
+        rows.push({
+          mon, fri, d, h,
+          active: sameDay(mon, currentMonday)
+        });
+      }
+      const html = ['<thead><tr><th>Week of</th><th>District</th><th>Notes</th></tr></thead><tbody>'];
+      rows.forEach(r => {
+        const range = r.mon.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+          + ' – ' + r.fri.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        const note = r.h
+          ? '<span class="holiday">' + r.h.name + (r.h.shift ? ' · +1 day shift' : '') + '</span>'
+          : '';
+        html.push(
+          '<tr class="' + (r.active ? 'active' : '') + '">'
+          + '<td>' + range + '</td>'
+          + '<td>D' + r.d + '</td>'
+          + '<td>' + note + '</td>'
+          + '</tr>'
+        );
+      });
+      html.push('</tbody>');
+      rotationEl.innerHTML = html.join('');
+    }
+
+    // ---- Wire controls
+    document.getElementById('btn-this-week').addEventListener('click', function () {
+      render(today);
+    });
+    document.getElementById('btn-next-week').addEventListener('click', function () {
+      const m = startOfWeek(new Date(dateInput.value || fmtISO(today)));
+      render(addDays(m, 7));
+    });
+    document.getElementById('btn-prev-week').addEventListener('click', function () {
+      const m = startOfWeek(new Date(dateInput.value || fmtISO(today)));
+      render(addDays(m, -7));
+    });
+    dateInput.addEventListener('change', function () {
+      if (!dateInput.value) return;
+      // Parse as local date
+      const parts = dateInput.value.split('-').map(Number);
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
+      render(d, { skipDate: true });
+    });
+    daySelect.addEventListener('change', function () {
+      const parts = (dateInput.value || fmtISO(today)).split('-').map(Number);
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
+      render(d, { skipDate: true });
+    });
+    districtSelect.addEventListener('change', function () {
+      const target = parseInt(districtSelect.value, 10);
+      if (!target) return;
+      // Find the next week (forward in time, from currentMonday) matching this district.
+      const startMon = startOfWeek(
+        dateInput.value
+          ? (function () { const p = dateInput.value.split('-').map(Number);
+              return new Date(p[0], p[1] - 1, p[2]); })()
+          : today
+      );
+      for (let i = 0; i < 9; i++) {
+        const mon = addDays(startMon, i * 7);
+        if (districtForWeekStart(mon) === target) {
+          render(mon);
+          break;
+        }
+      }
+      districtSelect.value = '';
+    });
+
+    // ---- Boot
+    render(today);
+  })();
+  </script>
+</body>
+</html>
