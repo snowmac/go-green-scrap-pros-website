@@ -8,6 +8,14 @@
   <meta name="referrer" content="no-referrer">
   <title>SCRAP-MAP — Denver LIP Route Lookup (Internal)</title>
   <link rel="canonical" href="https://gogreenscrappros.com/routes-trash/">
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="anonymous">
+  <script defer
+          src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin="anonymous"></script>
   <style>
     :root {
       --bg: #0f1216;
@@ -215,6 +223,82 @@
       border: 1px solid var(--line-2); border-radius: 3px; background: var(--panel-2);
       color: var(--ink-dim);
     }
+
+    /* Map */
+    .map-panel { padding: 0; overflow: hidden; }
+    .map-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--line);
+      background: var(--panel-2);
+    }
+    .map-head h2 {
+      margin: 0; font-size: 12px; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--ink-dim); font-weight: 600;
+      border: 0; padding: 0;
+    }
+    .map-head .map-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .map-head .map-actions .btn { padding: 4px 8px; font-size: 11px; }
+    .map-head .map-actions .btn.on {
+      background: var(--accent-dim); color: #d6f7df; border-color: var(--accent);
+    }
+    #map {
+      width: 100%; height: 520px; background: #11161c;
+    }
+    @media (max-width: 700px) { #map { height: 380px; } }
+    .map-foot {
+      display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+      padding: 8px 14px; border-top: 1px solid var(--line); background: var(--panel-2);
+      font-size: 11.5px; color: var(--ink-dim);
+    }
+    .legend-swatch {
+      display: inline-block; width: 12px; height: 12px; border-radius: 2px;
+      margin-right: 5px; vertical-align: -2px; border: 1px solid rgba(0,0,0,.35);
+    }
+    .legend-item { white-space: nowrap; font-family: var(--mono); font-size: 11px; }
+    .legend-item.dim { opacity: .45; }
+    .map-status {
+      padding: 6px 14px; background: var(--panel-2); border-top: 1px solid var(--line);
+      font-family: var(--mono); font-size: 11.5px; color: var(--ink-dim);
+    }
+    .map-status.err { color: var(--danger); }
+    .map-status .ok { color: var(--accent); }
+
+    /* Drive summary */
+    .drive-summary {
+      display: grid; gap: 10px;
+      grid-template-columns: repeat(4, 1fr);
+      margin-top: 12px;
+    }
+    @media (max-width: 900px) { .drive-summary { grid-template-columns: repeat(2, 1fr); } }
+    .drive-summary .stat {
+      background: var(--panel-2); border: 1px solid var(--line); border-radius: 4px;
+      padding: 8px 10px;
+    }
+    .drive-summary .stat .k {
+      font-size: 10.5px; text-transform: uppercase; letter-spacing: 1.2px;
+      color: var(--ink-mute); margin-bottom: 3px;
+    }
+    .drive-summary .stat .v {
+      font-family: var(--mono); font-size: 13px; color: var(--ink);
+      word-break: break-word;
+    }
+    .drive-summary .stat .v.dim { color: var(--ink-dim); }
+
+    .leaflet-popup-content-wrapper {
+      background: var(--panel); color: var(--ink); border-radius: 5px;
+      border: 1px solid var(--line-2);
+    }
+    .leaflet-popup-content {
+      margin: 10px 12px; font-size: 12.5px; line-height: 1.5;
+    }
+    .leaflet-popup-content b { color: var(--accent); }
+    .leaflet-popup-tip { background: var(--panel); }
+    .leaflet-container { background: #0f1216; }
+    .leaflet-control-attribution {
+      background: rgba(15,18,22,.85) !important; color: var(--ink-dim) !important;
+      font-size: 10.5px !important;
+    }
+    .leaflet-control-attribution a { color: var(--link) !important; }
   </style>
 </head>
 <body>
@@ -299,7 +383,30 @@
       </aside>
 
       <section>
-        <div class="panel">
+        <div class="panel map-panel" id="map-panel">
+          <div class="map-head">
+            <h2 id="map-title">Drive map — active district</h2>
+            <div class="map-actions">
+              <button class="btn" data-setout="all" id="setout-all" type="button">All setouts</button>
+              <button class="btn" data-setout="alley" id="setout-alley" type="button">Alley only</button>
+              <button class="btn" data-setout="curb" id="setout-curb" type="button">Curb only</button>
+              <button class="btn" id="map-fit" type="button" title="Re-fit to district">Fit</button>
+            </div>
+          </div>
+          <div id="map" role="region" aria-label="Denver LIP district map">
+            <noscript>
+              <div style="padding:14px;color:#f1d18a">
+                Map requires JavaScript. Operator view falls back to the route cards and 9-week rotation below.
+              </div>
+            </noscript>
+          </div>
+          <div class="map-status" id="map-status">Loading Denver GIS layers…</div>
+          <div class="map-foot" id="map-legend"></div>
+        </div>
+
+        <div class="drive-summary" id="drive-summary"></div>
+
+        <div class="panel" style="margin-top:16px">
           <h2 id="result-title">This week — route cards (Mon–Fri)</h2>
           <div id="cards" class="cards"></div>
           <p style="color:var(--ink-mute);font-size:12px;margin-top:10px">
@@ -340,6 +447,9 @@
             <li><span class="label">Address lookup</span><a href="https://Denvergov.org/TrashSchedule" target="_blank" rel="noreferrer">Denvergov.org/TrashSchedule</a></li>
             <li><span class="label">LIP overview</span><a href="https://Denvergov.org/LIP" target="_blank" rel="noreferrer">Denvergov.org/LIP</a></li>
             <li><span class="label">Program page</span><a href="https://www.denvergov.org/My-Property/Recycling-Compost-and-Trash/Large-Item-Pickup" target="_blank" rel="noreferrer">Large Item Pickup — Denvergov.org</a></li>
+            <li><span class="label">GIS — districts</span><a href="https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/Solid_Waste_Districts/FeatureServer/0" target="_blank" rel="noreferrer">Solid Waste Districts (FeatureServer/0)</a></li>
+            <li><span class="label">GIS — areas</span><a href="https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/ODC_ADMN_SOLIDWASTECOLLECTION_A/FeatureServer/311" target="_blank" rel="noreferrer">Solid Waste Collection Areas (FeatureServer/311)</a></li>
+            <li><span class="label">GIS — arrows</span><a href="https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/ODC_ADMN_SOLIDWASTEMAPARROWS_L/FeatureServer/421" target="_blank" rel="noreferrer">Solid Waste Collection Arrows (FeatureServer/421)</a></li>
           </ul>
           <div class="caveat">
             <b>Caveat:</b> Route-wide district boundary mapping in this PoC is operational guidance only and must be verified against the official Denver map or the Denver Trash &amp; Recycling app. Do not present district inferences as official.
@@ -522,6 +632,7 @@
       }
 
       renderRotation(monday);
+      MapMod.update(district, dayFilter);
     }
 
     function renderRotation(currentMonday) {
@@ -555,6 +666,284 @@
       html.push('</tbody>');
       rotationEl.innerHTML = html.join('');
     }
+
+    // ---- Map module (Leaflet + Denver ArcGIS GeoJSON)
+    const MapMod = (function () {
+      const DISTRICTS_URL = 'https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/Solid_Waste_Districts/FeatureServer/0/query';
+      const AREAS_URL = 'https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/ODC_ADMN_SOLIDWASTECOLLECTION_A/FeatureServer/311/query';
+
+      // Day code -> { name, color }
+      const DAY_META = {
+        MO: { name: 'Monday',    color: '#6fd08c' },
+        TU: { name: 'Tuesday',   color: '#7ab8ff' },
+        WE: { name: 'Wednesday', color: '#c39bff' },
+        TH: { name: 'Thursday',  color: '#f4b94a' },
+        FR: { name: 'Friday',    color: '#ef6a5a' },
+        MH: { name: 'Mon/Thu',   color: '#9fdcb1' },
+        MF: { name: 'Mon–Fri',   color: '#cfd9e4' },
+        TF: { name: 'Tue/Fri',   color: '#a4c7ef' }
+      };
+      const DAY_FILTER_TO_CODE = { 1: 'MO', 2: 'TU', 3: 'WE', 4: 'TH', 5: 'FR' };
+
+      // Official setout codes from the layer's coded-value domain.
+      const SETOUT = {
+        'No Service': 'No Service',
+        A: 'Alley', B: 'Behind Home', C: 'Curb',
+        ES: 'East Side of Alley', NS: 'North Side of Alley',
+        S: 'Special Location', SS: 'South Side of Alley',
+        WS: 'West Side of Alley', PA: 'Primary Alley',
+        P: 'Porch', SA: 'Special Alley', SC: 'Special Curb'
+      };
+      const ALLEY_CODES = ['A', 'ES', 'NS', 'SS', 'WS', 'PA', 'SA'];
+      const CURB_CODES  = ['B', 'C', 'P', 'S', 'SC'];
+
+      let map = null;
+      let districtsLayer = null;        // all 9 district outlines (light)
+      let activeBoundaryLayer = null;   // bold highlight of active district
+      let areasLayer = null;            // collection-area polygons for active district
+      const areaCache = {};             // { '3': GeoJSON FeatureCollection }
+      let currentDistrict = null;
+      let setoutFilter = 'all';
+      let dayHighlight = null;          // day code to spotlight, or null
+      let statusEl, legendEl, summaryEl;
+      let leafletReady = false;
+
+      function setStatus(text, kind) {
+        if (!statusEl) return;
+        statusEl.textContent = text;
+        statusEl.classList.toggle('err', kind === 'err');
+      }
+
+      function init() {
+        statusEl = document.getElementById('map-status');
+        legendEl = document.getElementById('map-legend');
+        summaryEl = document.getElementById('drive-summary');
+        renderLegend();
+        if (typeof L === 'undefined') {
+          setStatus('Map library failed to load. Falling back to cards + rotation table.', 'err');
+          return;
+        }
+        leafletReady = true;
+        map = L.map('map', {
+          center: [39.7392, -104.9903],   // Denver
+          zoom: 11, zoomControl: true,
+          attributionControl: true,
+          worldCopyJump: false
+        });
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · &copy; <a href="https://carto.com/attributions">CARTO</a> · Districts &amp; areas: <a href="https://www.denvergov.org/opendata" target="_blank" rel="noreferrer">Denver Open Data</a>',
+          maxZoom: 19, subdomains: 'abcd'
+        }).addTo(map);
+
+        loadDistricts();
+        wireMapControls();
+      }
+
+      function wireMapControls() {
+        document.getElementById('setout-all').addEventListener('click', () => setSetout('all'));
+        document.getElementById('setout-alley').addEventListener('click', () => setSetout('alley'));
+        document.getElementById('setout-curb').addEventListener('click', () => setSetout('curb'));
+        document.getElementById('map-fit').addEventListener('click', fitActive);
+      }
+
+      function setSetout(v) {
+        setoutFilter = v;
+        ['all', 'alley', 'curb'].forEach(k => {
+          document.getElementById('setout-' + k).classList.toggle('on', k === v);
+        });
+        redrawAreas();
+      }
+
+      function fitActive() {
+        if (!activeBoundaryLayer) return;
+        try { map.fitBounds(activeBoundaryLayer.getBounds().pad(0.05)); } catch (e) {}
+      }
+
+      function loadDistricts() {
+        const url = DISTRICTS_URL + '?f=geojson&where=1%3D1&outFields=*&outSR=4326';
+        fetch(url).then(r => r.ok ? r.json() : Promise.reject(r.status))
+          .then(gj => {
+            districtsLayer = L.geoJSON(gj, {
+              style: { color: '#3a4554', weight: 1, fillColor: '#1c232b', fillOpacity: 0.15, opacity: 0.7 },
+              onEachFeature: (feat, lyr) => {
+                const p = feat.properties || {};
+                lyr.bindTooltip('District ' + (p.DISTRICT_NUMBER || '?'), { sticky: true });
+              }
+            }).addTo(map);
+            // If render() already set a district, draw it now.
+            if (currentDistrict) drawActiveBoundary(currentDistrict);
+          })
+          .catch(err => setStatus('Could not load district polygons (' + err + '). Showing fallback list view only.', 'err'));
+      }
+
+      function drawActiveBoundary(district) {
+        if (!districtsLayer || !map) return;
+        if (activeBoundaryLayer) { activeBoundaryLayer.remove(); activeBoundaryLayer = null; }
+        let target = null;
+        districtsLayer.eachLayer(lyr => {
+          const p = (lyr.feature && lyr.feature.properties) || {};
+          if (String(p.DISTRICT_NUMBER) === String(district)) target = lyr.feature;
+        });
+        if (!target) return;
+        activeBoundaryLayer = L.geoJSON(target, {
+          style: { color: '#6fd08c', weight: 3, fillOpacity: 0, opacity: 0.95, dashArray: '4,3' }
+        }).addTo(map);
+        try { map.fitBounds(activeBoundaryLayer.getBounds().pad(0.05)); } catch (e) {}
+      }
+
+      async function loadAreasForDistrict(district) {
+        if (areaCache[district]) return areaCache[district];
+        const where = encodeURIComponent("NEW_TRASH_SERVICE = 'District " + district + "'");
+        const outFields = encodeURIComponent('OBJECTID,NEW_TRASH_SERVICE,NEW_TRASH_DAY,NEW_TRASH_ROUTE,NEW_TRASH_SETOUT,LIP_ID,TRASH_SERVICE,TRASH_DAY,TRASH_ROUTE,TRASH_SETOUT');
+        const baseQs = 'f=geojson&where=' + where + '&outFields=' + outFields + '&outSR=4326&resultRecordCount=2000';
+        const all = { type: 'FeatureCollection', features: [] };
+        let offset = 0, safety = 6;
+        // ArcGIS GeoJSON doesn't reliably echo exceededTransferLimit, so paginate
+        // until a page returns fewer than the page size.
+        while (safety-- > 0) {
+          const url = AREAS_URL + '?' + baseQs + '&resultOffset=' + offset;
+          const resp = await fetch(url);
+          if (!resp.ok) throw new Error('areas ' + resp.status);
+          const page = await resp.json();
+          const feats = (page && page.features) || [];
+          all.features = all.features.concat(feats);
+          if (feats.length < 2000) break;
+          offset += 2000;
+        }
+        areaCache[district] = all;
+        return all;
+      }
+
+      function styleFor(props) {
+        const day = (props.NEW_TRASH_DAY || props.TRASH_DAY || '').toUpperCase();
+        const meta = DAY_META[day] || { color: '#64727f' };
+        let opacity = 0.55;
+        let weight = 0.4;
+        // Day spotlight: dim non-matching days.
+        if (dayHighlight && day !== dayHighlight) opacity = 0.08;
+        // Setout filter: hide non-matching by collapsing to near-zero opacity.
+        const setout = (props.NEW_TRASH_SETOUT || props.TRASH_SETOUT || '').toUpperCase();
+        if (setoutFilter === 'alley' && ALLEY_CODES.indexOf(setout) === -1) opacity = 0;
+        if (setoutFilter === 'curb' && CURB_CODES.indexOf(setout) === -1) opacity = 0;
+        return {
+          color: meta.color, weight, fillColor: meta.color,
+          fillOpacity: opacity, opacity: opacity > 0 ? 0.6 : 0,
+          stroke: opacity > 0
+        };
+      }
+
+      function popupFor(props) {
+        const day = (props.NEW_TRASH_DAY || props.TRASH_DAY || '').toUpperCase();
+        const dayName = (DAY_META[day] && DAY_META[day].name) || day || '—';
+        const setoutCode = (props.NEW_TRASH_SETOUT || props.TRASH_SETOUT || '').toUpperCase();
+        const setoutLabel = SETOUT[setoutCode] || setoutCode || '—';
+        const route = props.NEW_TRASH_ROUTE || props.TRASH_ROUTE || '—';
+        const service = props.NEW_TRASH_SERVICE || props.TRASH_SERVICE || '—';
+        const lip = props.LIP_ID == null ? '—' : props.LIP_ID;
+        return '<b>' + service + '</b><br>'
+          + 'Day: ' + dayName + ' <span style="color:#93a1b1">(' + day + ')</span><br>'
+          + 'Route: ' + route + '<br>'
+          + 'Setout: ' + setoutLabel + ' <span style="color:#93a1b1">(' + setoutCode + ')</span><br>'
+          + 'LIP_ID: ' + lip;
+      }
+
+      function redrawAreas() {
+        if (!areasLayer) return;
+        areasLayer.setStyle(f => styleFor(f.properties || {}));
+      }
+
+      async function drawAreas(district) {
+        if (areasLayer) { areasLayer.remove(); areasLayer = null; }
+        setStatus('Loading collection areas for District ' + district + '…');
+        try {
+          const gj = await loadAreasForDistrict(district);
+          areasLayer = L.geoJSON(gj, {
+            style: f => styleFor(f.properties || {}),
+            onEachFeature: (feat, lyr) => {
+              lyr.bindPopup(popupFor(feat.properties || {}));
+            }
+          }).addTo(map);
+          // Keep district boundary above the fill.
+          if (activeBoundaryLayer) activeBoundaryLayer.bringToFront();
+          setStatus('District ' + district + ' loaded · ' + gj.features.length + ' collection-area features.');
+          renderSummary(district, gj);
+        } catch (err) {
+          setStatus('Could not load collection areas for District ' + district + ' (' + err + '). Cards and rotation remain available.', 'err');
+          renderSummary(district, { features: [] });
+        }
+      }
+
+      function renderSummary(district, gj) {
+        if (!summaryEl) return;
+        const feats = (gj && gj.features) || [];
+        const days = {}, routes = {}, setouts = {};
+        feats.forEach(f => {
+          const p = f.properties || {};
+          const d = (p.NEW_TRASH_DAY || p.TRASH_DAY || '').toUpperCase();
+          if (d) days[d] = (days[d] || 0) + 1;
+          const r = p.NEW_TRASH_ROUTE || p.TRASH_ROUTE;
+          if (r && r !== 'No Service') routes[r] = (routes[r] || 0) + 1;
+          const s = (p.NEW_TRASH_SETOUT || p.TRASH_SETOUT || '').toUpperCase();
+          if (s && s !== 'NO SERVICE') setouts[s] = (setouts[s] || 0) + 1;
+        });
+        const visibleCount = dayHighlight ? (days[dayHighlight] || 0) : feats.length;
+        const dayList = Object.keys(days).sort().map(k =>
+          k + ' ' + days[k]).join(' · ') || '—';
+        const routeList = Object.keys(routes).sort((a, b) => Number(a) - Number(b)).join(', ') || '—';
+        const setoutList = Object.keys(setouts).sort().map(k =>
+          k + ' ' + setouts[k]).join(' · ') || '—';
+        const focusLabel = dayHighlight
+          ? (DAY_META[dayHighlight] ? DAY_META[dayHighlight].name : dayHighlight) + ' (' + dayHighlight + ')'
+          : 'All days';
+        summaryEl.innerHTML =
+          stat('Active district', 'D' + district) +
+          stat('Focus day', focusLabel) +
+          stat('Visible features', String(visibleCount) + ' / ' + feats.length) +
+          stat('Setout filter', setoutFilter === 'all' ? 'All' : setoutFilter[0].toUpperCase() + setoutFilter.slice(1)) +
+          stat('Day breakdown', dayList) +
+          stat('Routes', routeList) +
+          stat('Setout codes', setoutList) +
+          stat('Verify', 'Address-level certainty: Denvergov.org/TrashSchedule');
+      }
+
+      function stat(k, v) {
+        return '<div class="stat"><div class="k">' + k
+          + '</div><div class="v">' + v + '</div></div>';
+      }
+
+      function renderLegend() {
+        if (!legendEl) return;
+        const order = ['MO', 'TU', 'WE', 'TH', 'FR'];
+        const items = order.map(k =>
+          '<span class="legend-item" data-day="' + k + '">'
+          + '<span class="legend-swatch" style="background:' + DAY_META[k].color + '"></span>'
+          + DAY_META[k].name + ' (' + k + ')</span>'
+        ).join('');
+        legendEl.innerHTML = items
+          + '<span class="legend-item" style="color:var(--ink-mute);margin-left:auto">'
+          + 'Click a polygon for route, setout, LIP_ID.</span>';
+      }
+
+      function highlightLegend() {
+        if (!legendEl) return;
+        legendEl.querySelectorAll('.legend-item[data-day]').forEach(el => {
+          if (!dayHighlight) el.classList.remove('dim');
+          else el.classList.toggle('dim', el.getAttribute('data-day') !== dayHighlight);
+        });
+      }
+
+      // Public: called from render() with the active district + day filter (1..5 or null).
+      function update(district, dayFilter) {
+        currentDistrict = district;
+        dayHighlight = dayFilter ? (DAY_FILTER_TO_CODE[dayFilter] || null) : null;
+        highlightLegend();
+        if (!leafletReady) return;
+        drawActiveBoundary(district);
+        drawAreas(district);
+      }
+
+      return { init, update };
+    })();
 
     // ---- Wire controls
     document.getElementById('btn-this-week').addEventListener('click', function () {
@@ -600,8 +989,16 @@
       districtSelect.value = '';
     });
 
-    // ---- Boot
-    render(today);
+    // ---- Boot — wait for DOM + deferred Leaflet to settle.
+    function boot() {
+      MapMod.init();
+      render(today);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
   })();
   </script>
 </body>
