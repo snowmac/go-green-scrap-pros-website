@@ -433,12 +433,12 @@ footer .social-icons a:hover {
 .city-more-menu {
   display: none;
   position: absolute;
-  top: calc(100% + 0.4rem);
+  top: 100%;
   left: 50%;
   transform: translateX(-50%);
   background: #163f33;
   border-radius: 10px;
-  padding: 0.5rem;
+  padding: 0.9rem 0.5rem 0.5rem;
   z-index: 100;
   min-width: 160px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
