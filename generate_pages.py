@@ -943,6 +943,7 @@ def generate_page(city_key, service_key):
   <meta property="og:title" content="{og_title}">
   <meta property="og:description" content="{og_desc}">
   <meta property="og:url" content="{canonical}">
+  <meta property="og:type" content="website">
   <meta property="og:image" content="https://gogreenscrappros.com/assets/images/logo.png">
   <link rel="canonical" href="{canonical}">
 
