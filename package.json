@@ -1,0 +1,12 @@
+{
+  "name": "ggsp-web",
+  "version": "1.0.0",
+  "description": "Go Green Scrap Pros static website",
+  "private": true,
+  "scripts": {
+    "minify-css": "cleancss -o assets/style.css assets/source-style.css"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3"
+  }
+}
