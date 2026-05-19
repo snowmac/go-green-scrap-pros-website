@@ -175,6 +175,38 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Junk Removal — Adams County / Near North Denver city pages (new) -->
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-derby/</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-federal-heights/</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-sherrelwood/</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-welby/</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gogreenscrappros.com/junk-removal-brighton/</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Junk Removal — Boulder County & Northern Colorado city pages -->
   <url>
     <loc>https://gogreenscrappros.com/junk-removal-boulder/</loc>
