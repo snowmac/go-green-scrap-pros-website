@@ -116,21 +116,6 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Sitemap pages (human-readable) -->
-  <url>
-    <loc>https://gogreenscrappros.com/sitemap/</loc>
-    <lastmod>2026-04-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <url>
-    <loc>https://gogreenscrappros.com/sitemap.html</loc>
-    <lastmod>2026-04-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
   <!-- Junk Removal — Denver Metro city pages -->
   <url>
     <loc>https://gogreenscrappros.com/junk-removal-thornton/</loc>
