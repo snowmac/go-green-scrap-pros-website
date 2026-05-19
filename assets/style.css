@@ -385,6 +385,7 @@ footer .social-icons a:hover {
   gap: 0.4rem;
   justify-content: center;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .city-nav a {
@@ -402,6 +403,58 @@ footer .social-icons a:hover {
   background: #f1b24a;
   color: #1e5a4a;
   font-weight: 600;
+}
+
+/* City Nav — More dropdown (CSS-only) */
+.city-more {
+  position: relative;
+}
+
+.city-more-toggle {
+  color: #a4d2c2;
+  font-size: 0.82rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.city-more-toggle:hover,
+.city-more:hover .city-more-toggle,
+.city-more:focus-within .city-more-toggle {
+  background: #f1b24a;
+  color: #1e5a4a;
+  font-weight: 600;
+}
+
+.city-more-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #163f33;
+  border-radius: 10px;
+  padding: 0.5rem;
+  z-index: 100;
+  min-width: 160px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+.city-more:hover .city-more-menu,
+.city-more:focus-within .city-more-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.city-more-menu a {
+  border-radius: 6px;
+  padding: 0.3rem 0.8rem;
+  display: block;
 }
 
 /* Footer city links */

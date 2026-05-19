@@ -849,12 +849,29 @@ def generate_page(city_key, service_key):
     nearby_html = ",\n          ".join(nearby_links)
 
     # --- City nav links (for same service across all cities) ---
+    # Main 5 cities shown inline; remaining 2 in a CSS-only dropdown
+    main_cities = ["arvada", "golden", "thornton", "broomfield", "westminster"]
+    more_cities = ["wheat-ridge", "northglenn"]
     city_nav_links = []
-    for ck in ["thornton", "arvada", "westminster", "golden", "wheat-ridge", "broomfield", "northglenn"]:
+    for ck in main_cities:
         cd = CITIES[ck]
         href = f"/{service['slug']}-{ck}/"
         active = ' class="active"' if ck == city_key else ""
         city_nav_links.append(f'      <a href="{href}"{active}>{cd["name"]}</a>')
+    more_items = []
+    for ck in more_cities:
+        cd = CITIES[ck]
+        href = f"/{service['slug']}-{ck}/"
+        active = ' class="active"' if ck == city_key else ""
+        more_items.append(f'          <a href="{href}"{active}>{cd["name"]}</a>')
+    city_nav_links.append(
+        '      <div class="city-more">\n'
+        '        <span class="city-more-toggle" tabindex="0">More Cities ▾</span>\n'
+        '        <div class="city-more-menu">\n'
+        + "\n".join(more_items) + "\n"
+        '        </div>\n'
+        '      </div>'
+    )
     city_nav_html = "\n".join(city_nav_links)
 
     # --- "What we take" rows (no prices, just items) ---
