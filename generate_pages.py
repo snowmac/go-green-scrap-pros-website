@@ -9,6 +9,8 @@ genuinely applicable (e.g. curbside scrap metal, curbside fridge/freezer pickup)
 """
 import os
 import json
+import datetime
+import glob
 
 # ─── City Data ───────────────────────────────────────────────────────────────
 CITIES = {
@@ -1148,6 +1150,135 @@ def generate_page(city_key, service_key):
     return slug, html
 
 
+# ─── Sitemap generation ──────────────────────────────────────────────────────
+BASE_URL = "https://gogreenscrappros.com"
+
+# Pages that must never appear in the sitemap (internal / utility / disallowed).
+SITEMAP_EXCLUDE = {
+    "routes-trash",   # disallowed in robots.txt
+    "sitemap",        # the HTML sitemap page itself
+    "cardinal",       # legacy / unrelated page
+    "404",
+}
+
+
+def _sitemap_attrs(path):
+    """Return (changefreq, priority) for a given site-relative path.
+
+    Mirrors the conventions used in the hand-maintained sitemap so the
+    generated file stays consistent.
+    """
+    p = path.strip("/")
+    service_keys = list(SERVICES.keys())
+    city_keys = list(CITIES.keys())
+
+    # Homepage
+    if p == "":
+        return "weekly", "1.0"
+    # Static info / conversion pages
+    if p == "booking.html":
+        return "monthly", "0.7"
+    if p == "quote.html":
+        return "monthly", "0.6"
+    if p == "about":
+        return "yearly", "0.6"
+    if p == "contact":
+        return "yearly", "0.7"
+    if p == "case-studies":
+        return "monthly", "0.8"
+    if p.startswith("case-studies/"):
+        return "yearly", "0.8"
+
+    # Service hub pages (e.g. /mattress-removal/)
+    if p in service_keys:
+        return "monthly", "0.9"
+
+    # City hub pages (e.g. /junk-removal-arvada/) -> 0.8
+    if p.startswith("junk-removal-"):
+        return "monthly", "0.8"
+
+    # Service+city combo pages (e.g. /mattress-removal-arvada/)
+    for s in service_keys:
+        for c in city_keys:
+            if p == f"{s}-{c}":
+                # estate-cleanout and scrap-metal-pickup combos rank 0.8, rest 0.7
+                if s in ("estate-cleanout", "scrap-metal-pickup"):
+                    return "monthly", "0.8"
+                return "monthly", "0.7"
+
+    # Sensible default for anything else discovered on disk
+    return "monthly", "0.7"
+
+
+def generate_sitemap(base_dir):
+    """Regenerate sitemap.xml by discovering pages on disk.
+
+    lastmod is set to today for every URL, so the sitemap always reflects the
+    current build. Deleted pages drop out automatically; new pages are picked up.
+    """
+    today = datetime.date.today().isoformat()
+    paths = set()
+
+    # Directory-based pages: any folder containing an index.html -> "/folder/"
+    for idx in glob.glob(os.path.join(base_dir, "**", "index.html"), recursive=True):
+        rel = os.path.relpath(os.path.dirname(idx), base_dir)
+        rel = "" if rel == "." else rel.replace(os.sep, "/")
+        top = rel.split("/")[0] if rel else ""
+        if top in SITEMAP_EXCLUDE:
+            continue
+        paths.add(rel)
+
+    # Standalone top-level .html conversion pages (booking, quote)
+    for html in glob.glob(os.path.join(base_dir, "*.html")):
+        name = os.path.basename(html)
+        if name in ("404.html",):
+            continue
+        if name == "index.html":
+            continue
+        paths.add(name)
+
+    def sort_key(p):
+        # Homepage first, then service hubs, then everything else alphabetically
+        if p == "":
+            return (0, "")
+        if p in SERVICES:
+            return (1, p)
+        if p.startswith("junk-removal-"):
+            return (2, p)
+        if p.endswith(".html"):
+            return (3, p)
+        return (4, p)
+
+    entries = []
+    for p in sorted(paths, key=sort_key):
+        if p == "":
+            loc = f"{BASE_URL}/"
+        elif p.endswith(".html"):
+            loc = f"{BASE_URL}/{p}"
+        else:
+            loc = f"{BASE_URL}/{p}/"
+        cf, pr = _sitemap_attrs(p)
+        entries.append(
+            "  <url>\n"
+            f"    <loc>{loc}</loc>\n"
+            f"    <lastmod>{today}</lastmod>\n"
+            f"    <changefreq>{cf}</changefreq>\n"
+            f"    <priority>{pr}</priority>\n"
+            "  </url>"
+        )
+
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n\n'
+        + "\n".join(entries)
+        + "\n\n</urlset>\n"
+    )
+    with open(os.path.join(base_dir, "sitemap.xml"), "w", encoding="utf-8") as f:
+        f.write(xml)
+    print(f"  Wrote sitemap.xml with {len(entries)} URLs (lastmod={today}).")
+    return len(entries)
+
+
 # ─── Main: Generate all 56 pages ────────────────────────────────────────────
 def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -1164,7 +1295,12 @@ def main():
             count += 1
             print(f"  Created: {slug}/index.html")
 
-    print(f"\nDone! Generated {count} pages.")
+    print(f"\nGenerated {count} city+service pages.")
+
+    # Always refresh the sitemap so lastmod reflects the current build and any
+    # added/removed pages are picked up automatically.
+    generate_sitemap(base_dir)
+    print("\nDone!")
 
 
 if __name__ == "__main__":
