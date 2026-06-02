@@ -715,6 +715,22 @@ def fill_template(text, city, service):
     )
 
 
+def clip_meta(text, limit=160):
+    """Trim a meta description to <= limit chars on a word boundary.
+
+    Avoids mid-word truncation and leaves no trailing punctuation/space.
+    Returns the text unchanged if it already fits.
+    """
+    text = " ".join(text.split())  # normalize whitespace
+    if len(text) <= limit:
+        return text
+    clipped = text[:limit]
+    # back up to the last space so we don't cut a word in half
+    if " " in clipped:
+        clipped = clipped[:clipped.rfind(" ")]
+    return clipped.rstrip(" ,.;:-\u2014")
+
+
 def generate_page(city_key, service_key):
     """Generate complete HTML page for a city+service combination."""
     city = CITIES[city_key]
@@ -740,10 +756,14 @@ def generate_page(city_key, service_key):
             f"curbside pickup at no charge. Call Adam: 720-675-7693."
         )
     else:
-        meta_desc = (
-            f"{service_name} in {city_name}, CO — flat-rate curbside pickup. "
-            f"{service['what_we_take']}. Call Adam for a free quote: 720-675-7693."
-        )
+        # Lead with location + CTA (kept intact), then append the items list,
+        # which clip_meta trims to fit the 160-char limit if needed. This keeps
+        # the phone number from ever being cut off.
+        meta_lead = f"{service_name} in {city_name}, CO. Call Adam for a free quote: 720-675-7693."
+        meta_desc = f"{meta_lead} We take {service['what_we_take'][0].lower()}{service['what_we_take'][1:]}."
+
+    # Keep meta description within the ~160 char limit search engines display.
+    meta_desc = clip_meta(meta_desc, 160)
 
     # --- OG tags ---
     if is_free:
