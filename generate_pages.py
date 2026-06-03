@@ -731,6 +731,26 @@ def clip_meta(text, limit=160):
     return clipped.rstrip(" ,.;:-\u2014")
 
 
+def clip_title(text, limit=60):
+    """Trim a <title> to <= limit chars on a word boundary.
+
+    Drops a trailing '| ...' suffix segment first if removing it brings the
+    title under the limit, otherwise trims words. Returns unchanged if it fits.
+    """
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    # Try dropping the last "| ..." segment to preserve whole words
+    if " | " in text:
+        head = text.rsplit(" | ", 1)[0]
+        if len(head) <= limit:
+            return head
+    clipped = text[:limit]
+    if " " in clipped:
+        clipped = clipped[:clipped.rfind(" ")]
+    return clipped.rstrip(" |,.;:-\u2014")
+
+
 def generate_page(city_key, service_key):
     """Generate complete HTML page for a city+service combination."""
     city = CITIES[city_key]
@@ -743,11 +763,12 @@ def generate_page(city_key, service_key):
     canonical = f"https://gogreenscrappros.com/{slug}/"
     zips_text = format_zips(city["zips"])
 
-    # --- Title ---
+    # --- Title (kept <=60 chars so it isn't truncated in search results) ---
     if is_free:
-        title = f"{service_name} {city_name} CO | Free Curbside Pickup"
+        title = f"{service_name} {city_name} CO | Free Pickup"
     else:
-        title = f"{service_name} {city_name} CO | Free Quote, Same-Day Pickup"
+        title = f"{service_name} {city_name} CO | Same-Day Pickup"
+    title = clip_title(title, 60)
 
     # --- Meta description ---
     if is_free:

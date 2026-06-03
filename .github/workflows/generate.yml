@@ -1,0 +1,51 @@
+name: Regenerate pages & sitemap
+
+# Runs the static-site generator on every push to master so the 56 city+service
+# pages and sitemap.xml (with a fresh <lastmod>) always reflect the source data.
+# If the generator produces changes, they are committed back automatically.
+
+on:
+  push:
+    branches: [master]
+    # Skip when only generated output, CI config, or docs changed (avoids loops)
+    paths:
+      - 'generate_pages.py'
+      - '.github/workflows/generate.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    # Don't react to the bot's own auto-commit
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Regenerate pages and sitemap
+        run: python3 generate_pages.py
+
+      - name: Commit changes if any
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "chore: regenerate pages & sitemap [skip ci]"
+            git push
+            echo "Committed regenerated output."
+          else
+            echo "No changes to commit."
+          fi
