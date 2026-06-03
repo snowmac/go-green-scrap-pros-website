@@ -1216,6 +1216,11 @@ def _sitemap_attrs(path):
     # Homepage
     if p == "":
         return "weekly", "1.0"
+    # Blog index and posts
+    if p == "blog":
+        return "weekly", "0.8"
+    if p.startswith("blog/"):
+        return "monthly", "0.7"
     # Static info / conversion pages
     if p == "booking.html":
         return "monthly", "0.7"

@@ -1,0 +1,53 @@
+name: Publish scheduled blog posts
+
+# Runs weekly and publishes any draft in /drafts whose publish_date has arrived.
+# Each post is gated by its frontmatter publish_date, so with dates spaced ~3
+# weeks apart you get roughly one new article every 3 weeks. Builds the post
+# page, refreshes the /blog/ index, regenerates sitemap.xml (fresh lastmod),
+# and commits the result back to master.
+
+on:
+  schedule:
+    # Every Monday at 14:00 UTC (~7-8am Denver). Date-gating in build_blog.py
+    # ensures a post only goes live once its publish_date arrives.
+    - cron: '0 14 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-blog
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install markdown
+
+      - name: Build due blog posts and refresh sitemap
+        run: python3 build_blog.py
+
+      - name: Commit newly published posts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "blog: publish scheduled post(s) & refresh sitemap [skip ci]"
+            git push
+            echo "Published new content."
+          else
+            echo "No posts due today."
+          fi
