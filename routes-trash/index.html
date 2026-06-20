@@ -299,6 +299,39 @@
       font-size: 10.5px !important;
     }
     .leaflet-control-attribution a { color: var(--link) !important; }
+
+    /* Geolocation marker (pulsing blue dot) */
+    .geo-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #4aa3ff; border: 2px solid #fff;
+      box-shadow: 0 0 0 2px rgba(74,163,255,.35), 0 0 8px rgba(74,163,255,.65);
+      position: relative;
+    }
+    .geo-dot::after {
+      content: ""; position: absolute; inset: -6px;
+      border-radius: 50%; border: 2px solid rgba(74,163,255,.55);
+      animation: geo-pulse 1.8s ease-out infinite;
+    }
+    @keyframes geo-pulse {
+      0%   { transform: scale(0.6); opacity: .9; }
+      100% { transform: scale(2.0); opacity: 0; }
+    }
+    .map-head .map-actions .btn.geo { color: var(--link); border-color: #2c4a6e; }
+    .map-head .map-actions .btn.geo:hover { color: #fff; border-color: var(--link); }
+    .map-head .map-actions .btn.geo.on { background: #1c3550; color: #d6e8ff; border-color: var(--link); }
+    .map-head .map-actions .btn.geo[disabled] { opacity: .55; cursor: progress; }
+
+    .geo-banner {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 8px 14px; border-bottom: 1px solid var(--line);
+      background: #14202c; color: #cfe2f7;
+      font-size: 12.5px;
+    }
+    .geo-banner.hidden { display: none; }
+    .geo-banner.err { background: #2a1614; color: #f6c9c1; }
+    .geo-banner .geo-msg { flex: 1; min-width: 0; }
+    .geo-banner .geo-actions { display: flex; gap: 6px; }
+    .geo-banner .btn { padding: 4px 10px; font-size: 11.5px; }
   </style>
 </head>
 <body>
@@ -391,7 +424,15 @@
               <button class="btn" data-setout="alley" id="setout-alley" type="button">Alley only</button>
               <button class="btn" data-setout="curb" id="setout-curb" type="button">Curb only</button>
               <button class="btn" id="map-fit" type="button" title="Re-fit to district">Fit</button>
+              <button class="btn geo" id="btn-locate" type="button" title="Show my location on the map">Locate me</button>
             </div>
+          </div>
+          <div class="geo-banner hidden" id="geo-banner" role="status" aria-live="polite">
+            <span class="geo-msg" id="geo-msg">Enable location to see where you are on the route.</span>
+            <span class="geo-actions">
+              <button class="btn" id="geo-enable" type="button">Enable</button>
+              <button class="btn" id="geo-dismiss" type="button">Dismiss</button>
+            </span>
           </div>
           <div id="map" role="region" aria-label="Denver LIP district map">
             <noscript>
@@ -708,6 +749,14 @@
       let statusEl, legendEl, summaryEl;
       let leafletReady = false;
 
+      // Geolocation state
+      let geoMarker = null;
+      let geoAccuracyCircle = null;
+      let geoWatchId = null;
+      let geoBannerEl = null, geoMsgEl = null, geoBtnEl = null;
+      let geoLastFix = null;            // { lat, lng, accuracy }
+      let geoFollow = false;            // pan/zoom to user on next fix
+
       function setStatus(text, kind) {
         if (!statusEl) return;
         statusEl.textContent = text;
@@ -737,6 +786,7 @@
 
         loadDistricts();
         wireMapControls();
+        wireGeolocation();
       }
 
       function wireMapControls() {
@@ -759,6 +809,211 @@
         try { map.fitBounds(activeBoundaryLayer.getBounds().pad(0.05)); } catch (e) {}
       }
 
+      // --- Geolocation ---
+      function wireGeolocation() {
+        geoBannerEl = document.getElementById('geo-banner');
+        geoMsgEl    = document.getElementById('geo-msg');
+        geoBtnEl    = document.getElementById('btn-locate');
+        const enableEl  = document.getElementById('geo-enable');
+        const dismissEl = document.getElementById('geo-dismiss');
+
+        if (!('geolocation' in navigator)) {
+          showGeoBanner('Location not supported by this browser.', true);
+          if (geoBtnEl) geoBtnEl.disabled = true;
+          return;
+        }
+
+        if (geoBtnEl) geoBtnEl.addEventListener('click', () => requestLocation(true));
+        if (enableEl) enableEl.addEventListener('click', () => requestLocation(true));
+        if (dismissEl) dismissEl.addEventListener('click', () => hideGeoBanner());
+
+        // Attempt unobtrusive prompt on load. Modern browsers gate this behind a
+        // user gesture only when not on HTTPS / not granted previously; the call
+        // is safe to attempt — if blocked the catch path shows the banner.
+        if (navigator.permissions && navigator.permissions.query) {
+          navigator.permissions.query({ name: 'geolocation' }).then(p => {
+            if (p.state === 'granted') {
+              requestLocation(false);
+            } else if (p.state === 'prompt') {
+              showGeoBanner('Enable location to plot your position on the route map.', false);
+              requestLocation(false);
+            } else {
+              showGeoBanner('Location is blocked in your browser settings. Re-enable it for this site to plot your position.', true);
+            }
+          }).catch(() => {
+            showGeoBanner('Enable location to plot your position on the route map.', false);
+            requestLocation(false);
+          });
+        } else {
+          showGeoBanner('Enable location to plot your position on the route map.', false);
+          requestLocation(false);
+        }
+      }
+
+      function showGeoBanner(msg, isErr) {
+        if (!geoBannerEl) return;
+        geoBannerEl.classList.remove('hidden');
+        geoBannerEl.classList.toggle('err', !!isErr);
+        if (geoMsgEl) geoMsgEl.textContent = msg;
+      }
+      function hideGeoBanner() {
+        if (!geoBannerEl) return;
+        geoBannerEl.classList.add('hidden');
+      }
+
+      function requestLocation(userInitiated) {
+        if (!('geolocation' in navigator)) return;
+        if (userInitiated) geoFollow = true;
+        if (geoBtnEl) { geoBtnEl.disabled = true; geoBtnEl.textContent = 'Locating…'; }
+
+        const opts = { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 };
+        navigator.geolocation.getCurrentPosition(onGeoSuccess, onGeoError, opts);
+
+        // Start a watch so the dot tracks movement; cap to one watch.
+        if (geoWatchId == null) {
+          try {
+            geoWatchId = navigator.geolocation.watchPosition(onGeoSuccess, onGeoError, opts);
+          } catch (e) { /* ignore */ }
+        }
+      }
+
+      function onGeoSuccess(pos) {
+        const c = pos.coords || {};
+        const lat = c.latitude, lng = c.longitude;
+        const accM = typeof c.accuracy === 'number' ? c.accuracy : null;
+        geoLastFix = { lat, lng, accuracy: accM };
+        if (geoBtnEl) {
+          geoBtnEl.disabled = false;
+          geoBtnEl.textContent = 'Locate me';
+          geoBtnEl.classList.add('on');
+        }
+        if (!map) return;
+
+        if (!geoMarker) {
+          const icon = L.divIcon({
+            className: 'geo-marker-wrap',
+            html: '<div class="geo-dot" aria-label="Your location"></div>',
+            iconSize: [14, 14], iconAnchor: [7, 7]
+          });
+          geoMarker = L.marker([lat, lng], { icon, interactive: true, keyboard: false, zIndexOffset: 1000 })
+            .addTo(map)
+            .bindPopup(geoPopupContent(lat, lng, accM));
+        } else {
+          geoMarker.setLatLng([lat, lng]);
+          geoMarker.setPopupContent(geoPopupContent(lat, lng, accM));
+        }
+
+        if (accM && accM > 0) {
+          if (!geoAccuracyCircle) {
+            geoAccuracyCircle = L.circle([lat, lng], {
+              radius: accM, color: '#4aa3ff', weight: 1,
+              fillColor: '#4aa3ff', fillOpacity: 0.10, opacity: 0.55, interactive: false
+            }).addTo(map);
+          } else {
+            geoAccuracyCircle.setLatLng([lat, lng]);
+            geoAccuracyCircle.setRadius(accM);
+          }
+        }
+
+        if (geoFollow) {
+          geoFollow = false;
+          try { map.setView([lat, lng], Math.max(map.getZoom(), 14)); } catch (e) {}
+        }
+
+        updateGeoStatus();
+        hideGeoBanner();
+      }
+
+      function onGeoError(err) {
+        if (geoBtnEl) {
+          geoBtnEl.disabled = false;
+          geoBtnEl.textContent = 'Locate me';
+        }
+        let msg = 'Could not determine your location.';
+        if (err && err.code === 1) msg = 'Permission denied. Enable location for this site in your browser to plot your position.';
+        else if (err && err.code === 2) msg = 'Position unavailable. Try moving to an area with better GPS or network signal.';
+        else if (err && err.code === 3) msg = 'Location request timed out. Tap "Locate me" to try again.';
+        showGeoBanner(msg, true);
+      }
+
+      function ftFromMeters(m) {
+        return Math.round(m * 3.28084);
+      }
+
+      function geoPopupContent(lat, lng, accM) {
+        const accTxt = accM ? ('±' + ftFromMeters(accM) + ' ft') : 'accuracy n/a';
+        return '<b>You are here</b><br>'
+          + lat.toFixed(5) + ', ' + lng.toFixed(5) + '<br>'
+          + 'Accuracy ' + accTxt;
+      }
+
+      // Ray-cast point-in-polygon over a GeoJSON Feature (Polygon or MultiPolygon).
+      // Coords are [lng, lat]. Returns true if the lat/lng falls inside any ring's
+      // outer boundary (we ignore holes — district polygons here don't have any).
+      function pointInFeature(feat, lat, lng) {
+        if (!feat || !feat.geometry) return false;
+        const g = feat.geometry;
+        const polys = g.type === 'Polygon' ? [g.coordinates]
+          : g.type === 'MultiPolygon' ? g.coordinates
+          : null;
+        if (!polys) return false;
+        for (let p = 0; p < polys.length; p++) {
+          const outer = polys[p][0];
+          if (pointInRing(outer, lat, lng)) return true;
+        }
+        return false;
+      }
+      function pointInRing(ring, lat, lng) {
+        let inside = false;
+        for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+          const xi = ring[i][0], yi = ring[i][1];
+          const xj = ring[j][0], yj = ring[j][1];
+          const intersect = ((yi > lat) !== (yj > lat))
+            && (lng < (xj - xi) * (lat - yi) / ((yj - yi) || 1e-12) + xi);
+          if (intersect) inside = !inside;
+        }
+        return inside;
+      }
+
+      function activeDistrictFeature() {
+        if (!districtsLayer || currentDistrict == null) return null;
+        let target = null;
+        districtsLayer.eachLayer(lyr => {
+          const p = (lyr.feature && lyr.feature.properties) || {};
+          if (String(p.DISTRICT_NUMBER) === String(currentDistrict)) target = lyr.feature;
+        });
+        return target;
+      }
+
+      function updateGeoStatus() {
+        if (!geoLastFix) return;
+        const { lat, lng, accuracy } = geoLastFix;
+        const feat = activeDistrictFeature();
+        const accTxt = accuracy ? ' · Accuracy ±' + ftFromMeters(accuracy) + ' ft' : '';
+        if (!feat) {
+          setStatus('Location ready · waiting for district polygons' + accTxt);
+          return;
+        }
+        const inside = pointInFeature(feat, lat, lng);
+        if (inside) {
+          setStatus('Location ready · You are INSIDE active District ' + currentDistrict + accTxt);
+        } else {
+          // Cheap fallback hint: which district is the operator actually in?
+          let inOther = null;
+          if (districtsLayer) {
+            districtsLayer.eachLayer(lyr => {
+              if (inOther) return;
+              if (pointInFeature(lyr.feature, lat, lng)) {
+                const p = (lyr.feature && lyr.feature.properties) || {};
+                inOther = p.DISTRICT_NUMBER;
+              }
+            });
+          }
+          const otherTxt = inOther ? ' · You appear to be in District ' + inOther : '';
+          setStatus('Location ready · OUTSIDE active District ' + currentDistrict + otherTxt + accTxt);
+        }
+      }
+
       function loadDistricts() {
         const url = DISTRICTS_URL + '?f=geojson&where=1%3D1&outFields=*&outSR=4326';
         fetch(url).then(r => r.ok ? r.json() : Promise.reject(r.status))
@@ -772,6 +1027,7 @@
             }).addTo(map);
             // If render() already set a district, draw it now.
             if (currentDistrict) drawActiveBoundary(currentDistrict);
+            if (geoLastFix) updateGeoStatus();
           })
           .catch(err => setStatus('Could not load district polygons (' + err + '). Showing fallback list view only.', 'err'));
       }
@@ -940,6 +1196,7 @@
         if (!leafletReady) return;
         drawActiveBoundary(district);
         drawAreas(district);
+        if (geoLastFix) updateGeoStatus();
       }
 
       return { init, update };
