@@ -616,60 +616,61 @@ SERVICES = {
         "name": "Scrap Metal Pickup",
         "slug": "scrap-metal-pickup",
         "item": "scrap metal",
-        "price_free": True,
+        "price_free": False,
         "short": "scrap metal pickup",
-        "action": "Free curbside scrap metal pickup and recycling",
+        "action": "Curbside scrap metal pickup — free for qualifying high-value loads, dispatch fee otherwise",
         "what_we_take": "Steel, aluminum, copper, brass, iron, old metal furniture, metal fencing, auto parts, and any other metal items",
-        "schema_name": "Free Scrap Metal Pickup",
+        "schema_name": "Scrap Metal Pickup",
         "intro_templates": [
             (
                 "Got scrap metal piling up in the garage, backyard, or on a job site in {city_name}? "
-                "Don't pay someone to take it — we'll pick it up for free. Go Green Scrap Pros offers "
-                "free curbside scrap metal pickup across all of {city_name} because we make our money "
-                "by recycling the metal. You win, we win, the landfill loses. That's the deal."
+                "Text a photo to 720-675-7693 and we'll tell you the rate before we schedule anything. "
+                "Commercial HVAC units, server racks, and clean copper or brass batches often qualify "
+                "for free pickup. Everything else gets a flat, distance-based dispatch fee — starting at $35."
             ),
             (
                 "Steel, aluminum, copper, brass, iron — old grills, metal shelving, car parts, fencing, "
-                "pipes, wiring, appliance shells — if it's metal and you can get it to the curb, "
-                "we'll take it at no charge. We serve all of {city_name} including zip codes {zips_text}. "
-                "No catch, no minimum quantity."
+                "pipes, wiring, appliance shells. We serve all of {city_name} including zip codes {zips_text}. "
+                "High-value loads (HVAC units, server racks, clean copper/brass) may be picked up free; "
+                "standard loads run $35-$95 based on distance from our Thornton hub."
             ),
             (
-                "Whether you're in {neighborhoods_short} or anywhere else in {city_name}, "
-                "free scrap metal pickup is just a phone call away. "
-                "Text or call Adam at 720-675-7693 and we'll swing by — usually same-day or next-day."
+                "Whether you're in {neighborhoods_short} or anywhere else in {city_name}, scrap metal "
+                "pickup starts with a photo. Text or call Adam at 720-675-7693 — we'll confirm your "
+                "dispatch fee, or confirm it's free, before we're on the way. Usually same-day or next-day."
             ),
         ],
         "how_it_works": [
-            ("Contact Adam", "Call or text 720-675-7693. Tell us what kind of metal you have and roughly how much. We'll schedule a pickup."),
-            ("Set It at the Curb", "Pile your scrap metal at the curb or driveway. Steel beams, old appliances, copper pipe, aluminum cans — whatever you've got."),
-            ("We Pick It Up Free", "We come by, load it up, and take it to the recycler. You pay nothing. We make money on the scrap value, and the metal gets a second life."),
+            ("Text a Photo & Address", "Send a photo of your scrap metal and your address to 720-675-7693. We need to see it before we can quote it."),
+            ("Get Your Dispatch Quote", "We'll confirm your rate — free if it's a qualifying high-value load (commercial HVAC, server racks, clean copper/brass), or a flat dispatch fee ($35-$95) based on distance if not."),
+            ("We Haul It Away", "We show up, load it up, and take it to the recycler. No surprises beyond the rate we quoted."),
         ],
         "why_choose": [
-            "Always FREE — no charge for curbside scrap metal pickup",
+            "Free pickup for qualifying high-value loads — commercial HVAC units, server racks, clean copper/brass batches",
+            "Flat, distance-based dispatch fee otherwise — $35 (0-15mi), $65 (16-30mi), $95 (31mi+) from our Thornton hub",
             "Steel, aluminum, copper, brass, iron — all accepted",
-            "No minimum quantity — even a few pieces are fine",
-            "We recycle everything we collect",
+            "Your rate is confirmed by photo before we schedule — no guessing, no surprise charges",
             "Same-day and next-day pickup in {city_name}",
             "Locally owned — Adam is the one who shows up",
         ],
         "faqs": [
-            ("Is scrap metal pickup really free in {city_name}?",
-             "Yes, 100% free. We make our money by selling the scrap metal to recyclers. As long as it's at the curb and it's metal, there's no charge. {city_name} zip codes {zips_text} — all covered."),
+            ("Is scrap metal pickup free in {city_name}?",
+             "It can be. Commercial HVAC units, server racks, and clean copper or brass batches often qualify for free pickup — text a photo to 720-675-7693 and we'll confirm. Everything else gets a flat dispatch fee based on distance, typically $35-$95."),
             ("What types of metal do you pick up?",
              "Steel, aluminum, copper, brass, iron, tin — basically all metals. Old grills, metal furniture, car parts, fencing, pipes, wiring, appliance shells, bed frames, filing cabinets — if it's metal, we want it."),
-            ("Do I need a minimum amount of scrap metal?",
-             "No minimum. Whether it's a single old metal shelf or a whole pile of scrap from a renovation project in {city_name}, we'll come get it."),
+            ("Is there a minimum amount of scrap metal?",
+             "No set minimum, but smaller general loads are more likely to carry the standard dispatch fee rather than qualify as free. Clean copper/brass in volume, commercial HVAC units, and server racks are what typically offsets the fee."),
             ("What {city_name} zip codes do you serve?",
              "All of {city_name} — zip codes {zips_text}. From {neighborhoods_two} and everywhere in between."),
             ("How quickly can you pick up scrap metal in {city_name}?",
-             "Most pickups are same-day or next-day. Call or text Adam at 720-675-7693 and we'll get on the schedule fast."),
+             "Most pickups are same-day or next-day once we've confirmed your rate by photo. Call or text Adam at 720-675-7693 to get started."),
         ],
         "items_section": [
             "Steel, iron, and tin (any condition)",
             "Aluminum: cans, siding, gutters, frames",
             "Copper pipe, copper wire, brass fittings",
             "Mixed metal piles, old appliances, bed frames, fencing",
+            "Commercial HVAC units, server racks, and clean copper/brass batches — may qualify for free pickup",
         ],
     },
 }
