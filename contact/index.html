@@ -106,6 +106,70 @@
       border: 0;
       display: block;
     }
+    .contact-form {
+      max-width: 600px;
+      margin: 3rem auto 0;
+      text-align: left;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    .contact-form .field { margin-bottom: 1.25rem; }
+    .contact-form label {
+      display: block;
+      font-weight: 600;
+      color: #1e5a4a;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid #d0d7d5;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #333;
+      background: #fff;
+    }
+    .contact-form input:focus,
+    .contact-form select:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: #1e5a4a;
+    }
+    .contact-form textarea { resize: vertical; min-height: 100px; }
+    .contact-form .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 500px) {
+      .contact-form .field-row { grid-template-columns: 1fr; }
+    }
+    .contact-form button {
+      width: 100%;
+      padding: 1rem;
+      background-color: #f1b24a;
+      color: #1e5a4a;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .contact-form button:hover { background-color: #f3c274; }
+    .contact-form .form-note {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+    .honeypot-field { position: absolute; left: -9999px; }
   </style>
 </head>
 <body>
@@ -151,7 +215,7 @@
   <div class="location-hero">
     <div class="container">
       <h1>Contact Go Green Scrap Pros</h1>
-      <p>Call or text Adam directly — no forms, no hold music, no call centers.</p>
+      <p>Call or text Adam directly — no hold music, no call centers. Prefer a form? That works too.</p>
       <a href="tel:7206757693" class="cta-button">Call or Text: 720-675-7693</a>
     </div>
   </div>
@@ -216,6 +280,94 @@
 
     <section>
       <div class="container">
+        <h2>Or Send a Message</h2>
+        <p class="intro-text">
+          Not ready to call or text? Fill this out and we'll get back to you — usually within the hour during business hours.
+        </p>
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contact/thanks/" class="contact-form">
+          <input type="hidden" name="form-name" value="contact">
+          <p class="honeypot-field">
+            <label>Don't fill this out if you're human: <input name="bot-field"></label>
+          </p>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="cf-name">Name</label>
+              <input type="text" id="cf-name" name="name" required>
+            </div>
+            <div class="field">
+              <label for="cf-phone">Phone</label>
+              <input type="tel" id="cf-phone" name="phone" required>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="cf-email">Email (optional)</label>
+              <input type="email" id="cf-email" name="email">
+            </div>
+            <div class="field">
+              <label for="cf-city">City</label>
+              <select id="cf-city" name="city" required>
+                <option value="" disabled selected>Select your city</option>
+                <option value="Thornton">Thornton</option>
+                <option value="Arvada">Arvada</option>
+                <option value="Westminster">Westminster</option>
+                <option value="Golden">Golden</option>
+                <option value="Wheat Ridge">Wheat Ridge</option>
+                <option value="Broomfield">Broomfield</option>
+                <option value="Northglenn">Northglenn</option>
+                <option value="Boulder">Boulder</option>
+                <option value="Longmont">Longmont</option>
+                <option value="Loveland">Loveland</option>
+                <option value="Brighton">Brighton</option>
+                <option value="Dacono">Dacono</option>
+                <option value="Firestone">Firestone</option>
+                <option value="Frederick">Frederick</option>
+                <option value="Niwot">Niwot</option>
+                <option value="Hygiene">Hygiene</option>
+                <option value="Lyons">Lyons</option>
+                <option value="Gunbarrel">Gunbarrel</option>
+                <option value="Derby">Derby</option>
+                <option value="Federal Heights">Federal Heights</option>
+                <option value="Sherrelwood">Sherrelwood</option>
+                <option value="Welby">Welby</option>
+                <option value="Other">Other / Not Listed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="cf-item">What do you have?</label>
+            <select id="cf-item" name="item_type" required>
+              <option value="" disabled selected>Select an item type</option>
+              <option value="Mattress">Mattress</option>
+              <option value="Couch / Furniture">Couch / Furniture</option>
+              <option value="Large Appliance">Large Appliance (washer, dryer, stove)</option>
+              <option value="Fridge / Freezer">Fridge / Freezer</option>
+              <option value="Air Conditioner">Air Conditioner</option>
+              <option value="Treadmill / Exercise Equipment">Treadmill / Exercise Equipment</option>
+              <option value="TV / Electronics">TV / Electronics</option>
+              <option value="Scrap Metal">Scrap Metal</option>
+              <option value="Full Cleanout / Estate">Full Cleanout / Estate</option>
+              <option value="Mixed / Not Sure">Mixed / Not Sure</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" name="message" placeholder="Tell us what you've got, where it is, and anything else that'll help us quote it." required></textarea>
+          </div>
+
+          <button type="submit">Send Message</button>
+          <p class="form-note">For the fastest response, text a photo to 720-675-7693 instead.</p>
+        </form>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
         <h2>Our Service Area</h2>
         <p class="intro-text">Based in Thornton — serving the north and west Denver Metro.</p>
         <div class="map-wrap">
@@ -234,7 +386,7 @@
         <h2>Ready to Schedule?</h2>
         <p class="intro-text">
           Call or text 720-675-7693. Same-day slots available most days. Mattress removal $80 flat,
-          furniture and appliance haul away, free curbside scrap metal pickup.
+          furniture and appliance haul away, scrap metal pickup.
         </p>
         <a href="tel:7206757693" class="cta-button">Call or Text 720-675-7693</a>
       </div>
