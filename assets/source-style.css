@@ -48,6 +48,28 @@ header p {
   color: #a4d2c2;
 }
 
+.hero-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding: 0.5rem 1.1rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(241,178,74,0.4);
+  border-radius: 50px;
+  font-size: 1rem;
+}
+
+.hero-rating .stars {
+  color: #f1b24a;
+  letter-spacing: 2px;
+}
+
+.hero-rating .rating-text {
+  color: #f5f5f5;
+  font-weight: 600;
+}
+
 .cta-button {
   display: inline-block;
   margin-top: 2rem;
