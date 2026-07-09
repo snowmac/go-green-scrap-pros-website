@@ -127,7 +127,7 @@ SERVICES = {
         "item": "TV",
         "price_free": False,
         "short": "TV recycling",
-        "action": "Curbside TV pickup and responsible e-waste recycling",
+        "action": "Curbside TV pickup and responsible e-waste recycling — $30 per unit",
         "what_we_take": "CRT TVs, flat screens, LED, LCD, plasma, and projection TVs",
         "schema_name": "TV Recycling & E-Waste Pickup",
         "intro_templates": [
@@ -147,16 +147,16 @@ SERVICES = {
             (
                 "Serving {neighborhoods_short} and every neighborhood in between, "
                 "we make TV recycling in {city_name} as easy as a phone call. "
-                "Text or call Adam at 720-675-7693 for a free quote — usually same-day or next-day pickup."
+                "Text or call Adam at 720-675-7693 — $30 per unit, usually same-day or next-day pickup."
             ),
         ],
         "how_it_works": [
-            ("Schedule Your Pickup", "Call or text Adam at 720-675-7693 for a free quote. Let us know what type and size of TV you have. We'll confirm a pickup window — most jobs are same-day or next-day."),
+            ("Schedule Your Pickup", "Call or text Adam at 720-675-7693. Let us know what type and size of TV you have. We'll confirm a pickup window — most jobs are same-day or next-day."),
             ("Set It at the Curb", "Place your TV at the curb or driveway. No need to box it or wrap it. CRTs, flat screens, any size — just get it outside and we take it from there."),
             ("We Recycle It Right", "Your TV gets properly disassembled and recycled. Metals, glass, plastics, and circuit boards are separated and sent to certified processing facilities — not the landfill."),
         ],
         "why_choose": [
-            "Flat-rate curbside pickup — no hidden fees, no surprises",
+            "$30 flat per unit — no hidden fees, no surprises",
             "CRTs, flat screens, plasma, LED, LCD — we take them all",
             "Proper e-waste recycling with certified processors",
             "Curbside pickup — you don't have to haul it anywhere",
@@ -164,10 +164,10 @@ SERVICES = {
             "Locally owned and operated — you deal with Adam directly",
         ],
         "faqs": [
-            ("How do I get a TV recycling quote in {city_name}?",
-             "Call or text Adam at 720-675-7693 with your address and the type of TV you need picked up. We'll quote you on the spot — flat-rate curbside pickup with no surprise fees."),
+            ("How much does TV recycling cost in {city_name}?",
+             "$30 per unit, flat — CRT, flat screen, any size. Call or text Adam at 720-675-7693 with your address and we'll confirm a pickup window."),
             ("Do you pick up CRT TVs in {city_name}?",
-             "Yes, we pick up all TV types in {city_name} including CRT, LED, LCD, plasma, and projection TVs. CRTs are some of the most important to recycle properly because of the lead in the glass."),
+             "Yes, we pick up all TV types in {city_name} including CRT, LED, LCD, plasma, and projection TVs, all at the same $30 flat rate. CRTs are some of the most important to recycle properly because of the lead in the glass."),
             ("Why can't I just throw my old TV in the trash?",
              "TVs contain hazardous materials including lead, mercury, and cadmium that contaminate soil and groundwater in landfills. Colorado law requires proper e-waste disposal. We make sure your TV is recycled responsibly."),
             ("What zip codes do you serve in {city_name}?",
