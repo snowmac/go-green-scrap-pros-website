@@ -47,7 +47,7 @@ For typical homeowner renovations — a bathroom remodel, deck replacement, or g
 Not all construction waste belongs in a landfill:
 
 ### Metal
-Old plumbing pipes, metal duct work, copper wire, steel framing, and metal fixtures all have scrap value. Separating metal from the debris pile can offset disposal costs — and in some cases, the metal is worth picking up for free.
+Old plumbing pipes, metal duct work, copper wire, steel framing, and metal fixtures all have scrap value. Separating metal from the debris pile can offset disposal costs — and clean copper or brass pulled out in batch quantities can qualify for free pickup on its own.
 
 Our [scrap metal pickup](/scrap-metal-pickup/) service handles metals from renovation projects. Pull your copper, aluminum, and steel pipe and we'll take care of it.
 

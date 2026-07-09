@@ -63,9 +63,9 @@ Common steel — from old shelving, tools, bed frames, and rebar — pays at a m
 - **Bring an ID.** Colorado law requires scrap dealers to record seller information to help prevent metal theft.
 - **Know the weight.** A bathroom scale gives you a rough idea before you make the trip.
 
-## Free Scrap Metal Pickup in the Denver Metro
+## Scrap Metal Pickup in the Denver Metro
 
-If you have a load of scrap metal but don't have a truck to haul it, Go Green Scrap Pros offers **free curbside scrap metal pickup** across the Denver metro area — Thornton, Arvada, Westminster, Northglenn, Wheat Ridge, Golden, and beyond. We collect the metal, take it to the yard, and there's no cost to you.
+If you have a load of scrap metal but don't have a truck to haul it, Go Green Scrap Pros picks up across the Denver metro area — Thornton, Arvada, Westminster, Northglenn, Wheat Ridge, Golden, and beyond. High-value loads — commercial HVAC units, server racks, clean copper or brass batches — often qualify for free pickup. Everything else gets a flat dispatch fee based on distance, typically $35–$95.
 
 For larger loads that include mixed junk alongside scrap metal, visit our [scrap metal pickup page](/scrap-metal-pickup/) or pair it with a [large appliance removal](/large-appliance-removal/) if you're clearing out old equipment.
 

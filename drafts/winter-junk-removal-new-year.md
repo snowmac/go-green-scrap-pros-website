@@ -41,7 +41,7 @@ The Denver area's unfinished basements are notorious storage repositories. A win
 - Box collections from moves that were never unpacked
 - Children's gear from phases past: car seats, strollers, bikes, toys
 
-**What to recycle vs. what to haul:** Old appliances often have meaningful scrap metal value. Exercise equipment frames are frequently steel and aluminum. Separate recyclable metal from non-recyclable items before calling for pickup — you may be able to get the scrap metal portion for free.
+**What to recycle vs. what to haul:** Old appliances often have meaningful scrap metal value. Exercise equipment frames are frequently steel and aluminum. Separate recyclable metal from non-recyclable items before calling for pickup — it'll still get picked up either way, just at a lower dispatch fee if it's mostly clean metal.
 
 ### The Garage
 

@@ -5,20 +5,18 @@ slug: "free-vs-paid-junk-removal"
 publish_date: "2026-10-06"
 author: "Go Green Scrap Pros"
 category: "Junk Removal"
-keywords: "free junk removal Denver, paid junk removal, scrap metal free pickup, free appliance pickup Denver, junk removal cost Colorado"
+keywords: "free junk removal Denver, paid junk removal, scrap metal dispatch fee, junk removal cost Colorado"
 ---
 
 "Free junk removal" gets searched a lot — and for good reason. Nobody wants to pay to get rid of stuff they don't want. The good news is that some categories of junk removal genuinely are free. The less-good news is that many things people expect to be free actually cost something, whether in money, time, or effort. Here's an honest breakdown.
 
 ## What Is Actually Free
 
-### Scrap Metal Pickup
+### High-Value Scrap Metal
 
-This is the most genuinely free category. If you have scrap metal — old appliances, copper pipe, aluminum siding, steel shelving, a broken washing machine — junk removal companies that handle scrap will pick it up at no charge. The business model works because they take the metal to a scrap yard and receive payment for the materials.
+This is the closest thing to a genuinely free category, but it's narrower than most people expect. The pickup itself only pays for itself when the load has real recycling value — commercial HVAC units, server racks, and clean copper or brass batches are the categories that typically qualify. A single old washing machine or a mixed pile of household scrap doesn't have enough recoverable value to cover a dedicated trip.
 
-The key word is **metal**. The item needs to have meaningful metal content. A fully functional washing machine is free. A washing machine stuffed inside bags of household trash is not.
-
-At Go Green Scrap Pros, we offer free curbside scrap metal pickup throughout the Denver metro. See our [scrap metal pickup page](/scrap-metal-pickup/) for details.
+At Go Green Scrap Pros, high-value loads like those often qualify for free pickup, confirmed by a photo before scheduling. Everything else — general scrap, old appliances, mixed metal — gets a flat dispatch fee based on distance ($35–$95). See our [scrap metal pickup page](/scrap-metal-pickup/) for the full breakdown of what's free vs. dispatch fee.
 
 ### City Bulk Pickup Programs
 
@@ -70,7 +68,8 @@ Here's a simple framework:
 
 | What you have | Best option |
 |---|---|
-| Pure scrap metal | Free pickup (GGSP or local yard) |
+| High-value scrap (HVAC, server racks, clean copper/brass) | Free pickup (GGSP or local yard) |
+| General scrap metal (appliances, mixed metal) | Flat dispatch fee ($35–$95 at GGSP) |
 | Working furniture in great condition | Donation pickup or Facebook Marketplace |
 | Mattress | Flat-rate removal ($80 at GGSP) |
 | Old fridge/freezer | Professional with refrigerant handling |
