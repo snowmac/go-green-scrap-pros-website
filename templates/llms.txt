@@ -1,0 +1,45 @@
+# Go Green Scrap Pros
+
+> Junk removal, scrap metal pickup, and estate cleanout services in the Denver metro area, Colorado. Family-owned, eco-friendly, same-day service available.
+
+Go Green Scrap Pros hauls away junk, furniture, appliances, and scrap metal for homes and businesses across the Denver metro area. Items are sorted for recycling, donation, and responsible disposal. Free quotes, upfront pricing, no hidden fees.
+
+## Services
+
+- [Junk Removal](https://gogreenscrappros.com/): Full-service junk hauling for homes and businesses. Same-day and next-day available.
+- [Mattress Removal](https://gogreenscrappros.com/mattress-removal/): Mattress and box spring pickup and disposal.
+- [Couch & Furniture Removal](https://gogreenscrappros.com/couch-removal/): Sofa, sectional, loveseat, and recliner removal starting at {{PRICE_COUCH_STARTING}}.
+- [Large Appliance Removal](https://gogreenscrappros.com/large-appliance-removal/): Washers, dryers, stoves, dishwashers, and more starting at {{PRICE_APPLIANCE_STARTING}}.
+- [Refrigerator Removal](https://gogreenscrappros.com/refrigerator-removal/): Fridges, freezers, and mini-fridges with EPA-compliant freon recovery.
+- [Air Conditioner Removal](https://gogreenscrappros.com/air-conditioner-removal/): Window and portable AC unit removal, {{PRICE_AC}} flat per unit.
+- [Treadmill & Exercise Equipment Removal](https://gogreenscrappros.com/treadmill-removal/): Treadmills, ellipticals, stationary bikes, and weight machines.
+- [TV Recycling](https://gogreenscrappros.com/tv-recycling/): Flat-screen, CRT, plasma, and LED TV pickup and recycling.
+- [Estate Cleanout](https://gogreenscrappros.com/estate-cleanout/): Full property cleanouts for estates, foreclosures, and hoarding situations.
+- [Scrap Metal Pickup](https://gogreenscrappros.com/scrap-metal-pickup/): Free for qualifying high-value loads (HVAC, server racks, clean copper/brass); {{PRICE_SCRAP_Z1}}-{{PRICE_SCRAP_Z3}} dispatch fee otherwise.
+
+## Service Areas
+
+- [Arvada](https://gogreenscrappros.com/junk-removal-arvada/)
+- [Golden](https://gogreenscrappros.com/junk-removal-golden/)
+- [Thornton](https://gogreenscrappros.com/junk-removal-thornton/)
+- [Broomfield](https://gogreenscrappros.com/junk-removal-broomfield/)
+- [Westminster](https://gogreenscrappros.com/junk-removal-westminster/)
+- [Wheat Ridge](https://gogreenscrappros.com/junk-removal-wheat-ridge/)
+- [Northglenn](https://gogreenscrappros.com/junk-removal-northglenn/)
+- [Boulder](https://gogreenscrappros.com/junk-removal-boulder/)
+- [Longmont](https://gogreenscrappros.com/junk-removal-longmont/)
+- [Loveland](https://gogreenscrappros.com/junk-removal-loveland/)
+- [Brighton](https://gogreenscrappros.com/junk-removal-brighton/)
+- [Derby](https://gogreenscrappros.com/junk-removal-derby/)
+- [Federal Heights](https://gogreenscrappros.com/junk-removal-federal-heights/)
+- [Sherrelwood](https://gogreenscrappros.com/junk-removal-sherrelwood/)
+- [Welby](https://gogreenscrappros.com/junk-removal-welby/)
+
+## Business Info
+
+- Phone: 720-675-7693
+- Service area: Denver metro, Adams County, Jefferson County, Boulder County, northern Colorado
+- Hours: By appointment, same-day available
+- [Book Online](https://gogreenscrappros.com/booking.html)
+- [About Us](https://gogreenscrappros.com/about/)
+- [Contact](https://gogreenscrappros.com/contact/)

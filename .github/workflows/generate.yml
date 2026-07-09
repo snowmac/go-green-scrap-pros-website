@@ -10,6 +10,8 @@ on:
     # Skip when only generated output, CI config, or docs changed (avoids loops)
     paths:
       - 'generate_pages.py'
+      - 'pricing.json'
+      - 'templates/**'
       - '.github/workflows/generate.yml'
   workflow_dispatch: {}
 

@@ -3,14 +3,20 @@
 Generate 56 city+service HTML pages for Go Green Scrap Pros.
 8 services x 7 cities = 56 unique pages.
 
-Note: Visible price amounts/ranges are intentionally not rendered. Pages drive
-visitors toward calling/texting for a quote. The "free" qualifier remains where
-genuinely applicable (e.g. curbside scrap metal, curbside fridge/freezer pickup).
+Note: Most services intentionally don't render an exact price - pages drive
+visitors toward calling/texting for a quote. Where a service does publish a
+number (scrap metal, TV recycling), it's pulled from pricing.json, the single
+source of truth also used to render the templated static pages in templates/
+(see render_pricing_templates() below). Edit pricing.json, not prices inline.
 """
 import os
 import json
 import datetime
 import glob
+
+_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(_BASE_DIR, "pricing.json")) as _f:
+    PRICING = json.load(_f)
 
 # ─── City Data ───────────────────────────────────────────────────────────────
 CITIES = {
@@ -116,10 +122,22 @@ CITIES = {
 
 # ─── Service Data ────────────────────────────────────────────────────────────
 # Each service has:
-#   - price_free: True only when curbside pickup is genuinely free
-#   - intro/why/faqs/items: visible copy with NO dollar amounts. Quote-oriented
-#     CTAs are used instead. The "free" wording remains for genuinely free
-#     services (curbside scrap metal pickup) since that is not a price amount.
+#   - price_free: True only when curbside pickup is genuinely free with no
+#     conditions attached (no service currently qualifies - see pricing.json's
+#     scrap_metal block for the qualifying-load exception model instead).
+#   - Most services intentionally publish no dollar amount in their copy and
+#     drive toward a call/text quote instead. Where a service does publish a
+#     price (scrap metal, TV recycling), the number comes from the PRICING
+#     dict (loaded from pricing.json above) via the _PRICE_* shortcuts below -
+#     never hardcode a dollar amount directly in a SERVICES string.
+_PRICE_TV = PRICING["tv_recycling"]["per_unit"]
+_PRICE_SCRAP_Z1 = PRICING["scrap_metal"]["zone1_fee"]
+_PRICE_SCRAP_Z2 = PRICING["scrap_metal"]["zone2_fee"]
+_PRICE_SCRAP_Z3 = PRICING["scrap_metal"]["zone3_fee"]
+_PRICE_SCRAP_Z1_MI = PRICING["scrap_metal"]["zone1_max_miles"]
+_PRICE_SCRAP_Z2_MI = PRICING["scrap_metal"]["zone2_max_miles"]
+_PRICE_INSIDE_FEE = PRICING["scrap_metal"]["inside_pickup_fee"]
+
 SERVICES = {
     "tv-recycling": {
         "name": "TV Recycling",
@@ -127,7 +145,7 @@ SERVICES = {
         "item": "TV",
         "price_free": False,
         "short": "TV recycling",
-        "action": "Curbside TV pickup and responsible e-waste recycling — $30 per unit",
+        "action": f"Curbside TV pickup and responsible e-waste recycling — ${_PRICE_TV} per unit",
         "what_we_take": "CRT TVs, flat screens, LED, LCD, plasma, and projection TVs",
         "schema_name": "TV Recycling & E-Waste Pickup",
         "intro_templates": [
@@ -147,7 +165,7 @@ SERVICES = {
             (
                 "Serving {neighborhoods_short} and every neighborhood in between, "
                 "we make TV recycling in {city_name} as easy as a phone call. "
-                "Text or call Adam at 720-675-7693 — $30 per unit, usually same-day or next-day pickup."
+                f"Text or call Adam at 720-675-7693 — ${_PRICE_TV} per unit, usually same-day or next-day pickup."
             ),
         ],
         "how_it_works": [
@@ -156,7 +174,7 @@ SERVICES = {
             ("We Recycle It Right", "Your TV gets properly disassembled and recycled. Metals, glass, plastics, and circuit boards are separated and sent to certified processing facilities — not the landfill."),
         ],
         "why_choose": [
-            "$30 flat per unit — no hidden fees, no surprises",
+            f"${_PRICE_TV} flat per unit — no hidden fees, no surprises",
             "CRTs, flat screens, plasma, LED, LCD — we take them all",
             "Proper e-waste recycling with certified processors",
             "Curbside pickup — you don't have to haul it anywhere",
@@ -165,9 +183,12 @@ SERVICES = {
         ],
         "faqs": [
             ("How much does TV recycling cost in {city_name}?",
-             "$30 per unit, flat — CRT, flat screen, any size. Call or text Adam at 720-675-7693 with your address and we'll confirm a pickup window."),
+             f"${_PRICE_TV} per unit, flat — CRT, flat screen, any size. Call or text Adam at 720-675-7693 with your address and we'll confirm a pickup window."),
             ("Do you pick up CRT TVs in {city_name}?",
-             "Yes, we pick up all TV types in {city_name} including CRT, LED, LCD, plasma, and projection TVs, all at the same $30 flat rate. CRTs are some of the most important to recycle properly because of the lead in the glass."),
+             (
+                 "Yes, we pick up all TV types in {city_name} including CRT, LED, LCD, plasma, and projection TVs, all at the same "
+                 f"${_PRICE_TV} flat rate. CRTs are some of the most important to recycle properly because of the lead in the glass."
+             )),
             ("Why can't I just throw my old TV in the trash?",
              "TVs contain hazardous materials including lead, mercury, and cadmium that contaminate soil and groundwater in landfills. Colorado law requires proper e-waste disposal. We make sure your TV is recycled responsibly."),
             ("What zip codes do you serve in {city_name}?",
@@ -626,13 +647,13 @@ SERVICES = {
                 "Got scrap metal piling up in the garage, backyard, or on a job site in {city_name}? "
                 "Text a photo to 720-675-7693 and we'll tell you the rate before we schedule anything. "
                 "Commercial HVAC units, server racks, and clean copper or brass batches often qualify "
-                "for free pickup. Everything else gets a flat, distance-based dispatch fee — starting at $35."
+                f"for free pickup. Everything else gets a flat, distance-based dispatch fee — starting at ${_PRICE_SCRAP_Z1}."
             ),
             (
                 "Steel, aluminum, copper, brass, iron — old grills, metal shelving, car parts, fencing, "
                 "pipes, wiring, appliance shells. We serve all of {city_name} including zip codes {zips_text}. "
                 "High-value loads (HVAC units, server racks, clean copper/brass) may be picked up free; "
-                "standard loads run $35-$95 based on distance from our Thornton hub."
+                f"standard loads run ${_PRICE_SCRAP_Z1}-${_PRICE_SCRAP_Z3} based on distance from our Thornton hub."
             ),
             (
                 "Whether you're in {neighborhoods_short} or anywhere else in {city_name}, scrap metal "
@@ -642,12 +663,16 @@ SERVICES = {
         ],
         "how_it_works": [
             ("Text a Photo & Address", "Send a photo of your scrap metal and your address to 720-675-7693. We need to see it before we can quote it."),
-            ("Get Your Dispatch Quote", "We'll confirm your rate — free if it's a qualifying high-value load (commercial HVAC, server racks, clean copper/brass), or a flat dispatch fee ($35-$95) based on distance if not."),
+            ("Get Your Dispatch Quote", f"We'll confirm your rate — free if it's a qualifying high-value load (commercial HVAC, server racks, clean copper/brass), or a flat dispatch fee (${_PRICE_SCRAP_Z1}-${_PRICE_SCRAP_Z3}) based on distance if not."),
             ("We Haul It Away", "We show up, load it up, and take it to the recycler. No surprises beyond the rate we quoted."),
         ],
         "why_choose": [
             "Free pickup for qualifying high-value loads — commercial HVAC units, server racks, clean copper/brass batches",
-            "Flat, distance-based dispatch fee otherwise — $35 (0-15mi), $65 (16-30mi), $95 (31mi+) from our Thornton hub",
+            (
+                f"Flat, distance-based dispatch fee otherwise — ${_PRICE_SCRAP_Z1} (0-{_PRICE_SCRAP_Z1_MI}mi), "
+                f"${_PRICE_SCRAP_Z2} ({_PRICE_SCRAP_Z1_MI + 1}-{_PRICE_SCRAP_Z2_MI}mi), "
+                f"${_PRICE_SCRAP_Z3} ({_PRICE_SCRAP_Z2_MI + 1}mi+) from our Thornton hub"
+            ),
             "Steel, aluminum, copper, brass, iron — all accepted",
             "Your rate is confirmed by photo before we schedule — no guessing, no surprise charges",
             "Same-day and next-day pickup in {city_name}",
@@ -655,7 +680,11 @@ SERVICES = {
         ],
         "faqs": [
             ("Is scrap metal pickup free in {city_name}?",
-             "It can be. Commercial HVAC units, server racks, and clean copper or brass batches often qualify for free pickup — text a photo to 720-675-7693 and we'll confirm. Everything else gets a flat dispatch fee based on distance, typically $35-$95."),
+             (
+                 "It can be. Commercial HVAC units, server racks, and clean copper or brass batches often qualify for free "
+                 "pickup — text a photo to 720-675-7693 and we'll confirm. Everything else gets a flat dispatch fee based on "
+                 f"distance, typically ${_PRICE_SCRAP_Z1}-${_PRICE_SCRAP_Z3}."
+             )),
             ("What types of metal do you pick up?",
              "Steel, aluminum, copper, brass, iron, tin — basically all metals. Old grills, metal furniture, car parts, fencing, pipes, wiring, appliance shells, bed frames, filing cabinets — if it's metal, we want it."),
             ("Is there a minimum amount of scrap metal?",
@@ -1325,6 +1354,64 @@ def generate_sitemap(base_dir):
 
 
 # ─── Main: Generate all 56 pages ────────────────────────────────────────────
+# ─── Templated static pages ──────────────────────────────────────────────────
+# Hand-authored pages (homepage, service hub pages, contact, llms.txt) that
+# reference a price live in templates/ with {{PRICE_*}} placeholders instead
+# of literal dollar amounts. render_pricing_templates() substitutes each
+# placeholder from pricing.json and writes the real file. To change a price:
+# edit pricing.json, then rerun this script - never hand-edit a dollar amount
+# directly in the rendered output, it will be overwritten on the next build.
+PRICE_TOKENS = {
+    "{{PRICE_MATTRESS}}": f"${PRICING['mattress']['first_item']}",
+    "{{PRICE_MATTRESS_ADDITIONAL}}": f"${PRICING['mattress']['additional_item']}",
+    "{{PRICE_MATTRESS_SET}}": f"${PRICING['mattress']['set']}",
+    "{{PRICE_COUCH_STARTING}}": f"${PRICING['couch']['starting']}",
+    "{{PRICE_APPLIANCE_STARTING}}": f"${PRICING['large_appliance']['starting']}",
+    "{{PRICE_GARAGE_LOW}}": f"${PRICING['garage_cleanout']['low']:,}",
+    "{{PRICE_GARAGE_HIGH}}": f"${PRICING['garage_cleanout']['high']:,}",
+    "{{PRICE_AC}}": f"${PRICING['air_conditioner']['flat']}",
+    "{{PRICE_TV}}": f"${PRICING['tv_recycling']['per_unit']}",
+    "{{PRICE_ESTATE_LOW}}": f"${PRICING['estate_cleanout']['low']:,}",
+    "{{PRICE_ESTATE_HIGH}}": f"${PRICING['estate_cleanout']['high']:,}",
+    "{{PRICE_SCRAP_Z1}}": f"${PRICING['scrap_metal']['zone1_fee']}",
+    "{{PRICE_SCRAP_Z2}}": f"${PRICING['scrap_metal']['zone2_fee']}",
+    "{{PRICE_SCRAP_Z3}}": f"${PRICING['scrap_metal']['zone3_fee']}",
+    "{{PRICE_INSIDE_FEE}}": f"${PRICING['scrap_metal']['inside_pickup_fee']}",
+}
+
+TEMPLATE_MAP = {
+    "index.html": "index.html",
+    "contact__index.html": "contact/index.html",
+    "scrap-metal-pickup__index.html": "scrap-metal-pickup/index.html",
+    "tv-recycling__index.html": "tv-recycling/index.html",
+    "mattress-removal__index.html": "mattress-removal/index.html",
+    "couch-removal__index.html": "couch-removal/index.html",
+    "large-appliance-removal__index.html": "large-appliance-removal/index.html",
+    "air-conditioner-removal__index.html": "air-conditioner-removal/index.html",
+    "estate-cleanout__index.html": "estate-cleanout/index.html",
+    "llms.txt": "llms.txt",
+}
+
+
+def render_pricing_templates(base_dir):
+    """Render templates/*.html + templates/llms.txt into their real output
+    paths, substituting {{PRICE_*}} placeholders with values from pricing.json."""
+    count = 0
+    for template_name, output_rel_path in TEMPLATE_MAP.items():
+        template_path = os.path.join(base_dir, "templates", template_name)
+        with open(template_path, encoding="utf-8") as f:
+            content = f.read()
+        for token, value in PRICE_TOKENS.items():
+            content = content.replace(token, value)
+        output_path = os.path.join(base_dir, output_rel_path)
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(content)
+        count += 1
+        print(f"  Rendered: {output_rel_path}")
+    print(f"\nRendered {count} pricing-templated pages.")
+
+
 def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     count = 0
@@ -1341,6 +1428,8 @@ def main():
             print(f"  Created: {slug}/index.html")
 
     print(f"\nGenerated {count} city+service pages.")
+
+    render_pricing_templates(base_dir)
 
     # Always refresh the sitemap so lastmod reflects the current build and any
     # added/removed pages are picked up automatically.
