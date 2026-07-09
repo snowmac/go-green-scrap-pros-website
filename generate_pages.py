@@ -1456,13 +1456,12 @@ def _sitemap_attrs(path):
     return "monthly", "0.7"
 
 
-def generate_sitemap(base_dir):
-    """Regenerate sitemap.xml by discovering pages on disk.
-
-    lastmod is set to today for every URL, so the sitemap always reflects the
-    current build. Deleted pages drop out automatically; new pages are picked up.
-    """
-    today = datetime.date.today().isoformat()
+def discover_all_paths(base_dir):
+    """Discover every real page on disk as a set of site-relative paths (e.g.
+    "mattress-removal-arvada", "" for the homepage, "booking.html"). This is
+    the single source of truth both sitemap.xml and the human-readable
+    /sitemap/ page are built from, so they can never drift out of sync with
+    each other or with what's actually on disk."""
     paths = set()
 
     # Directory-based pages: any folder containing an index.html -> "/folder/"
@@ -1483,20 +1482,32 @@ def generate_sitemap(base_dir):
             continue
         paths.add(name)
 
-    def sort_key(p):
-        # Homepage first, then service hubs, then everything else alphabetically
-        if p == "":
-            return (0, "")
-        if p in SERVICES:
-            return (1, p)
-        if p.startswith("junk-removal-"):
-            return (2, p)
-        if p.endswith(".html"):
-            return (3, p)
-        return (4, p)
+    return paths
+
+
+def _sitemap_sort_key(p):
+    # Homepage first, then service hubs, then everything else alphabetically
+    if p == "":
+        return (0, "")
+    if p in SERVICES:
+        return (1, p)
+    if p.startswith("junk-removal-"):
+        return (2, p)
+    if p.endswith(".html"):
+        return (3, p)
+    return (4, p)
+
+
+def generate_sitemap(base_dir, paths):
+    """Write sitemap.xml from the discovered path set.
+
+    lastmod is set to today for every URL, so the sitemap always reflects the
+    current build. Deleted pages drop out automatically; new pages are picked up.
+    """
+    today = datetime.date.today().isoformat()
 
     entries = []
-    for p in sorted(paths, key=sort_key):
+    for p in sorted(paths, key=_sitemap_sort_key):
         if p == "":
             loc = f"{BASE_URL}/"
         elif p.endswith(".html"):
@@ -1523,6 +1534,284 @@ def generate_sitemap(base_dir):
         f.write(xml)
     print(f"  Wrote sitemap.xml with {len(entries)} URLs (lastmod={today}).")
     return len(entries)
+
+
+SERVICE_EMOJI = {
+    "estate-cleanout": "🏠",
+    "mattress-removal": "🛏️",
+    "couch-removal": "🛋️",
+    "large-appliance-removal": "🔌",
+    "refrigerator-removal": "🧊",
+    "air-conditioner-removal": "❄️",
+    "treadmill-removal": "🏃",
+    "tv-recycling": "📺",
+    "scrap-metal-pickup": "🔩",
+}
+
+
+def _city_display_name(city_slug):
+    """Name for a city slug, using CITIES if we have it, otherwise a
+    title-cased fallback (covers junk-removal-only cities like Loveland
+    that predate the CITIES dict and don't have a full entry)."""
+    if city_slug in CITIES:
+        return CITIES[city_slug]["name"]
+    return city_slug.replace("-", " ").title()
+
+
+def generate_html_sitemap(base_dir, paths):
+    """Build the human-readable /sitemap/ page from the same discovered path
+    set as sitemap.xml, instead of a hand-maintained list that drifts out of
+    sync every time a city or service is added."""
+    junk_removal_cities = sorted(
+        p[len("junk-removal-"):] for p in paths if p.startswith("junk-removal-")
+    )
+
+    service_city_lists = {}
+    for service_key in SERVICES:
+        prefix = f"{service_key}-"
+        cities = sorted(
+            p[len(prefix):] for p in paths
+            if p.startswith(prefix) and p != service_key
+        )
+        service_city_lists[service_key] = cities
+
+    case_study_paths = sorted(
+        p for p in paths if p.startswith("case-studies/")
+    )
+
+    def city_col(cities_slice, title_prefix=""):
+        items = "\n".join(
+            f'                <li><a href="/junk-removal-{slug}/">{title_prefix}{_city_display_name(slug)}</a></li>'
+            for slug in cities_slice
+        )
+        return items
+
+    # Split the junk-removal city list into two roughly even alphabetical
+    # columns for layout - there's no verified "region" data to group by.
+    mid = (len(junk_removal_cities) + 1) // 2
+    jr_col_a = city_col(junk_removal_cities[:mid], "Junk Removal ")
+    jr_col_b = city_col(junk_removal_cities[mid:], "Junk Removal ")
+
+    core_services_items = "\n".join(
+        f'                <li><a href="/{key}/">{SERVICES[key]["name"]}</a></li>'
+        for key in SERVICES
+    )
+
+    case_study_items = ['                <li><a href="/case-studies/">All Case Studies</a></li>']
+    for p in case_study_paths:
+        slug = p[len("case-studies/"):]
+        label = slug.replace("-", " ").title()
+        case_study_items.append(f'                <li><a href="/{p}/">{label}</a></li>')
+
+    service_sections = []
+    for service_key, cities in service_city_lists.items():
+        if not cities:
+            continue
+        emoji = SERVICE_EMOJI.get(service_key, "")
+        name = SERVICES[service_key]["name"]
+        items = "\n".join(
+            f'                <li><a href="/{service_key}-{slug}/">{name} {_city_display_name(slug)}</a></li>'
+            for slug in cities
+        )
+        service_sections.append(f'''          <div class="sitemap-section">
+            <div class="sitemap-col">
+              <h3>{emoji} {name}</h3>
+              <ul>
+{items}
+              </ul>
+            </div>
+          </div>''')
+    # Case studies sits alongside the per-service cards in the same grid.
+    service_sections.insert(1, f'''          <div class="sitemap-section">
+            <div class="sitemap-col">
+              <h3>📸 Case Studies</h3>
+              <ul>
+{chr(10).join(case_study_items)}
+              </ul>
+            </div>
+          </div>''')
+    specialty_grid = "\n\n".join(service_sections)
+
+    total_pages = len(paths)
+
+    html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse every page on Go Green Scrap Pros — services and service areas across the Denver Metro, Boulder County, and Northern Colorado.">
+  <meta property="og:title" content="Site Map | Go Green Scrap Pros">
+  <meta property="og:description" content="Every page on gogreenscrappros.com — services, city pages, and tools.">
+  <meta property="og:url" content="https://gogreenscrappros.com/sitemap/">
+  <meta property="og:image" content="https://gogreenscrappros.com/assets/images/logo.png">
+  <link rel="canonical" href="https://gogreenscrappros.com/sitemap/">
+
+  <script type="application/ld+json">
+  {{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://gogreenscrappros.com" }},
+      {{ "@type": "ListItem", "position": 2, "name": "Site Map", "item": "https://gogreenscrappros.com/sitemap/" }}
+    ]
+  }}
+  </script>
+
+  <meta name="robots" content="index, follow">
+  <title>Site Map | Go Green Scrap Pros</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"></noscript>
+  <style>
+    .sitemap-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }}
+    .sitemap-col h3 {{ color: #1e5a4a; margin-bottom: 0.75rem; font-size: 1.1rem; border-bottom: 2px solid #e5efe9; padding-bottom: 0.4rem; }}
+    .sitemap-col ul {{ list-style: none; padding: 0; margin: 0 0 1.5rem 0; }}
+    .sitemap-col li {{ margin-bottom: 0.4rem; }}
+    .sitemap-col a {{ color: #2a6f5e; text-decoration: none; }}
+    .sitemap-col a:hover {{ text-decoration: underline; }}
+    .sitemap-section {{ background: #fff; border-radius: 10px; padding: 1.5rem; box-shadow: 0 3px 10px rgba(0,0,0,0.05); }}
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a href="/" class="brand">Go Green Scrap Pros</a>
+      <div class="nav-links">
+        <a href="/estate-cleanout/">Estate Cleanout</a>
+        <a href="/scrap-metal-pickup/">Scrap Metal</a>
+        <a href="/case-studies/">Case Studies</a>
+        <a href="/blog/">Blog</a>
+        <a href="/sitemap/" class="active">Service Areas</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <a href="tel:7206757693" class="nav-cta">Call 720-675-7693</a>
+        <a href="sms:7206757693" class="nav-sms">Text Us</a>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li>Site Map</li>
+      </ol>
+    </div>
+  </nav>
+
+  <div class="location-hero">
+    <div class="container">
+      <h1>Site Map &amp; Service Areas</h1>
+      <p>Every page on the site ({total_pages} total), organized by section. Find the city or service you need.</p>
+      <a href="tel:7206757693" class="cta-button">Call or Text for a Free Quote</a>
+    </div>
+  </div>
+
+  <main>
+    <section>
+      <div class="container">
+        <h2>Main Pages</h2>
+        <div class="sitemap-grid">
+          <div class="sitemap-section">
+            <div class="sitemap-col">
+              <h3>Site</h3>
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about/">About Adam &amp; Go Green</a></li>
+                <li><a href="/contact/">Contact</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/booking.html">Book a Pickup</a></li>
+                <li><a href="/sitemap.xml">XML Sitemap (for search engines)</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="sitemap-section">
+            <div class="sitemap-col">
+              <h3>Core Services</h3>
+              <ul>
+{core_services_items}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="why-us">
+      <div class="container">
+        <h2>Junk Removal by City</h2>
+        <p class="intro-text">Local junk hauling pages for each city we serve.</p>
+        <div class="sitemap-grid">
+          <div class="sitemap-section">
+            <div class="sitemap-col">
+              <h3>Cities A&ndash;{junk_removal_cities[mid-1][0].upper() if mid else ""}</h3>
+              <ul>
+{jr_col_a}
+              </ul>
+            </div>
+          </div>
+          <div class="sitemap-section">
+            <div class="sitemap-col">
+              <h3>Cities {junk_removal_cities[mid][0].upper() if mid < len(junk_removal_cities) else ""}&ndash;Z</h3>
+              <ul>
+{jr_col_b}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Specialty Removal &amp; Recycling — by City</h2>
+        <p class="intro-text">Single-item pickup and recycling pages, organized by service. Each link below is a dedicated, local page with FAQs and details for that city.</p>
+
+        <div class="sitemap-grid">
+{specialty_grid}
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>Don't See Your City?</h2>
+        <p class="intro-text">
+          We serve the entire Denver Metro, Boulder County, and Northern Colorado. If your city isn't
+          listed, give us a call — we may already be working in your area.
+        </p>
+        <a href="tel:7206757693" class="cta-button">Call or Text 720-675-7693</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-nav">
+        <a href="/">Home</a>
+        <a href="/sitemap/">Site Map</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+        <a href="tel:7206757693">Get a Free Quote</a>
+      </div>
+      <p>Go Green Scrap Pros — Thornton, CO 80229 — 720-675-7693</p>
+      <p style="margin-top: 1.5rem; font-size: 0.9rem;">© 2026 Go Green Scrap Pros. All Rights Reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
+'''
+
+    out_dir = os.path.join(base_dir, "sitemap")
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"  Wrote sitemap/index.html covering {total_pages} pages.")
 
 
 # ─── Main: Generate all 56 pages ────────────────────────────────────────────
@@ -1603,9 +1892,12 @@ def main():
 
     render_pricing_templates(base_dir)
 
-    # Always refresh the sitemap so lastmod reflects the current build and any
-    # added/removed pages are picked up automatically.
-    generate_sitemap(base_dir)
+    # Always refresh both sitemaps so they reflect the current build - any
+    # added/removed page is picked up automatically in both, from the same
+    # discovered path set, so they can't drift out of sync with each other.
+    all_paths = discover_all_paths(base_dir)
+    generate_sitemap(base_dir, all_paths)
+    generate_html_sitemap(base_dir, all_paths)
     print("\nDone!")
 
 
