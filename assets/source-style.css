@@ -463,6 +463,8 @@ footer .social-icons a:hover {
   padding: 0.9rem 0.5rem 0.5rem;
   z-index: 100;
   min-width: 160px;
+  max-height: 60vh;
+  overflow-y: auto;
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
 

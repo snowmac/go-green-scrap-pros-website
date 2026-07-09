@@ -33,6 +33,7 @@ CITIES = {
         "flavor": "one of the fastest-growing cities along the I-25 corridor north of Denver",
         "housing": "a mix of established 1970s–90s subdivisions and brand-new master-planned communities in the north end",
         "nearby": ["northglenn", "westminster", "broomfield"],
+        "scrap_zone": 1,
     },
     "arvada": {
         "name": "Arvada",
@@ -47,6 +48,7 @@ CITIES = {
         "flavor": "a charming city blending historic Olde Town character with modern growth stretching west toward the foothills",
         "housing": "established neighborhoods near Olde Town alongside newer developments like Candelas and Leyden Rock",
         "nearby": ["wheat-ridge", "westminster", "golden"],
+        "scrap_zone": 1,
     },
     "westminster": {
         "name": "Westminster",
@@ -61,6 +63,7 @@ CITIES = {
         "flavor": "a thriving suburb straddling the Adams-Jefferson county line with easy access to both Denver and Boulder",
         "housing": "a diverse housing stock ranging from mid-century ranches near the southern border to contemporary builds around the revitalized downtown",
         "nearby": ["arvada", "thornton", "broomfield"],
+        "scrap_zone": 1,
     },
     "golden": {
         "name": "Golden",
@@ -75,6 +78,7 @@ CITIES = {
         "flavor": "a mountain-town-meets-suburb nestled right at the foothills with the Colorado School of Mines at its heart",
         "housing": "a unique blend of historic downtown bungalows, hillside homes with views, and newer planned communities like Fossil Trace",
         "nearby": ["wheat-ridge", "arvada", "westminster"],
+        "scrap_zone": 1,
     },
     "wheat-ridge": {
         "name": "Wheat Ridge",
@@ -89,6 +93,7 @@ CITIES = {
         "flavor": "a small-town-feel city tucked between Arvada, Lakewood, and Denver with surprisingly deep roots as a farming community",
         "housing": "predominantly mid-century ranch homes and split-levels built in the 1950s–70s, many now seeing renovation and updates",
         "nearby": ["arvada", "golden", "westminster"],
+        "scrap_zone": 1,
     },
     "broomfield": {
         "name": "Broomfield",
@@ -103,6 +108,7 @@ CITIES = {
         "flavor": "a unique city-county hybrid along the US-36 tech corridor with rapid residential growth and a master-planned, suburban feel",
         "housing": "newer construction dominated by 2000s-era planned communities like Broadlands and Anthem alongside the Interlocken business park area",
         "nearby": ["westminster", "thornton", "arvada"],
+        "scrap_zone": 1,
     },
     "northglenn": {
         "name": "Northglenn",
@@ -117,6 +123,151 @@ CITIES = {
         "flavor": "a compact, friendly suburb directly north of Denver along I-25 with a strong sense of community pride",
         "housing": "mostly 1960s–80s single-family homes and townhomes built during the original suburban boom, with some infill development near the civic center",
         "nearby": ["thornton", "westminster", "broomfield"],
+        "scrap_zone": 1,
+    },
+    "welby": {
+        "name": "Welby",
+        "slug": "welby",
+        "zips": ["80229"],
+        "lat": 39.8483,
+        "lng": -104.9614,
+        "neighborhoods": ["Rotella Park", "Perl Mack Manor"],
+        "flavor": "an unincorporated Adams County community just north of Denver proper, a working-class mix of ranch homes, mobile-home communities, and light industrial areas along the I-25/I-270 corridor",
+        "housing": "long-established ranch homes and mobile-home communities near Rotella Park",
+        "nearby": ["thornton", "federal-heights", "northglenn"],
+        "scrap_zone": 1,
+    },
+    "federal-heights": {
+        "name": "Federal Heights",
+        "slug": "federal-heights",
+        "zips": ["80260", "80221", "80234"],
+        "lat": 39.8583,
+        "lng": -105.0128,
+        "neighborhoods": ["Holiday Hills", "Northborough Heights"],
+        "flavor": "a small home-rule city in western Adams County - Denver's northern doorstep - known locally for the Water World park and a mostly mid-century housing stock",
+        "housing": "1960s-70s split-level and bi-level ranch homes, with the Holiday Hills 55+ community and Northborough Heights among the established named areas",
+        "nearby": ["westminster", "northglenn", "welby"],
+        "scrap_zone": 1,
+    },
+    "sherrelwood": {
+        "name": "Sherrelwood",
+        "slug": "sherrelwood",
+        "zips": ["80221"],
+        "lat": 39.8228,
+        "lng": -105.0089,
+        "neighborhoods": ["Sherrelwood Estates", "Perl Mack"],
+        "flavor": "a dense, established unincorporated neighborhood in Adams County bordering Westminster, with mostly 1950s-70s single-family housing",
+        "housing": "1950s-70s single-family homes in the Sherrelwood Estates area and the historic Perl Mack subdivision",
+        "nearby": ["westminster", "welby", "federal-heights"],
+        "scrap_zone": 1,
+    },
+    "brighton": {
+        "name": "Brighton",
+        "slug": "brighton",
+        "zips": ["80601", "80602", "80603", "80640"],
+        "lat": 39.9853,
+        "lng": -104.8206,
+        "neighborhoods": ["Prairie Center", "Eagle Shadow North", "Eagle Shadow South", "Historic Downtown Brighton"],
+        "flavor": "an agricultural-heritage city turned fast-growing Denver-metro suburb along the South Platte River and I-76 corridor",
+        "housing": "new master-planned growth around Prairie Center and Eagle Shadow alongside the walkable historic downtown core",
+        "nearby": ["thornton", "dacono", "frederick"],
+        "scrap_zone": 3,
+    },
+    "dacono": {
+        "name": "Dacono",
+        "slug": "dacono",
+        "zips": ["80514"],
+        "lat": 40.0631,
+        "lng": -104.9358,
+        "neighborhoods": ["Sweetgrass", "Autumn Valley", "Village at Palisade Park", "Carriage Square"],
+        "flavor": "a small, fast-growing Weld County city in the Carbon Valley, historically a coal-mining and farming town now filling in with new-construction subdivisions",
+        "housing": "newer master-planned communities like Sweetgrass alongside the older town core",
+        "nearby": ["frederick", "firestone", "brighton"],
+        "scrap_zone": 2,
+    },
+    "frederick": {
+        "name": "Frederick",
+        "slug": "frederick",
+        "zips": ["80530", "80504", "80516"],
+        "lat": 40.0983,
+        "lng": -104.9497,
+        "neighborhoods": ["Wyndham Hill", "Hidden Creek"],
+        "flavor": "a fast-growing Weld County town in the Carbon Valley, spanning a patchwork of zip codes as new subdivisions fill in the land between I-25 and Highway 52",
+        "housing": "newer subdivisions like Wyndham Hill and Hidden Creek filling in around the historic town core",
+        "nearby": ["firestone", "dacono", "longmont"],
+        "scrap_zone": 2,
+    },
+    "firestone": {
+        "name": "Firestone",
+        "slug": "firestone",
+        "zips": ["80520", "80504"],
+        "lat": 40.1097,
+        "lng": -104.9425,
+        "neighborhoods": ["Barefoot Lakes", "Saddleback"],
+        "flavor": "a small, rapidly-expanding Weld County town off I-25 in the Carbon Valley, filling with new master-planned subdivisions",
+        "housing": "new-construction communities like Barefoot Lakes alongside the established Saddleback area",
+        "nearby": ["frederick", "dacono", "longmont"],
+        "scrap_zone": 2,
+    },
+    "gunbarrel": {
+        "name": "Gunbarrel",
+        "slug": "gunbarrel",
+        "zips": ["80301", "80503"],
+        "lat": 40.0625,
+        "lng": -105.2130,
+        "neighborhoods": ["Twin Lakes", "Gunbarrel Commons"],
+        "flavor": "an unincorporated Boulder County community northeast of Boulder proper, built up around the IBM campus in the 1960s and now home to Celestial Seasonings and Avery Brewing",
+        "housing": "1960s-70s development alongside newer infill near Twin Lakes",
+        "nearby": ["boulder", "longmont", "niwot"],
+        "scrap_zone": 3,
+    },
+    "boulder": {
+        "name": "Boulder",
+        "slug": "boulder",
+        "zips": ["80301", "80302", "80303", "80304", "80305"],
+        "lat": 40.0150,
+        "lng": -105.2705,
+        "neighborhoods": ["Chautauqua", "North Boulder", "Table Mesa", "Downtown Boulder"],
+        "flavor": "Colorado's iconic university-and-outdoors city at the base of the Flatirons, home to CU Boulder and a lifestyle built around trails and tech",
+        "housing": "a mix of historic Chautauqua-area homes, mid-century North Boulder neighborhoods, and foothills properties near Table Mesa",
+        "nearby": ["gunbarrel", "longmont", "niwot"],
+        "scrap_zone": 3,
+    },
+    "longmont": {
+        "name": "Longmont",
+        "slug": "longmont",
+        "zips": ["80501", "80503", "80504"],
+        "lat": 40.1672,
+        "lng": -105.1019,
+        "neighborhoods": ["Prospect New Town", "Southmoor Park", "Renaissance", "Historic Downtown Longmont"],
+        "flavor": "a mid-size St. Vrain Valley city between Boulder and Weld County, blending agricultural heritage with newer master-planned growth like Prospect New Town",
+        "housing": "established neighborhoods like Southmoor Park alongside newer developments like Prospect New Town",
+        "nearby": ["firestone", "frederick", "niwot"],
+        "scrap_zone": 3,
+    },
+    "niwot": {
+        "name": "Niwot",
+        "slug": "niwot",
+        "zips": ["80503"],
+        "lat": 40.0994,
+        "lng": -105.1714,
+        "neighborhoods": ["Old Town Niwot", "Cottonwood Square", "Somerset Estates"],
+        "flavor": "a small unincorporated Boulder County town along the Left Hand Creek corridor, named for Arapaho Chief Niwot, known for its historic Second Avenue storefronts and high-end acreage estates",
+        "housing": "historic Old Town storefront-era homes alongside high-end estate properties in Somerset Estates",
+        "nearby": ["longmont", "boulder", "gunbarrel"],
+        "scrap_zone": 3,
+    },
+    "lyons": {
+        "name": "Lyons",
+        "slug": "lyons",
+        "zips": ["80540"],
+        "lat": 40.2247,
+        "lng": -105.2719,
+        "neighborhoods": ["Bohn Park", "Meadow Park", "The Confluence"],
+        "flavor": "a small, artsy foothills town at the confluence of the North and South St. Vrain Creeks, known for red sandstone and a tight-knit community that rebuilt after the 2013 flood",
+        "housing": "a mix of historic in-town homes and mountain-foothills properties",
+        "nearby": ["niwot", "longmont", "boulder"],
+        "scrap_zone": 3,
     },
 }
 
@@ -647,13 +798,13 @@ SERVICES = {
                 "Got scrap metal piling up in the garage, backyard, or on a job site in {city_name}? "
                 "Text a photo to 720-675-7693 and we'll tell you the rate before we schedule anything. "
                 "Commercial HVAC units, server racks, and clean copper or brass batches often qualify "
-                f"for free pickup. Everything else gets a flat, distance-based dispatch fee — starting at ${_PRICE_SCRAP_Z1}."
+                "for free pickup. Everything else gets a flat, distance-based dispatch fee — {scrap_fee} in {city_name}."
             ),
             (
                 "Steel, aluminum, copper, brass, iron — old grills, metal shelving, car parts, fencing, "
                 "pipes, wiring, appliance shells. We serve all of {city_name} including zip codes {zips_text}. "
                 "High-value loads (HVAC units, server racks, clean copper/brass) may be picked up free; "
-                f"standard loads run ${_PRICE_SCRAP_Z1}-${_PRICE_SCRAP_Z3} based on distance from our Thornton hub."
+                "standard loads in {city_name} run {scrap_fee}, based on distance from our Thornton hub."
             ),
             (
                 "Whether you're in {neighborhoods_short} or anywhere else in {city_name}, scrap metal "
@@ -683,7 +834,7 @@ SERVICES = {
              (
                  "It can be. Commercial HVAC units, server racks, and clean copper or brass batches often qualify for free "
                  "pickup — text a photo to 720-675-7693 and we'll confirm. Everything else gets a flat dispatch fee based on "
-                 f"distance, typically ${_PRICE_SCRAP_Z1}-${_PRICE_SCRAP_Z3}."
+                 "distance — {scrap_fee} for {city_name}."
              )),
             ("What types of metal do you pick up?",
              "Steel, aluminum, copper, brass, iron, tin — basically all metals. Old grills, metal furniture, car parts, fencing, pipes, wiring, appliance shells, bed frames, filing cabinets — if it's metal, we want it."),
@@ -714,21 +865,39 @@ def format_zips(zips):
 
 
 def neighborhoods_short(city):
-    """Return 2-3 neighborhood names for a short mention."""
+    """Return 2-3 neighborhood names for a short mention. Degrades gracefully
+    for cities with fewer verified named neighborhoods (real small towns don't
+    all have 3+ distinct named areas - padding with invented names is worse
+    than a shorter, honest list)."""
     nh = city["neighborhoods"]
-    return f"{nh[0]}, {nh[1]}, and {nh[2]}"
+    if len(nh) >= 3:
+        return f"{nh[0]}, {nh[1]}, and {nh[2]}"
+    if len(nh) == 2:
+        return f"{nh[0]} and {nh[1]}"
+    return nh[0]
 
 
 def neighborhoods_two(city):
     """Return two neighborhoods for FAQ-style mention."""
     nh = city["neighborhoods"]
-    return f"{nh[0]} to {nh[3]}"
+    if len(nh) >= 2:
+        return f"{nh[0]} to {nh[-1]}"
+    return nh[0]
 
 
 def neighborhoods_sample(city):
     """Return a neighborhood sample for general mention."""
     nh = city["neighborhoods"]
-    return f"{nh[0]} or {nh[4]}"
+    if len(nh) >= 2:
+        return f"{nh[0]} or {nh[1]}"
+    return nh[0]
+
+
+def scrap_fee_for(city):
+    """Dollar amount for this city's scrap-metal dispatch zone (defaults to
+    zone 1 for any city that doesn't set scrap_zone explicitly)."""
+    zone = city.get("scrap_zone", 1)
+    return PRICING["scrap_metal"][f"zone{zone}_fee"]
 
 
 def fill_template(text, city, service):
@@ -742,6 +911,7 @@ def fill_template(text, city, service):
         .replace("{neighborhoods_two}", neighborhoods_two(city))
         .replace("{neighborhoods_sample}", neighborhoods_sample(city))
         .replace("{service_name}", service["name"])
+        .replace("{scrap_fee}", f"${scrap_fee_for(city)}")
     )
 
 
@@ -922,9 +1092,11 @@ def generate_page(city_key, service_key):
     nearby_html = ",\n          ".join(nearby_links)
 
     # --- City nav links (for same service across all cities) ---
-    # Main 5 cities shown inline; remaining 2 in a CSS-only dropdown
-    main_cities = ["arvada", "golden", "thornton", "broomfield", "westminster"]
-    more_cities = ["wheat-ridge", "northglenn"]
+    # Current city plus its nearby cities shown inline; every other city in
+    # CITIES goes in a CSS-only dropdown. Scales automatically as cities are
+    # added/removed instead of a fixed hardcoded list.
+    main_cities = [city_key] + [nc for nc in city["nearby"] if nc in CITIES][:4]
+    more_cities = [ck for ck in CITIES if ck not in main_cities]
     city_nav_links = []
     for ck in main_cities:
         cd = CITIES[ck]
