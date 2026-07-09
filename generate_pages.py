@@ -1225,8 +1225,6 @@ def _sitemap_attrs(path):
     # Static info / conversion pages
     if p == "booking.html":
         return "monthly", "0.7"
-    if p == "quote.html":
-        return "monthly", "0.6"
     if p == "about":
         return "yearly", "0.6"
     if p == "contact":
