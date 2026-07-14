@@ -20,7 +20,9 @@
     "flat": 50
   },
   "tv_recycling": {
-    "per_unit": 30
+    "monitor_flat": 30,
+    "flatscreen_starting": 50,
+    "crt_projection_starting": 100
   },
   "estate_cleanout": {
     "low": 500,

@@ -281,7 +281,9 @@ CITIES = {
 #     price (scrap metal, TV recycling), the number comes from the PRICING
 #     dict (loaded from pricing.json above) via the _PRICE_* shortcuts below -
 #     never hardcode a dollar amount directly in a SERVICES string.
-_PRICE_TV = PRICING["tv_recycling"]["per_unit"]
+_PRICE_TV_MONITOR = PRICING["tv_recycling"]["monitor_flat"]
+_PRICE_TV_FLATSCREEN = PRICING["tv_recycling"]["flatscreen_starting"]
+_PRICE_TV_CRT = PRICING["tv_recycling"]["crt_projection_starting"]
 _PRICE_SCRAP_Z1 = PRICING["scrap_metal"]["zone1_fee"]
 _PRICE_SCRAP_Z2 = PRICING["scrap_metal"]["zone2_fee"]
 _PRICE_SCRAP_Z3 = PRICING["scrap_metal"]["zone3_fee"]
@@ -296,7 +298,7 @@ SERVICES = {
         "item": "TV",
         "price_free": False,
         "short": "TV recycling",
-        "action": f"Curbside TV pickup and responsible e-waste recycling — ${_PRICE_TV} per unit",
+        "action": f"Curbside TV & monitor recycling — monitors ${_PRICE_TV_MONITOR} flat, flatscreen TVs from ${_PRICE_TV_FLATSCREEN}, CRT/projection from ${_PRICE_TV_CRT}",
         "what_we_take": "CRT TVs, flat screens, LED, LCD, plasma, and projection TVs",
         "schema_name": "TV Recycling & E-Waste Pickup",
         "intro_templates": [
@@ -316,7 +318,8 @@ SERVICES = {
             (
                 "Serving {neighborhoods_short} and every neighborhood in between, "
                 "we make TV recycling in {city_name} as easy as a phone call. "
-                f"Text or call Adam at 720-675-7693 — ${_PRICE_TV} per unit, usually same-day or next-day pickup."
+                f"Text or call Adam at 720-675-7693 — monitors ${_PRICE_TV_MONITOR} flat, TVs starting at "
+                f"${_PRICE_TV_FLATSCREEN}-${_PRICE_TV_CRT} by type, usually same-day or next-day pickup."
             ),
         ],
         "how_it_works": [
@@ -325,7 +328,7 @@ SERVICES = {
             ("We Recycle It Right", "Your TV gets properly disassembled and recycled. Metals, glass, plastics, and circuit boards are separated and sent to certified processing facilities — not the landfill."),
         ],
         "why_choose": [
-            f"${_PRICE_TV} flat per unit — no hidden fees, no surprises",
+            f"Monitors ${_PRICE_TV_MONITOR} flat, TVs starting at ${_PRICE_TV_FLATSCREEN}-${_PRICE_TV_CRT} by type — no hidden fees",
             "CRTs, flat screens, plasma, LED, LCD — we take them all",
             "Proper e-waste recycling with certified processors",
             "Curbside pickup — you don't have to haul it anywhere",
@@ -334,11 +337,14 @@ SERVICES = {
         ],
         "faqs": [
             ("How much does TV recycling cost in {city_name}?",
-             f"${_PRICE_TV} per unit, flat — CRT, flat screen, any size. Call or text Adam at 720-675-7693 with your address and we'll confirm a pickup window."),
+             f"Computer monitors are ${_PRICE_TV_MONITOR} flat. Flatscreen TVs (LED, LCD, OLED, plasma) start at ${_PRICE_TV_FLATSCREEN}. "
+             f"CRT and projection TVs start at ${_PRICE_TV_CRT} due to their extra weight and handling. Call or text Adam at "
+             "720-675-7693 with your address and TV type and we'll confirm your exact rate."),
             ("Do you pick up CRT TVs in {city_name}?",
              (
-                 "Yes, we pick up all TV types in {city_name} including CRT, LED, LCD, plasma, and projection TVs, all at the same "
-                 f"${_PRICE_TV} flat rate. CRTs are some of the most important to recycle properly because of the lead in the glass."
+                 "Yes, we pick up all TV types in {city_name} including CRT, LED, LCD, plasma, and projection TVs. CRT and "
+                 f"projection sets start at ${_PRICE_TV_CRT} because of their weight and the care required for the leaded "
+                 f"glass; flatscreen and plasma TVs start at ${_PRICE_TV_FLATSCREEN}."
              )),
             ("Why can't I just throw my old TV in the trash?",
              "TVs contain hazardous materials including lead, mercury, and cadmium that contaminate soil and groundwater in landfills. Colorado law requires proper e-waste disposal. We make sure your TV is recycled responsibly."),
@@ -1831,7 +1837,9 @@ PRICE_TOKENS = {
     "{{PRICE_GARAGE_LOW}}": f"${PRICING['garage_cleanout']['low']:,}",
     "{{PRICE_GARAGE_HIGH}}": f"${PRICING['garage_cleanout']['high']:,}",
     "{{PRICE_AC}}": f"${PRICING['air_conditioner']['flat']}",
-    "{{PRICE_TV}}": f"${PRICING['tv_recycling']['per_unit']}",
+    "{{PRICE_TV_MONITOR}}": f"${PRICING['tv_recycling']['monitor_flat']}",
+    "{{PRICE_TV_FLATSCREEN}}": f"${PRICING['tv_recycling']['flatscreen_starting']}",
+    "{{PRICE_TV_CRT}}": f"${PRICING['tv_recycling']['crt_projection_starting']}",
     "{{PRICE_ESTATE_LOW}}": f"${PRICING['estate_cleanout']['low']:,}",
     "{{PRICE_ESTATE_HIGH}}": f"${PRICING['estate_cleanout']['high']:,}",
     "{{PRICE_SCRAP_Z1}}": f"${PRICING['scrap_metal']['zone1_fee']}",
