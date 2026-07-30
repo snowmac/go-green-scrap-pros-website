@@ -4,7 +4,7 @@
   "mattress": {
     "first_item": 80,
     "additional_item": 60,
-    "set": 140
+    "set": 160
   },
   "couch": {
     "starting": 90
