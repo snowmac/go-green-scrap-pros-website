@@ -18,6 +18,17 @@ _BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(_BASE_DIR, "pricing.json")) as _f:
     PRICING = json.load(_f)
 
+# Google Analytics (gtag.js) — included in the <head> of every generated page.
+GTAG_SNIPPET = '''<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E3T9DVDCLY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-E3T9DVDCLY');
+  </script>'''
+
 # ─── City Data ───────────────────────────────────────────────────────────────
 CITIES = {
     "thornton": {
@@ -281,6 +292,9 @@ CITIES = {
 #     price (scrap metal, TV recycling), the number comes from the PRICING
 #     dict (loaded from pricing.json above) via the _PRICE_* shortcuts below -
 #     never hardcode a dollar amount directly in a SERVICES string.
+_PRICE_COUCH_STARTING = PRICING["couch"]["starting"]
+_PRICE_APPLIANCE_STARTING = PRICING["large_appliance"]["starting"]
+_PRICE_TREADMILL_STARTING = PRICING["treadmill"]["starting"]
 _PRICE_TV_MONITOR = PRICING["tv_recycling"]["monitor_flat"]
 _PRICE_TV_FLATSCREEN = PRICING["tv_recycling"]["flatscreen_starting"]
 _PRICE_TV_CRT = PRICING["tv_recycling"]["crt_projection_starting"]
@@ -435,7 +449,8 @@ SERVICES = {
                 "When a washer dies, a dryer quits heating, or an old stove finally gives up, "
                 "most {city_name} homeowners face the same problem: how do you actually get rid of it? "
                 "These things are heavy, awkward, and a pain to move. Go Green Scrap Pros takes the hassle away "
-                "with flat-rate curbside appliance removal for {city_name} and the surrounding area."
+                f"with curbside appliance removal starting at ${_PRICE_APPLIANCE_STARTING} for "
+                "{city_name} and the surrounding area."
             ),
             (
                 "We'll pick up your old washer, dryer, stove, oven, dishwasher, "
@@ -455,7 +470,7 @@ SERVICES = {
             ("We Pick Up & Recycle", "We load it up, haul it away, and recycle every bit of metal from the unit. Steel, copper, aluminum — it all gets a second life."),
         ],
         "why_choose": [
-            "Flat-rate quote per appliance — no surprise fees",
+            f"Starting at ${_PRICE_APPLIANCE_STARTING} per appliance — no surprise fees",
             "Washers, dryers, stoves, dishwashers — all covered",
             "Metal from every appliance gets recycled",
             "Curbside pickup means zero hassle for you",
@@ -464,7 +479,8 @@ SERVICES = {
         ],
         "faqs": [
             ("How do I get an appliance removal quote in {city_name}?",
-             "Call or text Adam at 720-675-7693 with the appliance type and your {city_name} address. We quote flat-rate per appliance — curbside pickup and recycling for washers, dryers, stoves, dishwashers, and more."),
+             "Call or text Adam at 720-675-7693 with the appliance type and your {city_name} address. Appliance removal starts at "
+             f"${_PRICE_APPLIANCE_STARTING} per appliance — curbside pickup and recycling for washers, dryers, stoves, dishwashers, and more."),
             ("Do you take refrigerators too?",
              "Refrigerators require special handling for freon recovery, so they have a separate service. Check our refrigerator removal page for {city_name} for details on that."),
             ("What happens to the old appliance?",
@@ -515,7 +531,7 @@ SERVICES = {
             ("We Handle Freon & Recycling", "We ensure proper refrigerant recovery per EPA guidelines, then dismantle and recycle the metal. No shortcuts, no illegal dumping."),
         ],
         "why_choose": [
-            "Flat-rate pickup — fridge, freezer, mini-fridge, wine cooler",
+            f"Starting at ${_PRICE_APPLIANCE_STARTING} — fridge, freezer, mini-fridge, wine cooler",
             "Proper freon recovery per EPA regulations",
             "All metal gets recycled after refrigerant removal",
             "No fines, no risk — we handle compliance for you",
@@ -524,11 +540,13 @@ SERVICES = {
         ],
         "faqs": [
             ("How do I get a refrigerator removal quote in {city_name}?",
-             "Call or text Adam at 720-675-7693. Refrigerator removal in {city_name} is flat-rate and includes curbside pickup, proper refrigerant recovery, and metal recycling."),
+             "Call or text Adam at 720-675-7693. Refrigerator removal in {city_name} starts at "
+             f"${_PRICE_APPLIANCE_STARTING} and includes curbside pickup, proper refrigerant recovery, and metal recycling."),
             ("Why does fridge removal cost more than other appliances?",
              "Fridges require certified refrigerant (freon) recovery before they can be recycled or disposed of. This extra step is required by the EPA and adds to the process — but it keeps harmful chemicals out of the atmosphere."),
             ("Do you take freezers and mini-fridges too?",
-             "Yes. Stand-up freezers, chest freezers, mini-fridges, wine coolers — any unit that contains refrigerant. Same flat-rate pickup."),
+             "Yes. Stand-up freezers, chest freezers, mini-fridges, wine coolers — any unit that contains refrigerant. "
+             f"Same starting rate of ${_PRICE_APPLIANCE_STARTING} applies."),
             ("What {city_name} areas do you serve?",
              "We serve all of {city_name} — zip codes {zips_text} — including {neighborhoods_two} and surrounding areas."),
             ("Is it illegal to dump a refrigerator in {city_name}?",
@@ -630,11 +648,11 @@ SERVICES = {
         ],
         "how_it_works": [
             ("Call or Text Adam", "Reach out at 720-675-7693 for a free quote. Describe the equipment — treadmill, elliptical, weight machine — and your location in {city_name}."),
-            ("Get It to the Curb", "If you can get it to the curb or driveway, perfect — that's our flat curbside rate. Can't move it? Ask about our in-home removal option."),
+            ("Get It to the Curb", f"If you can get it to the curb or driveway, perfect — that's our ${_PRICE_TREADMILL_STARTING} starting rate. Can't move it? Ask about our in-home removal option."),
             ("We Haul & Recycle", "We load it up and recycle the metal frame, motor, and steel components. The heavy lifting is on us."),
         ],
         "why_choose": [
-            "Flat-rate curbside pickup for treadmill removal — no surprises",
+            f"Starting at ${_PRICE_TREADMILL_STARTING} for curbside treadmill pickup — no surprises",
             "Ellipticals, weight machines, exercise bikes also accepted",
             "Metal frames and motors get recycled",
             "We handle the heavy lifting — these things are beasts",
@@ -643,15 +661,16 @@ SERVICES = {
         ],
         "faqs": [
             ("How do I get a treadmill removal quote in {city_name}?",
-             "Call or text Adam at 720-675-7693 for a free quote. Treadmill removal in {city_name} is flat-rate for curbside pickup. If you need help getting it out of a basement or upstairs room, mention it on the call and we'll work something out."),
+             "Call or text Adam at 720-675-7693 for a free quote. Treadmill removal in {city_name} starts at "
+             f"${_PRICE_TREADMILL_STARTING} for curbside pickup. If you need help getting it out of a basement or upstairs room, mention it on the call and we'll work something out."),
             ("Do you take other exercise equipment besides treadmills?",
              "Yes. Ellipticals, stationary bikes, weight machines, home gym systems — we take it all. Pricing depends on the item, so give us a call for a quote."),
             ("Why are treadmills more expensive to remove than smaller items?",
-             "Treadmills are exceptionally heavy — most weigh 200-350 pounds. The motor assembly, steel frame, and belt mechanism make them one of the heaviest single household items. The flat rate reflects the effort involved."),
+             "Treadmills are exceptionally heavy — most weigh 200-350 pounds. The motor assembly, steel frame, and belt mechanism make them one of the heaviest single household items. The starting rate reflects the effort involved."),
             ("What {city_name} areas do you serve for treadmill removal?",
              "All of {city_name} — zip codes {zips_text}. From {neighborhoods_two} and everywhere in between. If you're in {city_name}, we'll come to you."),
             ("Can you pick up a treadmill from my basement?",
-             "Our flat curbside rate covers pickup at the curb or driveway. Basement or upstairs removal is possible but may add to the quote depending on the stairs and access. Call Adam at 720-675-7693 and we'll work something out."),
+             f"Our ${_PRICE_TREADMILL_STARTING} starting rate covers pickup at the curb or driveway. Basement or upstairs removal is possible but may add to the quote depending on the stairs and access. Call Adam at 720-675-7693 and we'll work something out."),
         ],
         "items_section": [
             "Treadmills (folding and non-folding)",
@@ -674,7 +693,8 @@ SERVICES = {
                 "That old couch has served its time. Maybe the springs are shot, the fabric is torn, "
                 "or you're just upgrading and need the old one gone before the new one arrives. "
                 "Either way, getting a full-size couch out of a {city_name} home and disposed of properly "
-                "is way harder than it sounds. That's why Go Green Scrap Pros offers flat-rate curbside couch removal."
+                "is way harder than it sounds. That's why Go Green Scrap Pros offers curbside couch removal "
+                f"starting at ${_PRICE_COUCH_STARTING}."
             ),
             (
                 "We pick up your old couch, sofa, loveseat, or sectional from curbside "
@@ -694,7 +714,7 @@ SERVICES = {
             ("We Haul, Donate, or Recycle", "We pick it up and donate when possible. If it's past its useful life, we separate wood, metal, and foam for recycling."),
         ],
         "why_choose": [
-            "Flat-rate quote — couches, sofas, loveseats",
+            f"Starting at ${_PRICE_COUCH_STARTING} — couches, sofas, loveseats",
             "Sectionals and sofa beds accepted too",
             "Donation when the couch is still in good shape",
             "Materials recycled when donation isn't an option",
@@ -703,7 +723,8 @@ SERVICES = {
         ],
         "faqs": [
             ("How do I get a couch removal quote in {city_name}?",
-             "Call or text Adam at 720-675-7693 for a free quote. Couch removal in {city_name} is flat-rate for curbside pickup of a standard couch or sofa. Sectionals are quoted by size."),
+             "Call or text Adam at 720-675-7693 for a free quote. Couch removal in {city_name} starts at "
+             f"${_PRICE_COUCH_STARTING} for curbside pickup of a standard couch or sofa. Sectionals are quoted by size."),
             ("Do you take sectionals and sofa beds?",
              "Yes. Sectionals, sofa beds, futons, recliners, loveseats — we take it all. Oversized sectionals may run a little higher, but we'll quote the whole job upfront before we ever roll up."),
             ("Will you donate my old couch?",
@@ -711,7 +732,7 @@ SERVICES = {
             ("What {city_name} zip codes do you serve?",
              "We serve all of {city_name} — zip codes {zips_text}. {neighborhoods_two} and every neighborhood in between."),
             ("Can you remove a couch from inside my house?",
-             "Our flat rate is for curbside pickup. If you need help getting a couch out of a room, through a tight hallway, or down stairs, call Adam and we'll discuss options."),
+             f"Our ${_PRICE_COUCH_STARTING} starting rate is for curbside pickup. If you need help getting a couch out of a room, through a tight hallway, or down stairs, call Adam and we'll discuss options."),
         ],
         "items_section": [
             "Standard couches and sofas",
@@ -1171,11 +1192,11 @@ def generate_page(city_key, service_key):
         items_heading = f"What We Pick Up &mdash; Free in {city_name}"
         items_intro = "We take any metal item. No minimums. No charge for curbside pickup."
     else:
-        hero_subtitle = f"{service_name} in {city_name} — flat-rate curbside pickup. Call or text for a free quote."
+        hero_subtitle = f"{service_name} in {city_name} — curbside pickup. Call or text for a free quote."
         cta_text = f"Request a Free Quote — {service_name} in {city_name}"
         final_cta_heading = f"Get a Free Quote in {city_name}"
         items_heading = f"What We Take &mdash; {service_name} in {city_name}"
-        items_intro = "Flat-rate curbside pickup. Call or text us for a free quote — no surprises when we arrive."
+        items_intro = "Curbside pickup. Call or text us for a free quote — no surprises when we arrive."
 
     # --- Footer city links (keep pointing to junk-removal-* pages like existing site) ---
     footer_city_links = []
@@ -1207,6 +1228,7 @@ def generate_page(city_key, service_key):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {GTAG_SNIPPET}
   <meta name="description" content="{meta_desc}">
   <meta property="og:title" content="{og_title}">
   <meta property="og:description" content="{og_desc}">
@@ -1645,6 +1667,7 @@ def generate_html_sitemap(base_dir, paths):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {GTAG_SNIPPET}
   <meta name="description" content="Browse every page on Go Green Scrap Pros — services and service areas across the Denver Metro, Boulder County, and Northern Colorado.">
   <meta property="og:title" content="Site Map | Go Green Scrap Pros">
   <meta property="og:description" content="Every page on gogreenscrappros.com — services, city pages, and tools.">
@@ -1829,6 +1852,7 @@ def generate_html_sitemap(base_dir, paths):
 # edit pricing.json, then rerun this script - never hand-edit a dollar amount
 # directly in the rendered output, it will be overwritten on the next build.
 PRICE_TOKENS = {
+    "{{GTAG_SNIPPET}}": GTAG_SNIPPET,
     "{{PRICE_MATTRESS}}": f"${PRICING['mattress']['first_item']}",
     "{{PRICE_MATTRESS_ADDITIONAL}}": f"${PRICING['mattress']['additional_item']}",
     "{{PRICE_MATTRESS_SET}}": f"${PRICING['mattress']['set']}",

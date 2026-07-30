@@ -21,6 +21,17 @@ import html
 import json
 import datetime
 
+# Google Analytics (gtag.js) — included in the <head> of every blog page.
+GTAG_SNIPPET = '''<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E3T9DVDCLY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-E3T9DVDCLY');
+  </script>'''
+
 import markdown
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -203,6 +214,7 @@ def render_article(meta, body_html, slug):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {GTAG_SNIPPET}
   <meta name="description" content="{html.escape(desc)}">
   <meta name="keywords" content="{html.escape(keywords)}">
   <meta name="author" content="{BRAND}">
@@ -282,6 +294,7 @@ def render_index(posts):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {GTAG_SNIPPET}
   <meta name="description" content="{desc}">
   <meta name="author" content="{BRAND}">
   <meta property="og:title" content="Blog | {BRAND}">

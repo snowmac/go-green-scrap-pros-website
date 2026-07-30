@@ -9,6 +9,9 @@
   "couch": {
     "starting": 90
   },
+  "treadmill": {
+    "starting": 150
+  },
   "large_appliance": {
     "starting": 100
   },
