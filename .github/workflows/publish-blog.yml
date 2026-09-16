@@ -7,10 +7,12 @@ name: Publish scheduled blog posts
 # and commits the result back to master.
 
 on:
-  schedule:
-    # Every Monday at 14:00 UTC (~7-8am Denver). Date-gating in build_blog.py
-    # ensures a post only goes live once its publish_date arrives.
-    - cron: '0 14 * * 1'
+  # Scheduled auto-publish is paused while the business is temporarily closed
+  # (see assets/maintenance.js). Re-enable by uncommenting the schedule below.
+  # schedule:
+  #   # Every Monday at 14:00 UTC (~7-8am Denver). Date-gating in build_blog.py
+  #   # ensures a post only goes live once its publish_date arrives.
+  #   - cron: '0 14 * * 1'
   workflow_dispatch: {}
 
 permissions:

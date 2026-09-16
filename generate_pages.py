@@ -27,7 +27,8 @@ GTAG_SNIPPET = '''<!-- Google tag (gtag.js) -->
     gtag('js', new Date());
 
     gtag('config', 'G-E3T9DVDCLY');
-  </script>'''
+  </script>
+  <script src="/assets/maintenance.js"></script>'''
 
 # ─── City Data ───────────────────────────────────────────────────────────────
 CITIES = {
