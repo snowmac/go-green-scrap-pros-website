@@ -98,10 +98,10 @@
 </head>
 <body>
 
-  <div id="maintenance-notice" style="background:linear-gradient(135deg,#1e5a4a,#2a6f5e); color:#fff; padding:1.75rem 1.25rem; text-align:center;">
+  <div id="maintenance-notice" style="background:#1e5a4a; color:#fff; min-height:100vh; box-sizing:border-box; display:flex; align-items:center; justify-content:center; padding:2rem 1.25rem; text-align:center;">
     <div style="max-width:700px; margin:0 auto;">
       <div style="font-size:0.8rem; letter-spacing:1.5px; text-transform:uppercase; color:#f1b24a; font-weight:700; margin-bottom:0.6rem;">Temporarily Closed</div>
-      <h2 style="margin:0 0 0.75rem; font-size:1.4rem; line-height:1.3;">We're pausing pickups while Adam recovers from an injury</h2>
+      <h2 style="margin:0 0 0.75rem; font-size:1.4rem; line-height:1.3; color:#fff;">We're pausing pickups while Adam recovers from an injury</h2>
       <p style="margin:0 0 1.25rem; line-height:1.6; color:#e8f2ee;">
         For the time being, Go Green Scrap Pros is closed for regular junk removal jobs. If you need an
         <strong>affordable estate cleanout</strong>, Adam is still available to bring in a trusted team and manage
@@ -116,9 +116,13 @@
       if (window.MAINTENANCE_MODE === false) {
         var notice = document.getElementById('maintenance-notice');
         if (notice) notice.style.display = 'none';
+        var content = document.getElementById('site-content');
+        if (content) content.style.display = '';
       }
     });
   </script>
+
+  <div id="site-content" style="display:none;">
 
   <nav class="site-nav">
     <div class="container">
@@ -449,5 +453,7 @@
       <p style="margin-top: 1.5rem; font-size: 0.9rem;">© 2026 Go Green Scrap Pros. All Rights Reserved.</p>
     </div>
   </footer>
+
+  </div>
 </body>
 </html>
